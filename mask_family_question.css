@@ -1,0 +1,92 @@
+/*-----------------------------------------
+  Question family - Mask styles 
+*/
+
+#masks .mask-root.mask-family-question .mask-back{
+    border-width: 1px;
+    border-style: solid;
+    box-sizing: border-box;
+}
+
+#masks .mask-root.mask-family-question .mask-main{
+    background-repeat: no-repeat;
+    background-position: center;   
+    background-size: contain;
+    width: 48px;
+    height: 48px;
+    max-width: 75%;
+    max-height: 75%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    position: absolute;
+    padding: 0;
+    border: 0;
+    margin: 0:
+}
+
+
+/*-----------------------------------------
+  Mask colors
+*/
+
+#masks .mask-root.mask-style-question-3 .mask-back{
+    border-color: lightgrey;
+    background-color: darkgrey;
+}
+
+#masks .mask-root.mask-style-question-2 .mask-back{
+    border-color: lightgrey;
+    background-color: darkblue;
+}
+
+#masks .mask-root.mask-style-question-1 .mask-back{
+    border-color: lightgrey;
+    background-color: darkgreen;
+}
+
+#masks .mask-root.mask-style-question-0 .mask-back{
+    border-color: darkgrey;
+    background-color: darkred;
+}
+
+#masks .mask-root.mask-style-question-4 .mask-back{
+    border-color: darkgrey;
+    background-color: palevioletred;
+}
+
+#masks .mask-root.mask-style-question-5 .mask-back{
+    border-color: darkgrey;
+    background-color: palegreen;
+}
+
+#masks .mask-root.mask-style-question-6 .mask-back{
+    border-color: darkgrey;
+    background-color: paleturquoise;
+}
+
+#masks .mask-root.mask-style-question-7 .mask-back{
+    border-color: darkgrey;
+    background-color: lightgrey;
+}
+
+/*-----------------------------------------
+  Mask Icons
+*/
+
+#masks .mask-root.mask-style-question-0 .mask-main,
+#masks .mask-root.mask-style-question-1 .mask-main,
+#masks .mask-root.mask-style-question-2 .mask-main,
+#masks .mask-root.mask-style-question-3 .mask-main{
+    background-image: url('pix/mask_qtxt_white.png');
+}
+
+#masks .mask-root.mask-style-question-4 .mask-main,
+#masks .mask-root.mask-style-question-5 .mask-main,
+#masks .mask-root.mask-style-question-6 .mask-main,
+#masks .mask-root.mask-style-question-7 .mask-main{
+    background-image: url('pix/mask_qtxt.png');
+}
+
