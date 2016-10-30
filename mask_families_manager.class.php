@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Moodle interface library for masks
+ * Moodle manager class for mask families
  *
  * @copyright  2016 Edunao SAS (contact@edunao.com)
  * @author     Sadge (daniel@edunao.com)
@@ -23,12 +23,11 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// this is lib.php - add code here for interfacing this module to Moodle internals
+
+namespace mod_masks;
 
 defined('MOODLE_INTERNAL') || die;
 
-
-namespace mod_masks;
 
 require_once(dirname(__FILE__).'/mask_family_note.class.php');
 require_once(dirname(__FILE__).'/mask_family_question.class.php');
