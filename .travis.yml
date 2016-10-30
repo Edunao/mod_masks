@@ -13,7 +13,15 @@ php:
 env:
  matrix:
   - DB=mysqli MOODLE_BRANCH=MOODLE_27_STABLE
+  - DB=mysqli MOODLE_BRANCH=MOODLE_28_STABLE
+  - DB=mysqli MOODLE_BRANCH=MOODLE_29_STABLE
+  - DB=mysqli MOODLE_BRANCH=MOODLE_30_STABLE
+  - DB=mysqli MOODLE_BRANCH=MOODLE_31_STABLE
   - DB=pgsql MOODLE_BRANCH=MOODLE_27_STABLE
+  - DB=pgsql MOODLE_BRANCH=MOODLE_28_STABLE
+  - DB=pgsql MOODLE_BRANCH=MOODLE_29_STABLE
+  - DB=pgsql MOODLE_BRANCH=MOODLE_30_STABLE
+  - DB=pgsql MOODLE_BRANCH=MOODLE_31_STABLE
 
 
 before_install:
@@ -24,22 +32,17 @@ before_install:
   - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
 
 install:
-
-  - moodle-plugin-ci add-plugin --branch $MOODLE_BRANCH vfremaux/moodle-report_examtraining
-  - moodle-plugin-ci add-plugin --branch $MOODLE_BRANCH vfremaux/moodle-qtype_randomconstrained
-  - moodle-plugin-ci add-plugin --branch $MOODLE_BRANCH vfremaux/moodle-quizaccess_chooseconstraints
-  - moodle-plugin-ci add-plugin --branch $MOODLE_BRANCH vfremaux/moodle-quizaccess_usernumattempts
-  - moodle-plugin-ci add-plugin --branch $MOODLE_BRANCH vfremaux/moodle-block_userquiz_limits
   - moodle-plugin-ci install
 
 script:
   - moodle-plugin-ci phplint
-  - moodle-plugin-ci phpcpd
-  - moodle-plugin-ci phpmd
-  - moodle-plugin-ci codechecker
-  - moodle-plugin-ci csslint
+#  - moodle-plugin-ci phpcpd
+#  - moodle-plugin-ci phpmd
+#  - moodle-plugin-ci codechecker
+#  - moodle-plugin-ci csslint
 #  - moodle-plugin-ci shifter
-  - moodle-plugin-ci jshint
-  - moodle-plugin-ci validate
+#  - moodle-plugin-ci jshint
+#  - moodle-plugin-ci validate
 #  - moodle-plugin-ci phpunit
 #  - moodle-plugin-ci behat
+
