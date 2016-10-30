@@ -73,7 +73,7 @@ M.mod_masks={
         var body=$('body');
         body.click( this.onClick );
         body.dblclick( this.onDblClick );
-        if ( M.mod_masks_state.type == 1 ){
+        if ( M.mod_masks_state.type === 1 ){
             $('#masks-masks')
                 .addClass('editor')
                 .mousedown( M.mod_masks.onMaskMouseDn )
@@ -112,8 +112,8 @@ M.mod_masks={
         var target = $(e.target);
         var action = target.attr('dblclick-action');
         while ( !action ){
-            var target = target.parent();
-            var action = target.attr('dblclick-action');
+            target = target.parent();
+            action = target.attr('dblclick-action');
         }
 
         // delegate processing to a shared routine
@@ -125,8 +125,8 @@ M.mod_masks={
         var target = $(e.target);
         var action = target.attr('click-action');
         while ( !action ){
-            var target = target.parent();
-            var action = target.attr('click-action');
+            target = target.parent();
+            action = target.attr('click-action');
         }
 
         // delegate processing to a shared routine
@@ -194,22 +194,25 @@ M.mod_masks={
                 break;
 
             case 'click-mask':
-                var pageIdx = M.mod_masks.currentPage;
-                var pageId  = M.mod_masks_pages[ pageIdx ].id;
-                var maskIdx = target.attr('maskidx');
-                var mask    = M.mod_masks_masks.pages[ pageId ][ maskIdx ];
-                var isLastQuestion = ( ( mask.flags & this.FLAG_GRADED ) != 0 && ( mask.userstate & this.FLAG_DONE ) == 0 && M.mod_masks.countUnpassedMasks( this.FLAG_GRADED ) == 1 )? 1: 0;
-                M.mod_masks.selectedMask = mask;
-                M.mod_masks.activateFrame( 'click-mask', { mid: mask.id, qid: mask.question, pageid: mask.page, islast: isLastQuestion }, 'no' );
+                var pageIdx         = M.mod_masks.currentPage;
+                var pageId          = M.mod_masks_pages[ pageIdx ].id;
+                var clickedMaskIdx  = target.attr('maskidx');
+                var clickedMask     = M.mod_masks_masks.pages[ pageId ][ maskIdx ];
+                var flagGraded      = ( clickedMask.flags & this.FLAG_GRADED );
+                var flagDone        = ( clickedMask.userstate & this.FLAG_DONE );
+                var numUnanswered   = M.mod_masks.countUnpassedMasks( this.FLAG_GRADED );
+                var isLastQuestion = ( flagGraded !== 0 && flagDone === 0 && numUnanswered == 1 )? 1: 0;
+                M.mod_masks.selectedMask = clickedMask;
+                M.mod_masks.activateFrame( 'click-mask', { mid: clickedMask.id, qid: clickedMask.question, pageid: clickedMask.page, islast: isLastQuestion }, 'no' );
                 break;
 
             case 'reshow-masks':
                 // iterate over the mask data structure
-                for( var p in M.mod_masks_masks.pages ){
-                    var maskSet = M.mod_masks_masks.pages[ p ];
+                for( var rsmPage in M.mod_masks_masks.pages ){
+                    var maskSet = M.mod_masks_masks.pages[ rsmPage ];
                     for ( var maskId in maskSet ){
-                        var mask = maskSet[ maskId ];
-                        mask.userstate = 0;
+                        var theMask = maskSet[ maskId ];
+                        theMask.userstate = 0;
                     }
                 }
 
@@ -219,11 +222,11 @@ M.mod_masks={
 
             case 'rehide-masks':
                 // iterate over the mask data structure
-                for( var p in M.mod_masks_masks.pages ){
-                    var maskSet = M.mod_masks_masks.pages[ p ];
+                for( var rhmPage in M.mod_masks_masks.pages ){
+                    var maskSet = M.mod_masks_masks.pages[ rhmPage ];
                     for ( var maskId in maskSet ){
-                        var mask = maskSet[ maskId ];
-                        mask.userstate = mask.refuserstate;
+                        var theMask = maskSet[ maskId ];
+                        theMask.userstate = theMask.refuserstate;
                     }
                 }
 
@@ -240,12 +243,12 @@ M.mod_masks={
                 break;
 
             case 'set-mask-style':
-                var newStyle = target.attr('mask-style');
-                var mask     = M.mod_masks.selectedMask;
-                var maskId   = mask.id;
-                $('#mask-'+maskId).removeClass( 'mask-style-'+ mask.family + '-' + mask.style ).addClass( 'mask-style-'+ mask.family + '-' + newStyle );
-                mask.style = newStyle;
-                M.mod_masks.maskChanges[ maskId ] = mask;
+                var newStyle    = target.attr('mask-style');
+                var styledMask  = M.mod_masks.selectedMask;
+                var maskId      = styledMask.id;
+                $('#mask-'+maskId).removeClass( 'mask-style-'+ styledMask.family + '-' + styledMask.style ).addClass( 'mask-style-'+ styledMask.family + '-' + newStyle );
+                styledMask.style = newStyle;
+                M.mod_masks.maskChanges[ maskId ] = styledMask;
                 M.mod_masks.setSaveLayoutMenu(true);
                 M.mod_masks.setAlertInfo('saveStyleChange');
                 break;
@@ -283,7 +286,6 @@ M.mod_masks={
         var maxPage = M.mod_masks_pages.length - 1;
         newPage = Math.min( maxPage, newPage );
         newPage = Math.max( 0, newPage );
-        var pageHasChanged = ( M.mod_masks.currentPage != newPage );
         M.mod_masks.currentPage = newPage;
 
         // update the page nav menu
@@ -397,10 +399,6 @@ M.mod_masks={
                 M.mod_masks.setSaveLayoutMenu(true);
                 break;
 
-                // refresh the display of the current page
-                M.mod_masks.gotoPage( M.mod_masks.currentPage );
-                break;
-
             default:
                 console.warn('unrecognised toggle action: ', toggleName );
         }
@@ -414,11 +412,11 @@ M.mod_masks={
         this.setAlert(msgId,1,'alert-success');
     },
 
-    setAlertInfo: function( msgId, cssClass ){
+    setAlertInfo: function( msgId ){
         this.setAlert(msgId,2,'alert-info');
     },
 
-    setAlertWarn: function( msgId, cssClass ){
+    setAlertWarn: function( msgId ){
         this.setAlert(msgId,3,'alert-error');
     },
 
@@ -486,7 +484,7 @@ M.mod_masks={
             var frameTag = $('#popup-mdl-frame');
             frameTag.height( '1px' );
             frameTag.attr( 'src', url );
-            frameTag.removeClass('loaded')
+            frameTag.removeClass('loaded');
         }
     },
 
@@ -763,7 +761,7 @@ M.mod_masks={
             // start by looking to see if the mouse is out of bounds
             var canvas = $('#masks-masks');
             var canvasW = canvas.width();
-            var canvasH = canvas.height()
+            var canvasH = canvas.height();
             var x = e.pageX;
             var y = e.pageY;
             var canvasOffset = canvas.offset();
@@ -840,7 +838,7 @@ M.mod_masks={
         // move the context menu
         var canvas          = $('#masks-masks');
         var canvasWidth     = canvas.width();
-        var canvasHeight    = canvas.height()
+        var canvasHeight    = canvas.height();
         var maskNode        = $( '#mask-' + M.mod_masks.selectedMask.id );
         var maskPosition    = maskNode.position();
         var maskTop         = maskPosition.top;
@@ -1102,12 +1100,13 @@ M.mod_masks={
     },
 
     updateGradeInfo: function(){
+        var perfectAnswersPercent = 0;
         var gradeData = this.calculateGradeData();
         //correct answers
         if((gradeData.goodPasses + gradeData.badPasses + gradeData.fails) > 0){
-            var perfectAnwersPercent = (gradeData.goodPasses * 100 )/ (gradeData.goodPasses + gradeData.badPasses + gradeData.fails) ;
+            perfectAnswersPercent = (gradeData.goodPasses * 100 )/ (gradeData.goodPasses + gradeData.badPasses + gradeData.fails) ;
 
-            $('#correct-answers-container .circle-value').text(Math.round(perfectAnwersPercent) + '%');
+            $('#correct-answers-container .circle-value').text(Math.round(perfectAnswersPercent) + '%');
             $('#correct-answers-container').css('display','inline-block');
         }
 
@@ -1115,11 +1114,9 @@ M.mod_masks={
         $('#questions-remaining-container .circle-value').text(gradeData.numQuestions - gradeData.goodPasses - gradeData.badPasses );
 
         // if no question remaining and only perfect answers : display congratulation
-        if(((gradeData.numQuestions - gradeData.goodPasses - gradeData.badPasses) === 0) &&
-                (perfectAnwersPercent === 100)){
+        if(((gradeData.numQuestions - gradeData.goodPasses - gradeData.badPasses) === 0) && (perfectAnswersPercent === 100)){
             $('.grade-container').addClass('display-congratulation');
         }
-
     },
 
     calculateGradeData: function(){

@@ -1,55 +1,29 @@
-/*
- This file is part of Moodle - http: //moodle.org/
-
- Moodle is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
-
- Moodle is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License
- along with Moodle. If not, see <http: //www.gnu.org/licenses/>.
-*/
-/**
- * masks module style sheet for 'question' masks family
- *
- * @copyright  2016 Edunao SAS (contact@edunao.com)
- * @author     Sadge (daniel@edunao.com)
- * @package    mod_masks
- * @license    http: //www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 /*-----------------------------------------
-  Question family - Mask styles
+  Question family - Mask styles 
 */
 
 #masks .mask-root.mask-family-question .mask-back{
-    border-width: 1px;
     border-style: solid;
+    border-width: 1px;
     box-sizing: border-box;
 }
 
 #masks .mask-root.mask-family-question .mask-main{
-    background-repeat: no-repeat;
     background-position: center;
+    background-repeat: no-repeat;
     background-size: contain;
-    width: 48px;
-    height: 48px;
-    max-width: 75%;
-    max-height: 75%;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-    position: absolute;
-    padding: 0;
     border: 0;
-    margin: 0:
+    bottom: 0;
+    height: 48px;
+    left: 0;
+    margin: auto;
+    max-height: 75%;
+    max-width: 75%;
+    padding: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 48px;
 }
 
 
@@ -58,43 +32,43 @@
 */
 
 #masks .mask-root.mask-style-question-3 .mask-back{
-    border-color: lightgrey;
     background-color: darkgrey;
+    border-color: lightgrey;
 }
 
 #masks .mask-root.mask-style-question-2 .mask-back{
-    border-color: lightgrey;
     background-color: darkblue;
+    border-color: lightgrey;
 }
 
 #masks .mask-root.mask-style-question-1 .mask-back{
-    border-color: lightgrey;
     background-color: darkgreen;
+    border-color: lightgrey;
 }
 
 #masks .mask-root.mask-style-question-0 .mask-back{
-    border-color: darkgrey;
     background-color: darkred;
+    border-color: darkgrey;
 }
 
 #masks .mask-root.mask-style-question-4 .mask-back{
-    border-color: darkgrey;
     background-color: palevioletred;
+    border-color: darkgrey;
 }
 
 #masks .mask-root.mask-style-question-5 .mask-back{
-    border-color: darkgrey;
     background-color: palegreen;
+    border-color: darkgrey;
 }
 
 #masks .mask-root.mask-style-question-6 .mask-back{
-    border-color: darkgrey;
     background-color: paleturquoise;
+    border-color: darkgrey;
 }
 
 #masks .mask-root.mask-style-question-7 .mask-back{
-    border-color: darkgrey;
     background-color: lightgrey;
+    border-color: darkgrey;
 }
 
 /*-----------------------------------------

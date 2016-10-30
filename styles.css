@@ -15,7 +15,7 @@
  along with Moodle. If not, see <http: //www.gnu.org/licenses/>.
 */
 /**
- * masks module main style sheet
+ * masks module style sheet
  *
  * @copyright  2016 Edunao SAS (contact@edunao.com)
  * @author     Sadge (daniel@edunao.com)
@@ -33,13 +33,13 @@
 }
 
 #masks .masks-header{
-    position: relative;
+    background-color: #505a7c;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    color: #FFFFFF;
     display: inline-block;
     padding: 0;
-    background-color: #505a7c;
-    color : #FFFFFF ;
-    border-top-left-radius: 4px ;
-    border-top-right-radius: 4px ;
+    position: relative;
     width: 100%;
     z-index: 2;
 }
@@ -62,6 +62,7 @@
     margin-bottom: 8px;
 }
 
+
 /*-----------------------------------------
   Menu bar
 */
@@ -76,10 +77,10 @@
 }
 
 #masks .menu-bar-group>div{
-    display: inline-block;
-    position: relative;
-    height: 1.2em;
     cursor: pointer;
+    display: inline-block;
+    height: 1.2em;
+    position: relative;
 }
 
 #masks .menu-bar-group.left-group>div{
@@ -100,98 +101,101 @@
 }
 
 #masks .menu-bar-group>div.menu-bar-group-title{
-    font-weight: bold;
     cursor: default;
+    font-weight: bold;
 }
 
 #masks .menu-bar-group.right-group{
     float: right;
 }
 
+
 /*-----------------------------------------
   Menu bar - student result
 */
 
 #masks .masks-header #student-menu-bar .menu-bar-group.right-group{
-    padding-top : 5px ;
-    box-sizing: border-box ;
+    box-sizing: border-box;
+    padding-top: 5px;
 }
 
 #masks .masks-header #student-menu-bar #drop-down-options,
 #masks .masks-header #student-menu-bar #drop-down-page-select
 {
-    margin-top : 23px ;
+    margin-top: 23px;
 }
 
 #masks .masks-header #correct-answers-container{
-    display : none;
+    display: none;
 }
 
 #masks .menu-bar-group.left-group .grade-container{
-    margin-top : -5px;
-    cursor : initial ;
-    height : auto ;
+    cursor: initial;
+    height: auto;
+    margin-top: -5px;
 }
 
 #masks .menu-bar-group.left-group .grade-container #congratulation-container{
-    font-size : 22px;
-    text-transform: uppercase;
-    color : #34c795 ;
+    color: #34c795;
+    font-size: 22px;
     font-weight: 600;
+    text-transform: uppercase;
 }
 
 #masks .menu-bar-group.left-group .grade-container:not(.display-congratulation) #congratulation-container{
-    display : none ;
+    display: none;
 }
 
 #masks .menu-bar-group.left-group .grade-container>div{
-    display : inline-block ;
-    margin-right : 20px ;
-    cursor : initial ;
+    cursor: initial;
+    display: inline-block;
+    margin-right: 20px;
 }
 
 
 
 #masks .menu-bar-group .circle-value{
-    display : inline-block ;
-    height : 40px ;
-    width : 40px ;
-    line-height: 40px ;
-    text-align: center ;
-    border-radius: 50px ;
-    border : 1px #7383bf solid ;
-    background-color: #48516e ;
-    font-size : 15px ;
+    background-color: #48516e;
+    border: 1px #7383bf solid;
+    border-radius: 50px;
+    display: inline-block;
+    font-size: 15px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    width: 40px;
 }
 
 #masks .menu-bar-group .circle-value.correct-answers-circle{
-    border-color: #34c795 ;
+    border-color: #34c795;
 }
 
 #masks .menu-bar-group .circle-label{
-    display : inline-block ;
-    margin-left : 10px ;
-    vertical-align: middle ;
+    display: inline-block;
+    margin-left: 10px;
+    vertical-align: middle;
 }
 
 @media (max-width:660px){
     #masks .menu-bar-group.left-group .grade-container #congratulation-container{
-        margin-top : 10px ;
+        margin-top: 10px;
     }
 }
 
 @media (max-width:420px){
     #masks .menu-bar-group .circle-label{
-        font-size : 14px !important;
+        font-size: 14px !important;
     }
 }
 
 @media (max-width:400px){
     #masks #questions-remaining-container{
-        margin-top : 10px ;
+        margin-top: 10px;
     }
 
 }
+
+
 /*-----------------------------------------
   Menu bar - context-dependent buttons
 */
@@ -203,6 +207,7 @@
 #masks.hide-layout-save-group .layout-save-group{
     display: none;
 }
+
 
 /*-----------------------------------------
   Menu bar - drop down menu buttons
@@ -217,35 +222,36 @@
 }
 
 #masks .menu-button{
-    position: relative;
     display: inline-block;
+    position: relative;
     vertical-align: middle;
 }
+
 
 /*-----------------------------------------
   Drop down menus
 */
 
 #masks .menu-popup{
+    background-color: #393f53;
+    border: solid black 1px;
     display: none;
+    margin-top: 11px;
+    max-height: 20em;
+    overflow-x: hidden;
+    overflow-y: auto;
     position: absolute;
     top: 100%;
-    margin-top: 11px;
-    border: solid black 1px;
-    background-color: #393f53;
-    max-height: 20em;
-    overflow-y: auto;
-    overflow-x: hidden;
     width: inherit;
 }
 
 #masks .menu-entry{
-    position: relative;
     display: inline-block;
     left: 0;
-    right: 10px;
-    padding-top: 0.25em;
     padding-bottom: 0.25em;
+    padding-top: 0.25em;
+    position: relative;
+    right: 10px;
     white-space: nowrap;
     width: 100%;
 }
@@ -255,8 +261,8 @@
 }
 
 #masks .page-nav .menu-entry{
-    padding-right: 0.5em;
     padding-left: 0.5em;
+    padding-right: 0.5em;
 }
 
 #masks .menu-entry:hover{
@@ -273,9 +279,9 @@
 }
 
 #masks .menu-entry img{
+    height: 30px;
     padding-left: 5px;
     padding-right: 5px;
-    height : 30px ;
 }
 
 
@@ -284,8 +290,8 @@
 */
 
 #masks #drop-down-add-mask{
+    margin-left: -14px;
     padding-right: 0.5em;
-    margin-left : -14px ;
 }
 
 #masks #drop-down-page-select{
@@ -297,7 +303,7 @@
 }
 
 #masks #drop-down-options .reupload-entry img{
-    height : 26px ;
+    height: 26px;
 }
 
 
@@ -311,30 +317,30 @@
 }
 
 #masks .masks-body{
-    position: relative;
-    width: 100%;
-    top: 0;
     left: 0;
     margin: 0;
     padding: 0;
+    position: relative;
+    top: 0;
+    width: 100%;
 }
 
 #masks-page-space{
     display: block;
-    position: relative;
-    width: 100%;
-    top: 0;
     left: 0;
     margin: 0;
     padding: 0;
+    position: relative;
+    top: 0;
+    width: 100%;
 }
 
 #masks.page-hidden #masks-masks{
     background-color: #C0C0C0;
+    background-image: url([[pix: mod_masks|hide_page]]);
+    background-position: center 5%;
+    background-repeat: no-repeat;
     opacity: 0.75;
-    background-image: url([[pix:mod_masks|hide_page]]);
-    background-repeat: no-repeat ;
-    background-position: center 5% ;
 }
 
 /*-----------------------------------------
@@ -342,8 +348,8 @@
 */
 
 #masks #masks-context-menu.hidden{
-    visibility: hidden;
     display: block;
+    visibility: hidden;
 }
 
 #masks #masks-context-menu{
@@ -352,18 +358,18 @@
 }
 
 #masks .context-menu-pane{
-    top: 0;
     left: 0;
+    top: 0;
 }
 
 #masks .context-menu-pane > div{
     background-color: #505a7c;
-    color: white;
     border: solid gray 1px;
+    color: white;
+    cursor: pointer;
     margin: 2px;
     padding: 5px 14px;
     white-space: nowrap;
-    cursor: pointer;
 }
 
 #masks .context-menu-pane > div img{
@@ -376,24 +382,23 @@
 }
 
 #masks .context-menu-style{
-    width: 2em;
-    height: 2em;
     display: inline-block;
-    position: relative;
-    padding: 0;
+    height: 2em;
     margin: 4px 6px 0 6px;
-
+    padding: 0;
+    position: relative;
+    width: 2em;
 }
 #masks .context-menu-style:hover{
-    opacity: 0.7 ;
+    opacity: 0.7;
 }
 
 
 #masks .context-menu-style .mask-root{
-    width: 100%;
+    cursor: pointer;
     height: 100%;
     padding: 0;
-    cursor: pointer;
+    width: 100%;
 }
 
 
@@ -403,13 +408,13 @@
 
 #masks-masks{
     display: block;
-    position: absolute;
-    width: 100%;
     height: 100%;
-    top: 0;
     left: 0;
     margin: 0;
     padding: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
 }
 
 #masks .mask-root{
@@ -419,19 +424,19 @@
 }
 
 #masks .menu-entry .mask-root{
-    position: relative;
     display: inline-block;
-    padding-left: 0.25em;
-    width: 10em;
     height: 2em;
+    padding-left: 0.25em;
+    position: relative;
+    width: 10em;
 }
 
 #masks .mask-back,
 #masks .mask-main,
 #masks .mask-front{
+    height: 100%;
     position: absolute;
     width: 100%;
-    height: 100%;
 }
 
 #masks.dragging-mask .selected-mask .mask-back,
@@ -441,57 +446,57 @@
 }
 
 #masks .mask-front{
-    background-repeat: no-repeat;
     background-position: center;
+    background-repeat: no-repeat;
 }
 
 #masks .masks-handle{
-    position: absolute;
-    top: 0.25em;
-    left: 0.25em;
     bottom: 0.25em;
+    left: 0.25em;
+    position: absolute;
     right: 0.25em;
+    top: 0.25em;
 }
 
 
 #masks .masks-handle:hover{
-    border: 1px rgba(0, 0, 0, 0.2) solid;
     background: #FFF;
+    border: 1px rgba(0, 0, 0, 0.2) solid;
     opacity: 0.3;
 }
 
 #masks .masks-handle.l{
-    min-width: 0.25em;
-    max-width: 0.75em;
-    width: 100%;
-    left: -0.5em;
     cursor: ew-resize;
+    left: -0.5em;
+    max-width: 0.75em;
+    min-width: 0.25em;
+    width: 100%;
 }
 
 #masks .masks-handle.r{
-    min-width: 0.25em;
-    max-width: 0.75em;
-    width: 100%;
-    right: -0.5em;
-    left: initial;
     cursor: ew-resize;
+    left: initial;
+    max-width: 0.75em;
+    min-width: 0.25em;
+    right: -0.5em;
+    width: 100%;
 }
 
 #masks .masks-handle.t{
-    min-height: 0.25em;
-    max-height: 0.75em;
-    height: 100%;
-    top: -0.5em;
     cursor: ns-resize;
+    height: 100%;
+    max-height: 0.75em;
+    min-height: 0.25em;
+    top: -0.5em;
 }
 
 #masks .masks-handle.b{
-    min-height: 0.25em;
-    max-height: 0.75em;
-    height: 100%;
     bottom: -0.5em;
-    top: initial;
     cursor: ns-resize;
+    height: 100%;
+    max-height: 0.75em;
+    min-height: 0.25em;
+    top: initial;
 }
 
 #masks .masks-handle.t.l,
@@ -505,11 +510,11 @@
 }
 
 #masks .masks-handle.m.c{
-    top: 0;
-    left: 0;
     bottom: 0;
-    right: 0;
     cursor: move;
+    left: 0;
+    right: 0;
+    top: 0;
 }
 
 #masks .selected-mask .mask-front{
@@ -536,8 +541,8 @@
 
 #masks .mask-root.mask-deleted .masks-handle.m.c{
     background-image: url([[pix: i/invalid]]);
-    background-repeat: no-repeat;
     background-position: center;
+    background-repeat: no-repeat;
     background-size: contain;
 }
 
@@ -553,9 +558,9 @@
 #masks .selected-mask .masks-handle.t.r,
 #masks .selected-mask .masks-handle.b.l,
 #masks .selected-mask .masks-handle.b.r {
+    background: #FFF;
     border: 1px rgba(0, 0, 0, 0.5) solid;
     border-radius: 50% !important;
-    background: #FFF;
 }
 
 
@@ -572,10 +577,10 @@
 }
 
 #masks .nav-button:hover{
-    text-decoration: underline;
-    color: blue;
     background: #F0F0F0;
     border-radius: 0.1em;
+    color: blue;
+    text-decoration: underline;
 }
 
 #masks .nav-left{
@@ -588,24 +593,24 @@
 
 #masks.first-page .nav-left,
 #masks.last-page .nav-right{
-    opacity: 0.25;
-    cursor: default;
     background: inherit;
-    text-decoration: inherit;
     color: inherit;
+    cursor: default;
+    opacity: 0.25;
+    text-decoration: inherit;
 }
 
 #masks .nav-page-name{
     display: inline-block;
-    position: relative;
     height: 100%;
+    position: relative;
     vertical-align: middle;
 }
 
 #masks .nav-page-name.page-hidden,
 #masks.page-hidden .menu-button .nav-page-name{
-    text-decoration: line-through;
     color: lightgray;
+    text-decoration: line-through;
 }
 
 #masks .nav-page-word{
@@ -613,17 +618,18 @@
 }
 
 #masks-menu-page-select{
-    display: inline-block;
-    position: relative;
     cursor: pointer;
+    display: inline-block;
     height: 1.2em;
     margin-left: 0.25em;
     margin-right: 0.25em;
+    position: relative;
 }
 
 #masks-menu-page-select img{
     margin-left: 0;
 }
+
 
 /*-----------------------------------------
   Toggles
@@ -645,6 +651,7 @@
     display: inline;
 }
 
+
 /*-----------------------------------------
   Overlay
 */
@@ -655,53 +662,54 @@
 
 #masks.have-popup #page-overlay{
     display: block;
+    height: 100%;
     position: absolute;
     width: 100%;
-    height: 100%;
     z-index: 3;
 }
 
 #masks #page-mask{
+    background-color: #E0E0E0;
     display: block;
+    height: 100%;
+    opacity: 0.85;
     position: absolute;
     width: 100%;
-    height: 100%;
-    background-color: #E0E0E0;
-    opacity: 0.85;
 }
 
 #masks #popup-parent-iframe{
-    opacity: 0.0;
     max-height: 1px;
+    opacity: 0.0;
     overflow-y: visible;
     width: 80%;
 }
 
 #masks #popup-parent-iframe.popup-active{
-    width: 700px;
-    max-width: 100%;
     max-height: none;
+    max-width: 100%;
+    width: 700px;
 }
 
 #masks #popup-parent-iframe.loaded{
+    left: 0;
+    margin: auto;
     opacity: 1.0;
     position: absolute;
-    left: 0;
     right: 0;
-    margin: auto;
 }
 
 #masks iframe{
+    border: 0;
     margin: 0;
     padding: 0;
-    border: 0;
 }
 
 #masks #popup-mdl-frame{
-    width: 100%;
-    top: 5em;
     overflow-y: visible;
+    top: 5em;
+    width: 100%;
 }
+
 
 /*-----------------------------------------
     General mask style
@@ -713,8 +721,8 @@
 
 #masks .mask-root.mask-passed{
     cursor: default;
-    z-index: 0;
     opacity: 0.25;
+    z-index: 0;
 }
 
 #masks .mask-passed > .mask-front,
