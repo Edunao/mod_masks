@@ -91,10 +91,10 @@
     margin-left: 0.75em;
 }
 
-#masks .menu-button:hover,
+/*#masks .menu-button:hover,
 #masks .menu-button:hover>.nav-page-name{
-    //text-decoration: underline;
-}
+    text-decoration: underline;
+}*/
 
 #masks .menu-bar-group>div>img{
     margin-right: 0.25em;
@@ -517,8 +517,8 @@
     top: 0;
 }
 
-#masks .selected-mask .mask-front{
-}
+/*#masks .selected-mask .mask-front{
+}*/
 
 #masks .mask-root.mask-hidden div{
     opacity: 0.25;

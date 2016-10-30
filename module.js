@@ -22,6 +22,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+// Directives for jshint
+/*jshint bitwise: false*/
 
 // Namespace for the plugin code and data
 M.mod_masks={
@@ -197,7 +199,7 @@ M.mod_masks={
                 var pageIdx         = M.mod_masks.currentPage;
                 var pageId          = M.mod_masks_pages[ pageIdx ].id;
                 var clickedMaskIdx  = target.attr('maskidx');
-                var clickedMask     = M.mod_masks_masks.pages[ pageId ][ maskIdx ];
+                var clickedMask     = M.mod_masks_masks.pages[ pageId ][ clickedMaskIdx ];
                 var flagGraded      = ( clickedMask.flags & this.FLAG_GRADED );
                 var flagDone        = ( clickedMask.userstate & this.FLAG_DONE );
                 var numUnanswered   = M.mod_masks.countUnpassedMasks( this.FLAG_GRADED );
