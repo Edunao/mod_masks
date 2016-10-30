@@ -52,7 +52,7 @@ class mask_types_manager{
     // Public API
 
     /* Get the array of registered type names
-     * @returns array of string type names 
+     * @returns array of string type names
      */
     public static function getTypeNames(){
         self::populateTypeList();

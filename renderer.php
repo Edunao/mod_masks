@@ -33,7 +33,7 @@ class mod_masks_renderer extends plugin_renderer_base {
     public function renderTeacherView( $docData ) {
         global $OUTPUT;
         $result = '';
-        
+
         // open the main page area
         $result .= $this->openPage();
 
@@ -67,7 +67,7 @@ class mod_masks_renderer extends plugin_renderer_base {
     public function renderStudentView( $docData ) {
         global $OUTPUT;
         $result = '';
-        
+
         // open the main page area
         $result .= $this->openPage();
 
@@ -99,7 +99,7 @@ class mod_masks_renderer extends plugin_renderer_base {
     public function renderNotReadyMessage() {
         global $OUTPUT;
         $result = '';
-        
+
         // add notifications
         $strNotification = get_string( 'notReadyMsg', 'mod_masks' );
         $result .= $OUTPUT->notification($strNotification, 'notifyproblem');
@@ -116,7 +116,7 @@ class mod_masks_renderer extends plugin_renderer_base {
         $result = '';
 
         // open the page
-        $rootClasses = 'hide-mask-actions-group hide-layout-save-group hide-mask-style-note hide-mask-style-question'; 
+        $rootClasses = 'hide-mask-actions-group hide-layout-save-group hide-mask-style-note hide-mask-style-question';
         $result .= html_writer::start_tag( 'div', array( 'id' => 'masks', 'class' => $rootClasses ) );
 
         // add a little dummy div that can be used to record a scroll position and returned to as an anchor
@@ -167,7 +167,7 @@ class mod_masks_renderer extends plugin_renderer_base {
 
         // open page nav area tags
         $result .= html_writer::start_div('page-nav');
-        
+
         // buttons for navigating left
         $result .= html_writer::span( '<<', 'nav-button nav-left', array( 'click-action' => 'nav-to-left-end' ) );
         $result .= html_writer::span( '<', 'nav-button nav-left', array( 'click-action' => 'nav-to-left' ) );
@@ -192,7 +192,7 @@ class mod_masks_renderer extends plugin_renderer_base {
     }
 
     private function renderMenuBar( $docData, $includeTeacherOptions ){
-        global $OUTPUT ; 
+        global $OUTPUT ;
         $result = '';
 
         // lookup site-wide plugin configuration
@@ -232,19 +232,19 @@ class mod_masks_renderer extends plugin_renderer_base {
             $correctAnswersStr = get_string('gradeNamePass', 'mod_masks');
             $result .= $this->renderCircleValue(0, $correctAnswersStr , 'correct-answers-circle' );
             $result .= html_writer::end_div();
-            
-            // Questions Remaining 
+
+            // Questions Remaining
             $result .= html_writer::start_tag( 'div', array( 'id' => 'questions-remaining-container' ) );
             $questionRemainingStr = get_string('gradeNameToGo', 'mod_masks');
             $result .= $this->renderCircleValue(0, $questionRemainingStr , 'questions-remaining-circle' );
             $result .= html_writer::end_div();
-            
+
             // Congratulation
             $result .= html_writer::start_tag( 'div', array( 'id' => 'congratulation-container' ) );
             $congratulationStr = get_string('header_congratulations_text', 'mod_masks');
             $result .= $congratulationStr ;
             $result .= html_writer::end_div();
-            
+
             $result .= html_writer::end_div();
         }
 
@@ -328,7 +328,7 @@ class mod_masks_renderer extends plugin_renderer_base {
         foreach( $docData->pages as $page ){
             $pageWidth = max( $pageWidth, $page->w );
         }
-        
+
         // setup alternative image-width styles for controlling the size of the page image
         $styles = '';
         $styles .= '#masks-page-space{width:100%}';
@@ -350,12 +350,12 @@ class mod_masks_renderer extends plugin_renderer_base {
     private function renderContextMenu( $includeTeacherOptions ){
         require_once(dirname(__FILE__).'/mask_families_manager.class.php');
         global $OUTPUT ;
-        
+
         // for student view there is currently no context menu
         if ( $includeTeacherOptions !== true ){
             return;
         }
-        
+
         // open the context menu
         $result = '';
         $result .= html_writer::start_tag( 'div', array( 'id' => 'masks-context-menu', 'class' => 'hidden' ) );
@@ -388,13 +388,13 @@ class mod_masks_renderer extends plugin_renderer_base {
             $result .= html_writer::end_div();
         }
 
- 
+
         // close the context menu
         $result .= html_writer::end_div();
         $result .= html_writer::end_tag('div');
         return $result;
     }
-    
+
     private function renderCircleValue($value , $label , $classes = '' ){
         $result = '';
         $result .= html_writer::start_div( 'circle-value', array('class' => $classes) );
@@ -406,7 +406,7 @@ class mod_masks_renderer extends plugin_renderer_base {
         return $result;
     }
 
-        
+
     //-----------------------------------------------------------------------------------
     // Private utilities - menu-bar menus components
 
@@ -450,7 +450,7 @@ class mod_masks_renderer extends plugin_renderer_base {
 
         $strButtonText = get_string( $toggleName, 'mod_masks' );
         $attributes = array(
-            'click-action' => 'toggle', 
+            'click-action' => 'toggle',
             'arg' => $toggleName,
             'id' => 'masks-toggle-'.$toggleName );
 
@@ -538,7 +538,7 @@ class mod_masks_renderer extends plugin_renderer_base {
         $attributes = $extraAttributes;
         $attributes[ 'click-action' ] = $clickAction;
         $attributes[ 'class' ] = $classes ;
-        
+
         $result .= html_writer::start_div( 'menu-entry', $attributes );
         $result .= html_writer::empty_tag( 'img', array( 'src' => $menuIcon ) );
         $result .= html_writer::span( $strMenuText );
@@ -550,7 +550,7 @@ class mod_masks_renderer extends plugin_renderer_base {
     private function renderStyleMenuEntry( $idx ){
         global $OUTPUT;
         $result = '';
-        
+
         $attributes = array( 'click-action' => 'set-mask-style', 'mask-style' => $idx );
 
         $result .= html_writer::start_div( 'menu-entry', $attributes );
@@ -567,7 +567,7 @@ class mod_masks_renderer extends plugin_renderer_base {
     private function renderStyleContextMenuEntry( $idx , $familyName ){
         global $OUTPUT;
         $result = '';
-        
+
         $attributes = array( 'click-action' => 'set-mask-style', 'mask-style' => $idx , 'family-name' => $familyName);
 
         $result .= html_writer::start_div( 'context-menu-style', $attributes );
@@ -587,7 +587,7 @@ class mod_masks_renderer extends plugin_renderer_base {
 
         $strMenuText = get_string( $toggleName, 'mod_masks' );
         $attributes = array(
-            'click-action' => 'toggle', 
+            'click-action' => 'toggle',
             'arg' => $toggleName,
             'id' => 'masks-toggle-'.$toggleName );
 

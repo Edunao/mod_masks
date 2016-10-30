@@ -56,14 +56,14 @@ $string['page-mod-masks-x']             = 'N\'importe quelle page du module MASK
 $string['modulename_link']             = 'mod/masks/view';
 
 // Messages displayed in notification area
-$string['notReadyMsg']                  = 'L\'exercice n\'est pas prêt. Veuillez réessayer plus tard.'; 
+$string['notReadyMsg']                  = 'L\'exercice n\'est pas prêt. Veuillez réessayer plus tard.';
 
 // Texts for menus
 $string['page']                         = 'Page';
 $string['options']                      = 'Options';
 $string['full-size']                    = 'Zoom 100%';
-$string['reshow-masks']                 = 'Réafficher les masks'; 
-$string['rehide-masks']                 = 'Recacher les masks'; 
+$string['reshow-masks']                 = 'Réafficher les masks';
+$string['rehide-masks']                 = 'Recacher les masks';
 $string['page-hidden']                  = 'Cacher la page';
 $string['reupload']                     = 'Re-Importer le document';
 $string['add-mask-menu']                = 'AJOUTER';
@@ -92,12 +92,11 @@ $string['label_answer']                 = 'Réponse correcte (une alternative pa
 $string['label_valid_answers']          = 'Réponse correcte';
 $string['label_response']               = 'Réponse';
 $string['label_goodanswer']             = 'La réponse correcte';
-$string['label_badanswer0']             = 'Réponse incorrecte';
-$string['label_badanswer0']             = 'Une réponse incorrecte';
+$string['label_badanswer0']             = 'Réponses incorrectes';
 $string['label_badanswer1']             = 'Autre réponse incorrect';
 $string['label_badanswer2']             = 'Autre réponse incorrect';
 $string['label_badanswer3']             = 'Autre réponse incorrect';
-$string['label_badanswers']             = 'Réponses Incorrects';
+$string['label_badanswers']             = 'Réponses incorrectes';
 $string['label_goodanswerhint']         = 'Correct answer response';
 $string['label_badanswerhint']          = 'Incorrect answer response';
 $string['label_userhint']               = 'Indice';
@@ -138,8 +137,8 @@ $string['upload-wait-title']            = 'Importation du document';
 $string['upload-wait-text']             = ''
     . 'L\'importation de votre fichier sur le serveur est en cours<br>'
     . 'Cette opération peut prendre un moment.<br><br>'
-    . 'Une fois téléchargé, le fichier sera traité par le serveur<br><br>' 
-    . 'Ce message peut disparaitre avant que le traitement ne soit terminé<br><br>' 
+    . 'Une fois téléchargé, le fichier sera traité par le serveur<br><br>'
+    . 'Ce message peut disparaitre avant que le traitement ne soit terminé<br><br>'
     . 'Merci de ne pas rafraîchir la page ou naviguer vers une autre page<br>'
     ;
 
@@ -175,7 +174,7 @@ $string['add-mask-qtxt']                = 'Question Simple'; // simple = texte
 $string['add-mask-basic']               = 'Note Temporaire';
 $string['add-mask-note']                = 'Note Permanente';
 
-$string['title_new_qcm']                = 'Nouvelle Question à Choix Multiples';
+$string['title_new_qcm']                = 'Question à Choix Multiples';
 $string['title_new_qtxt']               = 'Nouvelle Question Simple';
 $string['title_new_basic']              = 'Nouvelle Note Temporaire';
 $string['title_new_note']               = 'Nouvelle Note Permanente';

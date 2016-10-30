@@ -35,12 +35,11 @@ class mask_type_basic extends mask_type{
     private $maskType       = 'basic';
     private $dbInterface    = null;
     private $fields         = null;
-    private $maskFamily     = 'note';
 
 
     //-------------------------------------------------------------------------
     // basics
-    
+
     public function __construct(){
         // Establish database connection
         require_once(dirname(__FILE__).'/database_interface.class.php');
@@ -51,7 +50,7 @@ class mask_type_basic extends mask_type{
             'title' => FIELD_TEXT + FIELD_REQUIRED,
             'note'  => FIELD_BIGTEXTAREA + FIELD_REQUIRED,
         );
-        
+
         // this is a notes field so override the default mask type family
         $this->maskTypeFamily  = 'note';
     }

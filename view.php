@@ -79,7 +79,7 @@ foreach($families as $family){
 
 
 ///////////////////////////////////////////////////////////////////////////
-// Include other css file 
+// Include other css file
 
 $PAGE->requires->css('/mod/masks/skin_enit.css');
 
@@ -149,7 +149,7 @@ if ($isTeacher){
     $maskData->count = $maskCount;
     // apply new recleaner mask data
     $docData->pages  = $cleanerDocPages;
-    
+
     // render the view
     $pageBody = $docData->isInitialised?
         $renderer->renderStudentView( $docData ):
@@ -170,7 +170,7 @@ $stateType  = $isTeacher? 1: 0;
 $rawScript  = '';
 $rawScript  .= 'M.mod_masks_state = { cmid: '.$id.', type: '.$stateType.', showGhosts: '.$config->showghosts.' };';
 $rawScript  .= 'M.mod_masks_texts = '.json_encode( array(
-    'pageExitPrompt'    => get_string( 'navigateaway', 'mod_masks' ), 
+    'pageExitPrompt'    => get_string( 'navigateaway', 'mod_masks' ),
     'uploadSuccess'     => get_string( 'alert_uploadsuccess', 'mod_masks' ),
     'uploadFail'        => get_string( 'alert_uploadfailed', 'mod_masks' ),
     'firstMaskAdded'    => get_string( 'alert_firstMaskAdded', 'mod_masks' ),

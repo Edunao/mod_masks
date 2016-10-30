@@ -36,8 +36,8 @@ define( 'mod_masks\FIELD_FEEDBACK'      , 0x1000 );
 define( 'mod_masks\FIELD_HINT'          , 0x2000 );
 
 // constants defining bit sets
-define('mod_masks\ALL_FIELD_TYPES'  , FIELD_FEEDBACK | FIELD_HINT ); 
-define('mod_masks\ALL_INPUT_TYPES'  , FIELD_TEXT | FIELD_TEXTAREA | FIELD_BIGTEXTAREA ); 
+define('mod_masks\ALL_FIELD_TYPES'  , FIELD_FEEDBACK | FIELD_HINT );
+define('mod_masks\ALL_INPUT_TYPES'  , FIELD_TEXT | FIELD_TEXTAREA | FIELD_BIGTEXTAREA );
 
 
 // constants that define which set of fields to NOT present in question editing forms
@@ -49,7 +49,7 @@ abstract class mask_type{
 
     //-------------------------------------------------------------------------
     // Protected Data
-    
+
     // moodle execution environment (determined at the start of the page and stored here for use as required)
     protected $course           = null;
     protected $cm               = null;
@@ -62,13 +62,13 @@ abstract class mask_type{
 
     //-------------------------------------------------------------------------
     // Public API
-    
+
     public function applyMoodleEnvironment( $course, $cm, $masksInstance ){
         $this->course       = $course;
         $this->cm           = $cm;
         $this->masksInstance = $masksInstance;
     }
-    
+
     public function setActiveMask( $maskId ){
         $this->activeMask   = $maskId;
     }
@@ -80,7 +80,7 @@ abstract class mask_type{
 
     //-------------------------------------------------------------------------
     // Abstract Public API
-    
+
     /* Method used to process a 'new mask' page
      * @param integer $id a course module instance id ($cm->id)
      * @param integer $pageId the masks_page db row to which the new mask should be assigned
@@ -94,7 +94,7 @@ abstract class mask_type{
      * @param object $questionData the form data retrieved from the database
      */
     abstract function onEditMask( $id, $maskId, $questionId, $questionData );
-    
+
     /* Method used to process a studen't interaction with a mask (the 'click on mask' page)
      * @param integer $questionId the masks_question db row corresponding to $maskId
      * @param object $questionData the form data retrieved from the database
@@ -103,11 +103,11 @@ abstract class mask_type{
      * @return boolean true if the action results in mask being closed else false
      */
     abstract function onClickMask( $questionId, $questionData, $hiddenFields, $isLastQuestion );
-    
+
 
     //-------------------------------------------------------------------------
     // Protected helper functions
-    
+
     protected function doNewMask( $id, $pageId, $maskType, $fields, $dbInterface, $flags ){
         // do we have a complete data set?
         $haveData = $this->haveData( $fields );
@@ -173,9 +173,13 @@ abstract class mask_type{
         // encode question data
         $newData = new \stdClass;
         foreach( $fields as $field => $flags ){
-            $newData->$field = htmlentities($_GET[ $field ]);
+            $fieldValue = htmlentities( $_GET[ $field ] );
+            // The following 2 lines have been commented for now as the result caused display bugs on firefox relating to the size of the iframe tag
+            //$regex = array('/&lt;(\/?)(b|i|strong|strike|em|li|ul|ol|p|h1|h2|h3|h4|h5|br|hr)\s*(\/?)&gt;/');
+            //$fieldValue = preg_replace( $regex, '<\1\2\3>', $fieldValue );
+            $newData->$field = $fieldValue;
         }
-        
+
         return $newData;
     }
 
@@ -238,7 +242,7 @@ abstract class mask_type{
         echo \html_writer::div( $helpText, 'hint frame-text' );
         echo \html_writer::end_div();
         echo \html_writer::end_div();
-        
+
         // open the question section
         echo \html_writer::start_div( 'frame-section question-section' );
 
@@ -361,7 +365,7 @@ abstract class mask_type{
         echo $answerHTML;
         echo \html_writer::end_div();
         echo \html_writer::end_div();
-        
+
         // close the form, adding submit buttons and suchlike
         $formWriter->closeForm();
 

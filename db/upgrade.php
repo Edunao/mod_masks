@@ -24,7 +24,7 @@
  */
 
 function xmldb_masks_upgrade($oldversion) {
-    global $CFG, $DB;
+    global $DB;
     $dbman = $DB->get_manager();
 
     // Upgrade to initial version by creating tables and adding fields
@@ -33,7 +33,7 @@ function xmldb_masks_upgrade($oldversion) {
 
         // include handy utility functions for setting up database fields with standardised settings
         require_once(dirname(__FILE__).'/upgradelib.php');
-        
+
         // Create the doc database table
         $newTable = new xmldb_table('masks_doc');
         mod_masks\add_db_id_field( $newTable, 'id' );
@@ -63,7 +63,7 @@ function xmldb_masks_upgrade($oldversion) {
         mod_masks\add_db_int_field( $newTable, 'flags'       );  // a bitmask of flags such as 'HIDDEN'
         $newTable->add_index('parentcm', XMLDB_INDEX_NOTUNIQUE, array('parentcm'));
         $dbman->create_table($newTable);
-        
+
         // Create the questions database table - note that questions are polymorphic - the description
         // is stored as a json-encoded blob on the assumption that a factory will be able to make sense of it
         $newTable = new xmldb_table('masks_question');
@@ -72,7 +72,7 @@ function xmldb_masks_upgrade($oldversion) {
         mod_masks\add_db_txt_field( $newTable, 'data'        );  // json encoded data representing the question
         $newTable->add_index('parentcm', XMLDB_INDEX_NOTUNIQUE, array('parentcm'));
         $dbman->create_table($newTable);
-        
+
         // Create the mask zones database table
         $newTable = new xmldb_table('masks_mask');
         mod_masks\add_db_id_field( $newTable, 'id' );
@@ -104,7 +104,7 @@ function xmldb_masks_upgrade($oldversion) {
         $newTable->add_index('userquestion', XMLDB_INDEX_NOTUNIQUE, array('user','question'));
         $newTable->add_index('question', XMLDB_INDEX_NOTUNIQUE, array('question'));
         $dbman->create_table($newTable);
-        
+
         // Add missing 'AUTO_INCREMENT' propertirs for id fields
         mod_masks\fix_id_field( 'masks_doc'       , 'id' );
         mod_masks\fix_id_field( 'masks_doc_page'  , 'id' );
@@ -113,13 +113,13 @@ function xmldb_masks_upgrade($oldversion) {
         mod_masks\fix_id_field( 'masks_mask'      , 'id' );
         mod_masks\fix_id_field( 'masks_user_state', 'id' );
     }
-    
+
     if ($oldversion < 2016102002){
         $table = new xmldb_table('masks_question');
         $field = new xmldb_field('type');
         $field->set_attributes(XMLDB_TYPE_CHAR, '32', null, null, null,'', 'parentcm');
         $dbman->add_field($table, $field);
-        
+
         //update masks type
         $allmasksquestions = $DB->get_records('masks_question');
         foreach($allmasksquestions as $question){

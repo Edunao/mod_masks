@@ -71,7 +71,7 @@ if ( $haveData !== true ){
     // create the frame head including required libs and stylesheets
     require_once('./locallib.php');
     \mod_masks\beginFrameOutput();
-    
+
     // construct the script to get the parent page to fill us in and submit the form
     $jsAutoSubmit = 'function masksAutoSubmit(){';
     $jsAutoSubmit .= 'document.getElementById("formprop-masks").value = parent.M.mod_masks.getMaskChanges();';

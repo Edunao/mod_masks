@@ -60,7 +60,7 @@ function beginFrameOutput(){
 
 function endFrameOutput(){
     // execute a bit of js directly to resize the div's parent
-    $jsCode = 
+    $jsCode =
         'parent.M.mod_masks.iframeUpdateHeight($("#masks-frame").height());'.
             '$("html, body").animate({'.
                 'scrollTop: $("#masks-frame").offset().top'.

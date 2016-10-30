@@ -30,7 +30,7 @@ class upload_policies{
     //-------------------------------------------------------------------------
     // Public API - Basics
     //-------------------------------------------------------------------------
-    
+
     /**
      * __construct()
      */
@@ -41,7 +41,7 @@ class upload_policies{
 
         // construct the context object
         $this->context = \context_module::instance( $cm->id );
-        
+
         // initialise logging
         $this->outputCSSRules();
     }
@@ -61,7 +61,7 @@ class upload_policies{
     //-------------------------------------------------------------------------
     // Public API - Main API
     //-------------------------------------------------------------------------
-    
+
     /**
      * Create a new record for the document object
      *
@@ -94,36 +94,36 @@ class upload_policies{
         // store the file away in the Moodle internal file storage
         $fs = get_file_storage();
         $fileRecord = array(
-            'contextid' => $this->context->id, 
-            'component' => 'mod_masks', 
+            'contextid' => $this->context->id,
+            'component' => 'mod_masks',
             'filearea'  => 'masks_doc_page',
             'itemid'    => $docPageId,
-            'filepath'  => '/', 
+            'filepath'  => '/',
             'filename'  => basename( $pageFileName )
         );
         $fs->create_file_from_pathname( $fileRecord, $pageFileName );
 
-        // update the doc page, writing the url to it 
+        // update the doc page, writing the url to it
         $this->databaseInterface->populateDocPage( $docPageId, $fileRecord['filename'], $width, $height );
 
         // store away the result
         $this->pageIds[ $pageNumber ] = $docPageId;
     }
-    
+
     /**
      * Instantiate database records to generate an exercise corresponding to the uploaded document
      *
      * @param integer $cmid - the $cm->id value for the course module instance that we're populating
      */
     public function finaliseUpload( $cmid ){
-        $this->databaseInterface->assignPages( $cmid, $this->pageIds );    
+        $this->databaseInterface->assignPages( $cmid, $this->pageIds );
     }
 
 
     //-------------------------------------------------------------------------
     // Public API - Utilities - File System
     //-------------------------------------------------------------------------
-    
+
     /**
      * getWorkFolderName()
      *
@@ -145,7 +145,7 @@ class upload_policies{
     //-------------------------------------------------------------------------
     // Public API - Utilities - Logging
     //-------------------------------------------------------------------------
-    
+
     private function outputCSSRules(){
         echo '<style>';
         echo 'log-title {color:light-blue;font-size:xx-large;font-weight:bold}';
@@ -154,7 +154,7 @@ class upload_policies{
         echo 'log-warn {color:red;font-size:large;font-weight:bold}';
         echo '</style>';
     }
-    
+
     public function logProgressTitle( $msg ){
         echo '<div class="log-title">' . $msg . "</div>\n";
         flush();
@@ -177,9 +177,9 @@ class upload_policies{
 
 
     //-------------------------------------------------------------------------
-    // Private Utility Routines - Standard PHP 
+    // Private Utility Routines - Standard PHP
     //-------------------------------------------------------------------------
-    
+
     static private function delTree($dir) {
         $files = array_diff(scandir($dir), array('.','..'));
         foreach ($files as $file) {
@@ -248,7 +248,7 @@ class upload_policies{
     //-------------------------------------------------------------------------
     // Private Data
     //-------------------------------------------------------------------------
-    
+
     private $context            = null;
     private $workFolder         = null;
     private $databaseInterface  = null;

@@ -6,17 +6,17 @@
   <TABLES>
 
     <TABLE NAME="masks" COMMENT="each record represents one module instance">
-    
+
       <FIELDS>
       	<!-- Fields REQUIRED by MOODLE -->
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
       </FIELDS>
-      
+
       <!-- primary key -->
       <KEYS><KEY NAME="primary" TYPE="primary" FIELDS="id"/></KEYS>
-      
+
     </TABLE>
 
     <!--
@@ -31,7 +31,7 @@
         plan to throw out the upgrade.php code, which is less readable, and maintain this xml file instead.
 
         The xml here below is a good starting point for understanding the plugin's database structure anyway so it makes
-        sense to keep it here, but be warned - it is not being actively maintained.	
+        sense to keep it here, but be warned - it is not being actively maintained.
 
 
         <TABLE NAME="masks" COMMENT="each record represents one module instance">

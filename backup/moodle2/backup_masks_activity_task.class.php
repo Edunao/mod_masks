@@ -1,4 +1,27 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * MASKS module standard backup / restore implementation
+ *
+ * @copyright  2016 Edunao SAS (contact@edunao.com)
+ * @author     Sadge (daniel@edunao.com)
+ * @package    mod_masks
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -33,9 +56,9 @@ class backup_masks_activity_task extends backup_activity_task {
      */
     static public function encode_content_links($content) {
         global $CFG;
-        
+
         $base = preg_quote($CFG->wwwroot,"/");
-        
+
          // Link to the list of masks
         $search="/(".$base."\/mod\/masks\/index.php\?id\=)([0-9]+)/";
         $content= preg_replace($search, '$@MASKSINDEX*$2@$', $content);
@@ -43,7 +66,7 @@ class backup_masks_activity_task extends backup_activity_task {
         // Link to masks view by moduleid
         $search="/(".$base."\/mod\/masks\/view.php\?id\=)([0-9]+)/";
         $content= preg_replace($search, '$@MASKSVIEWBYID*$2@$', $content);
-        
+
         return $content;
     }
 }

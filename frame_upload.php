@@ -95,8 +95,8 @@ if ( $haveData !== true ){
     echo \html_writer::start_tag( 'div', array( 'class' => 'upload-input' ) );
     echo \html_writer::start_tag('form', array(
         'action'=>new moodle_url( '/mod/masks/frame_upload.php' ),
-        'method'=>'post', 
-        'enctype'=>'multipart/form-data', 
+        'method'=>'post',
+        'enctype'=>'multipart/form-data',
         'onsubmit'=>'document.getElementById("masks-frame").classList.toggle("upload-running");parent.M.mod_masks.iframeUpdateHeight($("#masks-frame").height())'
     ));
     echo \html_writer::tag('input','',array('type'=>'hidden', 'name'=>'id', 'value'=>$id));
@@ -261,7 +261,7 @@ if (($error != -1) && (( count( $docData->pages ) > 0 ) && ! ( $config->debug > 
         echo $doneButton;
     }
     // close root tag
-    echo \html_writer::end_tag( 'div' );      
-    
+    echo \html_writer::end_tag( 'div' );
+
 }
 

@@ -35,12 +35,11 @@ class mask_type_qcm extends mask_type{
     private $maskType       = 'qcm';
     private $dbInterface    = null;
     private $fields         = null;
-    private $maskFamily     = 'question';
 
 
     //-------------------------------------------------------------------------
     // basics
-    
+
     public function __construct(){
         // Establish database connection
         require_once(dirname(__FILE__).'/database_interface.class.php');
@@ -63,7 +62,7 @@ class mask_type_qcm extends mask_type{
 
     //-------------------------------------------------------------------------
     // mask_type API
-    
+
     public function onNewMask( $id, $pageId ){
         // delegate work to generic method in base class
         $this->doNewMask( $id, $pageId, $this->maskType, $this->fields, $this->dbInterface, MASK_FLAGS_QUESTION );
@@ -142,7 +141,7 @@ class mask_type_qcm extends mask_type{
             }
             $this->renderAnswerResponsePage( $answerIsCorrect, $goodAnswerResponse, $badAnswerResponse, $hintText, $this->dbInterface, $questionId, $isLastQuestion );
 
-            // return true or false to represent 'question passed' of not            
+            // return true or false to represent 'question passed' of not
             return $answerIsCorrect;
         }
     }

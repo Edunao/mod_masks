@@ -94,7 +94,6 @@ $string['label_valid_answers']          = 'Valid answers';
 $string['label_response']               = 'Answer';
 $string['label_goodanswer']             = 'The correct answer';
 $string['label_badanswer0']             = 'Incorrect answers';
-$string['label_badanswer0']             = 'An incorrect answer';
 $string['label_badanswer1']             = 'Another incorrect answer';
 $string['label_badanswer2']             = 'Another incorrect answer';
 $string['label_badanswer3']             = 'Another incorrect answer';
@@ -117,7 +116,7 @@ $string['goodanswer_text']              = 'Well done. That is the correct answer
 $string['finalanswer_title']            = 'Congratulations';
 $string['finalanswer_text']             = 'All questions in this exercise have been answered correctly<br>'
                                         . 'More than one attempt was required for one or more questions';
-$string['perfectanswer_title']          = 'Perfect Score!';
+$string['perfectanswer_title']          = 'Strike!';
 $string['perfectanswer_text']           = 'Well done!<br>All questions were answered correctly at the first attempt';
 $string['wronganswer_title']            = 'Incorrect';
 $string['wronganswer_text']             = 'First incorrect attempt: Grade for this question will be zero';

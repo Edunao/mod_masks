@@ -50,7 +50,7 @@ Design Philosophy and future extension
 --------------------------------------
 This module is intended to be extremely simple to use.
 
-It would not be desirable to add options that can be confusing or cause it to bloat. 
+It would not be desirable to add options that can be confusing or cause it to bloat.
 
 It is desirable to improve the ergonomics, user feedback, clarity of presentation and any other such features that make the plugin easier or more pleasant to use.
 

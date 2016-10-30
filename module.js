@@ -35,7 +35,7 @@ M.mod_masks={
     maskChanges     : {},
     pageChanges     : {},
     alertLevel      : 0,
-    
+
     // constants - user progress flags
     FLAG_SEEN       : 0x10, // seen but not done
     FLAG_DONE       : 0x20, // seen and closed
@@ -188,7 +188,7 @@ M.mod_masks={
                 // delegate to 'edit-question' to open the editor form
                 this.processImpulseEvent(e,target,'edit-question');
                 break;
-                
+
             case 'edit-question':
                 M.mod_masks.activateFrame( action, { mid: M.mod_masks.selectedMask.id, qid: M.mod_masks.selectedMask.question, pageid: M.mod_masks.selectedMask.page }, 'no' );
                 break;
@@ -409,7 +409,7 @@ M.mod_masks={
 
     //------------------------------------------------------
     // Alert messages for the teacher
-    
+
     setAlertSuccess: function( msgId ){
         this.setAlert(msgId,1,'alert-success');
     },
@@ -461,9 +461,9 @@ M.mod_masks={
 
     //------------------------------------------------------
     // Managing iframe popups
-    
+
     activateFrame: function( frameName, args, saveLayout ){
-        // if there's a previous 'success' alert being displayed then get rid of it        
+        // if there's a previous 'success' alert being displayed then get rid of it
         this.clearAlertInfo();
 
         // update the properties of the iframe DOM tag
@@ -474,7 +474,7 @@ M.mod_masks={
             var val = args[ key ];
             url += '&'+key+'='+val;
         }
-        
+
         // if the save layout value is set here then indirect us through the save layout page
         if ( saveLayout != 'no' && ! $('#masks').hasClass('hide-layout-save-group') ){
             var confirm = ( saveLayout == 'prompt' )? 1: 0;
@@ -500,7 +500,7 @@ M.mod_masks={
         $('#popup-parent-'+popupId ).addClass('popup-active');
         $('#masks').addClass('have-popup');
         // move the scroll reference object to the top left of the current view
-        $('#masks-scroll-ref' ).offset({top:$(window).scrollTop(),left:$(window).scrollTop()});        
+        $('#masks-scroll-ref' ).offset({top:$(window).scrollTop(),left:$(window).scrollTop()});
         // scroll the question or suchlike into view
         var offset0 = $(window).scrollTop()+64; // +64 to get cleanly beneath the title bar that floats over the screen
         var offset1 = $('#masks>.masks-body').offset().top;
@@ -511,11 +511,11 @@ M.mod_masks={
 
     //------------------------------------------------------
     // mask display
-    
+
     clearMasks: function(){
         $( '#masks-masks' ).html('');
     },
-    
+
     renderMasks: function(){
         // if there are no masks on this page then we're done
         var pageId = M.mod_masks_pages[ M.mod_masks.currentPage ].id;
@@ -658,12 +658,12 @@ M.mod_masks={
                 $('#masks').removeClass('dragging-mask');
                 return;
             }
-            
+
             // claculate initial X0, Y0, X1, Y1
             var x0 = parseInt(mask.x);
             var y0 = parseInt(mask.y);
             var x1 = parseInt(mask.x) + parseInt(mask.w);
-            var y1 = parseInt(mask.y) + parseInt(mask.h);            
+            var y1 = parseInt(mask.y) + parseInt(mask.h);
 
             // lookup the specifier classes present on the target
             var hasT = target.hasClass('t')? 1: 0;
@@ -741,7 +741,7 @@ M.mod_masks={
                     M.mod_masks.setSaveLayoutMenu( true );
                     M.mod_masks.setAlertInfo('saveChanges');
                 }
-                
+
                 // if the mask was not resized then update the context menu position and show it
                 if ( ( ( dragInfo.newX1 - dragInfo.newX0 ) == ( dragInfo.posX1 - dragInfo.posX0 ) ) &&
                      ( ( dragInfo.newY1 - dragInfo.newY0 ) == ( dragInfo.posY1 - dragInfo.posY0 ) ) ){
@@ -881,8 +881,8 @@ M.mod_masks={
             }
         }
         // apply the calculated position and classes
-        contextMenuLeft = Math.max( contextMenuLeft, 0 );                
-        contextMenuTop = Math.max( contextMenuTop, 0 );                
+        contextMenuLeft = Math.max( contextMenuLeft, 0 );
+        contextMenuTop = Math.max( contextMenuTop, 0 );
         contextMenuLeft = contextMenuLeft * 100.0 / canvasWidth + '%';
         contextMenuTop  = contextMenuTop * 100.0 / canvasHeight + '%';
         $('#masks-context-menu')
@@ -919,10 +919,10 @@ M.mod_masks={
             if ( maskIsDeleted ){
                 delMaskNode.addClass( 'toggle' );
             }
-            
+
             // activate the styles lines in the masks context menu that correspond to this mask
             $('.context-menu-row').css('display', 'none');
-            $('.context-menu-row.mask-family-' + M.mod_masks.selectedMask.family).css('display', 'inherit');          
+            $('.context-menu-row.mask-family-' + M.mod_masks.selectedMask.family).css('display', 'inherit');
         }
     },
 
@@ -938,7 +938,7 @@ M.mod_masks={
         // if the menu is enabled then add a 'wait one moment - dont' run off yet' message
         window.onbeforeunload = ( desiredState === false )? null: M.mod_masks.promptBeforeLeavingPage;
     },
-    
+
     promptBeforeLeavingPage: function(){
         return M.mod_masks_texts.pageExitPrompt;
     },
@@ -1034,7 +1034,7 @@ M.mod_masks={
         // clear out existing page nodes
         var menuRoot = $('#masks-menu-page-select').find('.menu-popup');
         menuRoot.html('');
-        
+
         // special case - if the doc is empty then just put a page0 entry back in so as to have something to clone next time round
         if ( M.mod_masks_pages.length == 0 ){
             menuRoot.append( refNode );
@@ -1106,22 +1106,22 @@ M.mod_masks={
         //correct answers
         if((gradeData.goodPasses + gradeData.badPasses + gradeData.fails) > 0){
             var perfectAnwersPercent = (gradeData.goodPasses * 100 )/ (gradeData.goodPasses + gradeData.badPasses + gradeData.fails) ;
-            
+
             $('#correct-answers-container .circle-value').text(Math.round(perfectAnwersPercent) + '%');
             $('#correct-answers-container').css('display','inline-block');
         }
 
         //question remaining
         $('#questions-remaining-container .circle-value').text(gradeData.numQuestions - gradeData.goodPasses - gradeData.badPasses );
-    
+
         // if no question remaining and only perfect answers : display congratulation
-        if(((gradeData.numQuestions - gradeData.goodPasses - gradeData.badPasses) === 0) && 
+        if(((gradeData.numQuestions - gradeData.goodPasses - gradeData.badPasses) === 0) &&
                 (perfectAnwersPercent === 100)){
             $('.grade-container').addClass('display-congratulation');
         }
-    
+
     },
-    
+
     calculateGradeData: function(){
         var result = { numQuestions:0, goodPasses:0, badPasses:0, fails:0, unattempted:0, unseen:0, numNotes:0, notesDone:0, notesToDo:0 };
         // iterate over the masks...

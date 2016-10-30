@@ -35,12 +35,11 @@ class mask_type_qtxt extends mask_type{
     private $maskType       = 'qtxt';
     private $dbInterface    = null;
     private $fields         = null;
-    private $maskFamily     = 'question';
 
 
     //-------------------------------------------------------------------------
     // basics
-    
+
     public function __construct(){
         // Establish database connection
         require_once(dirname(__FILE__).'/database_interface.class.php');
@@ -59,7 +58,7 @@ class mask_type_qtxt extends mask_type{
 
     //-------------------------------------------------------------------------
     // mask_type API
-    
+
     public function onNewMask( $id, $pageId ){
         // delegate work to generic method in base class
         $this->doNewMask( $id, $pageId, $this->maskType, $this->fields, $this->dbInterface, MASK_FLAGS_QUESTION );
@@ -106,7 +105,7 @@ class mask_type_qtxt extends mask_type{
             $rawAnswers = preg_replace( "/\n$/", '', $rawAnswers );     // Remove \n at end of text
             $rawAnswers = preg_replace( "/^\n/", '', $rawAnswers );     // Remove \n at start of text
             $options = explode("\n",$rawAnswers);
-            
+
             // get hold of and clean up the user's answer
             $answer = $_GET[ 'response' ];
             $answer = trim( $answer );
@@ -130,7 +129,7 @@ class mask_type_qtxt extends mask_type{
             }
             $this->renderAnswerResponsePage( $answerIsCorrect, $goodAnswerResponse, $badAnswerResponse, $hintText, $this->dbInterface, $questionId, $isLastQuestion );
 
-            // return true or false to represent 'question passed' of not            
+            // return true or false to represent 'question passed' of not
             return $answerIsCorrect;
         }
     }

@@ -35,12 +35,11 @@ class mask_type_note extends mask_type{
     private $maskType       = 'note';
     private $dbInterface    = null;
     private $fields         = null;
-    private $maskFamily     = 'note';
 
 
     //-------------------------------------------------------------------------
     // basics
-    
+
     public function __construct(){
         // Establish database connection
         require_once(dirname(__FILE__).'/database_interface.class.php');
@@ -50,7 +49,7 @@ class mask_type_note extends mask_type{
         $this->fields = array(
             'note'  => FIELD_BIGTEXTAREA + FIELD_REQUIRED,
         );
-        
+
         // this is a notes field so override the default mask type family
         $this->maskTypeFamily  = 'note';
     }
@@ -77,7 +76,7 @@ class mask_type_note extends mask_type{
 
         // delegate work to generic method in base class
         $this->renderInfoPage( '', $questionData->note, '', 'info permanent', 'parent.M.mod_masks.closeFrame();' );
-        
+
         // we never close a note mask so return false
         return false;
     }

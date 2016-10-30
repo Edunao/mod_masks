@@ -30,7 +30,7 @@ class upload_processor{
     //-------------------------------------------------------------------------
     // Public API - Basics
     //-------------------------------------------------------------------------
-    
+
     /**
      * __construct()
      * @param object $config   - the configuration object containing miscellaneous config parameters
@@ -41,7 +41,7 @@ class upload_processor{
         $this->config   = $config;
     }
 
-    
+
     //-------------------------------------------------------------------------
     // Public API - Main methods
     //-------------------------------------------------------------------------
@@ -52,15 +52,15 @@ class upload_processor{
      * @param integer $cmid - the $cm->id value for the course module instance
      */
     public function process( $fileData, $cmid ){
-        
-        // Log start of the upload process 
+
+        // Log start of the upload process
         $this->policies->logProgressTitle( 'Processing uploaded file: ' . $fileData['name'] );
 
         // setup a temp folder to work with
         $this->policies->logProgressHeading('Creating Work Path');
         $workPath = $this->policies->getWorkFolderName();
         flush();
-        
+
         // save the pdf file to the work folder
         $this->policies->logProgressHeading('Saving PDF File to Work Path');
         $pdfName = "doc.pdf";
@@ -69,13 +69,13 @@ class upload_processor{
         move_uploaded_file( $uploadLocation, $pdfFile );
         flush();
 
-        // get hold of the 
+        // get hold of the
         // convert the uploaded pdf file to a set of pages
         $cmdLine = $this->config->cmdline_pdf2svg;
         $this->policies->logProgressHeading('Converting PDF File to Pages');
         system($cmdLine." $pdfFile $workPath/page-%04d.svg all");
         flush();
-        
+
         // retrieve the list of generated files
         $this->policies->logProgress("Retrieving Generated File List");
         $pageFiles = array_diff(scandir($workPath), array('..', '.', $pdfName));
@@ -106,7 +106,7 @@ class upload_processor{
     //-------------------------------------------------------------------------
     // Private Data
     //-------------------------------------------------------------------------
-    
+
     // The policies object provides all of the interfacing to the server back end
     // It can be re-implemented for testing purposes
     private $policies = null;

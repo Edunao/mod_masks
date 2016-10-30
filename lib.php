@@ -22,7 +22,7 @@
  * @package    mod_masks
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
- 
+
 // this is lib.php - add code here for interfacing this module to Moodle internals
 
 defined('MOODLE_INTERNAL') || die;
@@ -111,7 +111,7 @@ function masks_update_instance($data, $mform) {
     require_once($CFG->libdir.'/gradelib.php');
     $graderesult = grade_update('mod/masks', $data->course, 'mod', 'masks', $data->id, 0, null, array( 'itemname' => $data->name ) );
     if ( $graderesult != GRADE_UPDATE_OK ){
-        echo "Grade Result: $graderesult\n"; 
+        echo "Grade Result: $graderesult\n";
         echo "Data:\n";
         print_r($data);
         throw new \moodle_exception('Failed to set gradebook meta data: for new masks instance');

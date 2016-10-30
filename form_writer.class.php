@@ -105,6 +105,9 @@ class form_writer
 
     private function wrapWidget($widget,$propName, $required = null, $hideHeading = null){
         $label  = get_string( 'label_'.$propName, 'mod_masks' );
+        if ( $required ){
+            // consider adding code here to modify the appearance of labels for required fields
+        }
         if ( $hideHeading && ! $this->lastHideHeading ){
             echo \html_writer::div('','pre-noheading');
         }
