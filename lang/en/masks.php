@@ -120,7 +120,7 @@ $string['perfectanswer_title']          = 'Strike!';
 $string['perfectanswer_text']           = 'Well done!<br>'
                                         . 'All questions were answered correctly at the first attempt';
 $string['wronganswer_title']            = 'Incorrect';
-$string['wronganswer_text']             = 'First incorrect attempt<br>'.
+$string['wronganswer_text']             = 'First incorrect attempt<br>'
                                         . 'You will not score any marks for this question but you you should try again as you must give the correct answer in order to clear this mask';
 $string['badanswer_title']              = 'Incorrect';
 $string['badanswer_text']               = 'Please try again';
