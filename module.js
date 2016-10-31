@@ -203,7 +203,7 @@ M.mod_masks={
                 var flagGraded      = ( clickedMask.flags & this.FLAG_GRADED );
                 var flagDone        = ( clickedMask.userstate & this.FLAG_DONE );
                 var numUnanswered   = M.mod_masks.countUnpassedMasks( this.FLAG_GRADED );
-                var isLastQuestion = ( flagGraded !== 0 && flagDone === 0 && numUnanswered == 1 )? 1: 0;
+                var isLastQuestion = ( flagGraded !== 0 && flagDone === 0 && numUnanswered === 1 )? 1: 0;
                 M.mod_masks.selectedMask = clickedMask;
                 M.mod_masks.activateFrame( 'click-mask', { mid: clickedMask.id, qid: clickedMask.question, pageid: clickedMask.page, islast: isLastQuestion }, 'no' );
                 break;
@@ -212,9 +212,9 @@ M.mod_masks={
                 // iterate over the mask data structure
                 for( var rsmPage in M.mod_masks_masks.pages ){
                     var maskSet = M.mod_masks_masks.pages[ rsmPage ];
-                    for ( var maskId in maskSet ){
-                        var theMask = maskSet[ maskId ];
-                        theMask.userstate = 0;
+                    for ( var rsmMaskId in maskSet ){
+                        var rsmMask = maskSet[ rsmMaskId ];
+                        rsmMask.userstate = 0;
                     }
                 }
 
@@ -226,9 +226,9 @@ M.mod_masks={
                 // iterate over the mask data structure
                 for( var rhmPage in M.mod_masks_masks.pages ){
                     var maskSet = M.mod_masks_masks.pages[ rhmPage ];
-                    for ( var maskId in maskSet ){
-                        var theMask = maskSet[ maskId ];
-                        theMask.userstate = theMask.refuserstate;
+                    for ( var rhmMaskId in maskSet ){
+                        var rhmMask = maskSet[ rhmMaskId ];
+                        rhmMask.userstate = rhmMask.refuserstate;
                     }
                 }
 
@@ -245,12 +245,12 @@ M.mod_masks={
                 break;
 
             case 'set-mask-style':
-                var newStyle    = target.attr('mask-style');
-                var styledMask  = M.mod_masks.selectedMask;
-                var maskId      = styledMask.id;
-                $('#mask-'+maskId).removeClass( 'mask-style-'+ styledMask.family + '-' + styledMask.style ).addClass( 'mask-style-'+ styledMask.family + '-' + newStyle );
+                var newStyle        = target.attr('mask-style');
+                var styledMask      = M.mod_masks.selectedMask;
+                var styledMaskId    = styledMask.id;
+                $('#mask-'+styledMaskId).removeClass( 'mask-style-'+ styledMask.family + '-' + styledMask.style ).addClass( 'mask-style-'+ styledMask.family + '-' + newStyle );
                 styledMask.style = newStyle;
-                M.mod_masks.maskChanges[ maskId ] = styledMask;
+                M.mod_masks.maskChanges[ styledMaskId ] = styledMask;
                 M.mod_masks.setSaveLayoutMenu(true);
                 M.mod_masks.setAlertInfo('saveStyleChange');
                 break;
@@ -476,8 +476,8 @@ M.mod_masks={
         }
 
         // if the save layout value is set here then indirect us through the save layout page
-        if ( saveLayout != 'no' && ! $('#masks').hasClass('hide-layout-save-group') ){
-            var confirm = ( saveLayout == 'prompt' )? 1: 0;
+        if ( saveLayout !== 'no' && ! $('#masks').hasClass('hide-layout-save-group') ){
+            var confirm = ( saveLayout === 'prompt' )? 1: 0;
             this.activateFrame( 'save-layout', { id: M.mod_masks_state.cmid, confirm: confirm, nextframe: encodeURIComponent(url) }, 'no' );
         } else {
             // activate the iframe popup
@@ -528,11 +528,11 @@ M.mod_masks={
         for (var i = 0; i < pageMasks.length; ++i){
             var mask = pageMasks[ i ];
             // decide whether the mask is to be rendered at all
-            var maskIsHidden    = ( mask.flags & M.mod_masks.FLAG_HIDDEN ) != 0;
-            var maskIsDeleted   = ( mask.flags & M.mod_masks.FLAG_DELETED ) != 0;
+            var maskIsHidden    = ( mask.flags & M.mod_masks.FLAG_HIDDEN ) !== 0;
+            var maskIsDeleted   = ( mask.flags & M.mod_masks.FLAG_DELETED ) !== 0;
             var maskIsSeen      = ( mask.userstate & M.mod_masks.FLAG_DONE );
-            var viewHidden      = M.mod_masks_state.type == 1;
-            if ( maskIsDeleted || ( maskIsHidden && ! viewHidden ) || ( maskIsSeen && ( M.mod_masks_state.showGhosts == 0 ) ) ){
+            var viewHidden      = M.mod_masks_state.type === 1;
+            if ( maskIsDeleted || ( maskIsHidden && ! viewHidden ) || ( maskIsSeen && ( M.mod_masks_state.showGhosts === 0 ) ) ){
                 continue;
             }
 
@@ -610,7 +610,7 @@ M.mod_masks={
         if( pageId in M.mod_masks_masks.pages ){
             var pageMasks = M.mod_masks_masks.pages[pageId];
             for (var i=0; i < pageMasks.length; ++i){
-                if ( pageMasks[i].id == maskId ){
+                if ( pageMasks[i].id === maskId ){
                     mask = pageMasks[i];
                     break;
                 }
@@ -642,11 +642,11 @@ M.mod_masks={
     // on mouse button pressed
     onMaskMouseDn:function(e){
         var target = $(e.target);
-        if ( target.attr('id') == 'masks-masks' ){
+        if ( target.attr('id') === 'masks-masks' ){
             e.preventDefault();
             return;
         }
-        if (! target.hasClass('masks-handle') || e.which != 1 ){
+        if (! target.hasClass('masks-handle') || e.which !== 1 ){
             return;
         }
         var maskId = target.parent().attr('maskid');
@@ -709,7 +709,7 @@ M.mod_masks={
     // on mouse button released
     onMaskMouseUp:function(e){
         var dragInfo = M.mod_masks.dragInfo;
-        if ( dragInfo.maskId != -1 ){
+        if ( dragInfo.maskId !== -1 ){
             // prevent the event from bubbling
             e.stopPropagation();
             e.preventDefault();
@@ -724,7 +724,7 @@ M.mod_masks={
             for (var i = 0; i < pageMasks.length; ++i){
                 var mask = pageMasks[ i ];
                 // if this isn't the mask that we're looking for the skip it
-                if ( mask.id != dragInfo.maskId ){
+                if ( mask.id !== dragInfo.maskId ){
                     continue;
                 }
                 // calculate and store away the position update in the official page mask data
@@ -736,15 +736,15 @@ M.mod_masks={
                 M.mod_masks.maskChanges[ mask.id ] = mask;
 
                 // if the mouse position has moved so activate the mask move menu
-                if ( ( dragInfo.newX0 != dragInfo.posX0 ) || ( dragInfo.newX1 != dragInfo.posX1 ) ||
-                     ( dragInfo.newY0 != dragInfo.posY0 ) || ( dragInfo.newY1 != dragInfo.posY1 ) ){
+                if ( ( dragInfo.newX0 !== dragInfo.posX0 ) || ( dragInfo.newX1 !== dragInfo.posX1 ) ||
+                     ( dragInfo.newY0 !== dragInfo.posY0 ) || ( dragInfo.newY1 !== dragInfo.posY1 ) ){
                     M.mod_masks.setSaveLayoutMenu( true );
                     M.mod_masks.setAlertInfo('saveChanges');
                 }
 
                 // if the mask was not resized then update the context menu position and show it
-                if ( ( ( dragInfo.newX1 - dragInfo.newX0 ) == ( dragInfo.posX1 - dragInfo.posX0 ) ) &&
-                     ( ( dragInfo.newY1 - dragInfo.newY0 ) == ( dragInfo.posY1 - dragInfo.posY0 ) ) ){
+                if ( ( ( dragInfo.newX1 - dragInfo.newX0 ) === ( dragInfo.posX1 - dragInfo.posX0 ) ) &&
+                     ( ( dragInfo.newY1 - dragInfo.newY0 ) === ( dragInfo.posY1 - dragInfo.posY0 ) ) ){
                     M.mod_masks.contextMenuShow();
                 }
 
@@ -758,7 +758,7 @@ M.mod_masks={
 
     // on mouse move
     onMaskMouseMv:function(e){
-        if ( M.mod_masks.dragInfo.maskId != -1 ){
+        if ( M.mod_masks.dragInfo.maskId !== -1 ){
             var dragInfo = M.mod_masks.dragInfo;
             // start by looking to see if the mouse is out of bounds
             var canvas = $('#masks-masks');
@@ -802,13 +802,13 @@ M.mod_masks={
             // clamp min w/h to keep it in bounds
             var minWH = 100;
             if ( newW < minWH ){
-                newX0 = ( dX0 == 0 )? newX0: newX1 - minWH;
-                newX1 = ( dX1 == 0 )? newX1: newX0 + minWH;
+                newX0 = ( dX0 === 0 )? newX0: newX1 - minWH;
+                newX1 = ( dX1 === 0 )? newX1: newX0 + minWH;
                 newW = minWH;
             }
             if ( newH < minWH ){
-                newY0 = ( dY0 == 0 )? newY0: newY1 - minWH;
-                newY1 = ( dY1 == 0 )? newY1: newY0 + minWH;
+                newY0 = ( dY0 === 0 )? newY0: newY1 - minWH;
+                newY1 = ( dY1 === 0 )? newY1: newY0 + minWH;
                 newH = minWH;
             }
             // store the draginfo for later use
@@ -907,14 +907,14 @@ M.mod_masks={
         } else {
             // determine whether the selected mask is hidden and update the menu display to match
             var hideMaskNode = $( '#masks-toggle-mask-hidden' );
-            var maskIsHidden = ( M.mod_masks.selectedMask.flags & M.mod_masks.FLAG_HIDDEN ) != 0;
+            var maskIsHidden = ( M.mod_masks.selectedMask.flags & M.mod_masks.FLAG_HIDDEN ) !== 0;
             hideMaskNode.removeClass( 'toggle' );
             if ( maskIsHidden ){
                 hideMaskNode.addClass( 'toggle' );
             }
             // determine whether the selected mask is deleted and update the menu display to match
             var delMaskNode = $( '#masks-toggle-mask-deleted' );
-            var maskIsDeleted = ( M.mod_masks.selectedMask.flags & M.mod_masks.FLAG_DELETED ) != 0;
+            var maskIsDeleted = ( M.mod_masks.selectedMask.flags & M.mod_masks.FLAG_DELETED ) !== 0;
             delMaskNode.removeClass( 'toggle' );
             if ( maskIsDeleted ){
                 delMaskNode.addClass( 'toggle' );
@@ -992,13 +992,13 @@ M.mod_masks={
     },
 
     closeMask: function(){
-        if ( M.mod_masks.selectedMask == null ){
+        if ( M.mod_masks.selectedMask === null ){
             return;
         }
         var mask     = M.mod_masks.selectedMask;
         var maskId   = mask.id;
         // if the mask is present over the image then get rid of it
-        if ( M.mod_masks_state.showGhosts == 0 ){
+        if ( M.mod_masks_state.showGhosts === 0 ){
             $('#mask-'+maskId).remove();
         } else {
             $('#mask-'+maskId).addClass( 'mask-passed' );
@@ -1036,7 +1036,7 @@ M.mod_masks={
         menuRoot.html('');
 
         // special case - if the doc is empty then just put a page0 entry back in so as to have something to clone next time round
-        if ( M.mod_masks_pages.length == 0 ){
+        if ( M.mod_masks_pages.length === 0 ){
             menuRoot.append( refNode );
             M.mod_masks.gotoPage( M.mod_masks.currentPage );
             return;
@@ -1064,7 +1064,7 @@ M.mod_masks={
         for( var p in M.mod_masks_masks.pages ){
             var maskSet = M.mod_masks_masks.pages[ p ];
             for ( var m in maskSet ){
-                if ( maskSet[ m ].id == maskId ){
+                if ( maskSet[ m ].id === maskId ){
                     maskSet[ m ].userstate = parseInt(newState);
                     maskSet[ m ].refuserstate = parseInt(newState);
                 }
@@ -1132,14 +1132,14 @@ M.mod_masks={
                 if ( ( mask.flags & ( this.FLAG_HIDDEN | this.FLAG_DELETED ) ) > 0 ){
                     continue;
                 }
-                var isGraded   = ( ( mask.flags & this.FLAG_GRADED ) != 0 );
-                var isClosable = ( ( mask.flags & this.FLAG_CLOSABLE ) != 0 );
-                var isGoodPass = ( ( mask.refuserstate & ( this.FLAG_FAIL + this.FLAG_PASS ) ) == this.FLAG_PASS );
-                var isBadPass  = ( ( mask.refuserstate & ( this.FLAG_FAIL + this.FLAG_DONE ) ) == this.FLAG_FAIL + this.FLAG_DONE );
-                var isFail     = ( ( mask.refuserstate & ( this.FLAG_FAIL + this.FLAG_DONE ) ) == this.FLAG_FAIL );
-                var isToDo     = ( ( mask.refuserstate & ( this.FLAG_FAIL + this.FLAG_DONE ) ) == 0 );
-                var isUnseen   = ( ( mask.refuserstate & this.FLAG_SEEN ) == 0 );
-                var isDone     = ( ( mask.refuserstate & this.FLAG_DONE ) == this.FLAG_DONE );
+                var isGraded   = ( ( mask.flags & this.FLAG_GRADED ) !== 0 );
+                var isClosable = ( ( mask.flags & this.FLAG_CLOSABLE ) !== 0 );
+                var isGoodPass = ( ( mask.refuserstate & ( this.FLAG_FAIL + this.FLAG_PASS ) ) === this.FLAG_PASS );
+                var isBadPass  = ( ( mask.refuserstate & ( this.FLAG_FAIL + this.FLAG_DONE ) ) === this.FLAG_FAIL + this.FLAG_DONE );
+                var isFail     = ( ( mask.refuserstate & ( this.FLAG_FAIL + this.FLAG_DONE ) ) === this.FLAG_FAIL );
+                var isToDo     = ( ( mask.refuserstate & ( this.FLAG_FAIL + this.FLAG_DONE ) ) === 0 );
+                var isUnseen   = ( ( mask.refuserstate & this.FLAG_SEEN ) === 0 );
+                var isDone     = ( ( mask.refuserstate & this.FLAG_DONE ) === this.FLAG_DONE );
                 result.numQuestions += isGraded     ? 1: 0;
                 result.goodPasses   += isGoodPass   ? 1: 0;
                 result.badPasses    += isBadPass    ? 1: 0;
@@ -1161,7 +1161,7 @@ M.mod_masks={
             var maskSet = M.mod_masks_masks.pages[ p ];
             for ( var maskId in maskSet ){
                 var mask = maskSet[ maskId ];
-                result += ( ( mask.flags & ( this.FLAG_HIDDEN | this.FLAG_DELETED | maskTypeFlag ) ) == maskTypeFlag )? 1 : 0;
+                result += ( ( mask.flags & ( this.FLAG_HIDDEN | this.FLAG_DELETED | maskTypeFlag ) ) === maskTypeFlag )? 1 : 0;
             }
         }
         return result;
@@ -1174,8 +1174,8 @@ M.mod_masks={
             var maskSet = M.mod_masks_masks.pages[ p ];
             for ( var maskId in maskSet ){
                 var mask        = maskSet[ maskId ];
-                var isGradable  = ( ( mask.flags & ( this.FLAG_HIDDEN | this.FLAG_DELETED | maskTypeFlag ) ) == maskTypeFlag );
-                var isPassed    = ( ( mask.refuserstate & this.FLAG_DONE ) != 0 );
+                var isGradable  = ( ( mask.flags & ( this.FLAG_HIDDEN | this.FLAG_DELETED | maskTypeFlag ) ) === maskTypeFlag );
+                var isPassed    = ( ( mask.refuserstate & this.FLAG_DONE ) !== 0 );
                 result          += ( isGradable && !isPassed )? 1 : 0;
             }
         }

@@ -114,12 +114,14 @@ $string['passanswer_text']              = 'That is the correct answer';
 $string['goodanswer_title']             = 'Perfect';
 $string['goodanswer_text']              = 'Well done. That is the correct answer.';
 $string['finalanswer_title']            = 'Congratulations';
-$string['finalanswer_text']             = 'All questions in this exercise have been answered correctly<br>'
-                                        . 'More than one attempt was required for one or more questions';
+$string['finalanswer_text']             = 'All questions in this exercise have been answered<br>'
+                                        . 'More than one attempt was required to find the correct answer for one or more questions';
 $string['perfectanswer_title']          = 'Strike!';
-$string['perfectanswer_text']           = 'Well done!<br>All questions were answered correctly at the first attempt';
+$string['perfectanswer_text']           = 'Well done!<br>'
+                                        . 'All questions were answered correctly at the first attempt';
 $string['wronganswer_title']            = 'Incorrect';
-$string['wronganswer_text']             = 'First incorrect attempt: Grade for this question will be zero';
+$string['wronganswer_text']             = 'First incorrect attempt<br>'.
+                                        . 'You will not score any marks for this question but you you should try again as you must give the correct answer in order to clear this mask';
 $string['badanswer_title']              = 'Incorrect';
 $string['badanswer_text']               = 'Please try again';
 

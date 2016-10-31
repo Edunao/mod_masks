@@ -233,11 +233,7 @@
     background-repeat: no-repeat;
 }
 
-#masks-frame .frame-footer{
-    position: inherit;
-}
-
-#masks-frame .frame-footer .cancel-button{
+#masks-frame .cancel-button{
     background-color: #eb4e4e;
     background-image: url('pix/close.png');
     background-position: center;
@@ -255,6 +251,10 @@
     width: 27px;
 }
 
+#masks-frame .frame-footer{
+    position: inherit;
+}
+
 #masks-frame .frame-footer .cancel-button:hover{
     background-color: #c93b3b;
 }
@@ -267,6 +267,7 @@
 #masks-frame .option:hover{
     text-decoration: none;
 }
+
 
 /*-----------------------------------------
   Frame help button
@@ -289,8 +290,9 @@
 }
 
 #masks-frame button.hide-toggle span{
-    display: none !important;
+    display: none !important; /* csslint allow: important */
 }
+
 
 /*-----------------------------------------
   Frame edit title 
@@ -320,7 +322,7 @@
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
     box-sizing: border-box;
-    padding: 15px 0px;
+    padding: 15px 0;
 }
 
 #masks-frame.question .question-icon{
@@ -414,7 +416,6 @@
     border-top-width: 1px;
     margin-top: 20px;
     padding: 20px 32px;
-    width: 100%;
 }
 
 #masks-frame.correct-answer .frame-footer{
@@ -540,7 +541,7 @@
     cursor: pointer;
     font-size: 14px;
     font-weight: 700;
-    height: 44px !important;
+    height: 44px !important; /* csslint allow: important */
     padding: 11px 40px;
     transition: all 0.3s ease;
 }
@@ -585,7 +586,7 @@
 #masks .standard-button.close-button:hover,
 #masks-frame .standard-button.close-button:hover
 {
-    background-color: none;
+    background-color: inherit;
 }
 
 
