@@ -1,0 +1,10 @@
+Release 2.7.002
+---------------
+FIXED: Incorrect font used
+FIXED: incorrect text for the 'incorrect answers' label in multiple choice question editting form
+FIXED: Popup title text too long in french for 'new multiple choice question'
+
+Release 2.7.001
+---------------
+Initial release, tested on Moodle branches 2.7 and above
+

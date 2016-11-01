@@ -135,125 +135,28 @@ M.mod_masks={
         M.mod_masks.processImpulseEvent(e,target,action);
     },
 
-
     processImpulseEvent: function(e,target,action){
         // hide any visible menus
         $( '.menu-show' ).removeClass( 'menu-show' );
 
         // deal with the action
         switch (action){
-            case 'nav-to-left-end':
-                M.mod_masks.gotoPage( 0 );
-                break;
-
-            case 'nav-to-left':
-                M.mod_masks.gotoPage( M.mod_masks.currentPage - 1 );
-                break;
-
-            case 'nav-to-right':
-                M.mod_masks.gotoPage( M.mod_masks.currentPage + 1 );
-                break;
-
-            case 'nav-to-right-end':
-                M.mod_masks.gotoPage( M.mod_masks_pages.length - 1 );
-                break;
-
-            case 'show-menu':
-                var menuName = target.attr('menu');
-                var fullName = '#masks-menu-'+menuName;
-                var menuNode = $( fullName );
-                menuNode.addClass( 'menu-show' );
-                M.mod_masks.contextMenuHide();
-                break;
-
-            case 'goto-page':
-                var pageNumber = target.attr('page');
-                M.mod_masks.gotoPage( pageNumber );
-                M.mod_masks.contextMenuHide();
-                break;
-
-            case 'toggle':
-                M.mod_masks.clearAlertSuccess();
-                var toggleName = target.attr('arg');
-                M.mod_masks.toggleClass( toggleName );
-                break;
-
-            case 'add-mask':
-                var maskType = target.attr('masktype');
-                M.mod_masks.activateFrame( 'add-mask', { masktype: maskType }, 'prompt' );
-                break;
-
-            case 'edit-mask':
-                // start by selecting the mask
-                var maskId = target.parent().attr('maskid');
-                M.mod_masks.selectMask(maskId);
-                // delegate to 'edit-question' to open the editor form
-                this.processImpulseEvent(e,target,'edit-question');
-                break;
-
-            case 'edit-question':
-                M.mod_masks.activateFrame( action, { mid: M.mod_masks.selectedMask.id, qid: M.mod_masks.selectedMask.question, pageid: M.mod_masks.selectedMask.page }, 'no' );
-                break;
-
-            case 'click-mask':
-                var pageIdx         = M.mod_masks.currentPage;
-                var pageId          = M.mod_masks_pages[ pageIdx ].id;
-                var clickedMaskIdx  = target.attr('maskidx');
-                var clickedMask     = M.mod_masks_masks.pages[ pageId ][ clickedMaskIdx ];
-                var flagGraded      = ( clickedMask.flags & this.FLAG_GRADED );
-                var flagDone        = ( clickedMask.userstate & this.FLAG_DONE );
-                var numUnanswered   = M.mod_masks.countUnpassedMasks( this.FLAG_GRADED );
-                var isLastQuestion = ( flagGraded !== 0 && flagDone === 0 && numUnanswered === 1 )? 1: 0;
-                M.mod_masks.selectedMask = clickedMask;
-                M.mod_masks.activateFrame( 'click-mask', { mid: clickedMask.id, qid: clickedMask.question, pageid: clickedMask.page, islast: isLastQuestion }, 'no' );
-                break;
-
-            case 'reshow-masks':
-                // iterate over the mask data structure
-                for( var rsmPage in M.mod_masks_masks.pages ){
-                    var maskSet = M.mod_masks_masks.pages[ rsmPage ];
-                    for ( var rsmMaskId in maskSet ){
-                        var rsmMask = maskSet[ rsmMaskId ];
-                        rsmMask.userstate = 0;
-                    }
-                }
-
-                // refresh the display of the current page
-                M.mod_masks.gotoPage( M.mod_masks.currentPage );
-                break;
-
-            case 'rehide-masks':
-                // iterate over the mask data structure
-                for( var rhmPage in M.mod_masks_masks.pages ){
-                    var maskSet = M.mod_masks_masks.pages[ rhmPage ];
-                    for ( var rhmMaskId in maskSet ){
-                        var rhmMask = maskSet[ rhmMaskId ];
-                        rhmMask.userstate = rhmMask.refuserstate;
-                    }
-                }
-
-                // refresh the display of the current page
-                M.mod_masks.gotoPage( M.mod_masks.currentPage );
-                break;
-
-            case 'save-layout':
-                M.mod_masks.clearAlertInfo();
-                // drop through to code below (don't break!)
-            case 'reupload':
-                var emptySet = {};
-                M.mod_masks.activateFrame( action, emptySet, 'no' );
-                break;
-
-            case 'set-mask-style':
-                var newStyle        = target.attr('mask-style');
-                var styledMask      = M.mod_masks.selectedMask;
-                var styledMaskId    = styledMask.id;
-                $('#mask-'+styledMaskId).removeClass( 'mask-style-'+ styledMask.family + '-' + styledMask.style ).addClass( 'mask-style-'+ styledMask.family + '-' + newStyle );
-                styledMask.style = newStyle;
-                M.mod_masks.maskChanges[ styledMaskId ] = styledMask;
-                M.mod_masks.setSaveLayoutMenu(true);
-                M.mod_masks.setAlertInfo('saveStyleChange');
-                break;
+            case 'nav-to-left-end':     M.mod_masks.gotoPage( 0 );                                  break;
+            case 'nav-to-left':         M.mod_masks.gotoPage( M.mod_masks.currentPage - 1 );        break;
+            case 'nav-to-right':        M.mod_masks.gotoPage( M.mod_masks.currentPage + 1 );        break;
+            case 'nav-to-right-end':    M.mod_masks.gotoPage( M.mod_masks_pages.length - 1 );       break;
+            case 'show-menu':           M.mod_masks.onShowMenu(target);                             break;
+            case 'goto-page':           M.mod_masks.onGotoPage(target);                             break;
+            case 'toggle':              M.mod_masks.onToggle(target);                               break;
+            case 'add-mask':            M.mod_masks.onAddMask(target);                              break;
+            case 'edit-mask':           M.mod_masks.onEditMask(e,target);                           break;
+            case 'edit-question':       M.mod_masks.onEditQuestion(target);                         break;
+            case 'click-mask':          M.mod_masks.onClickMask(target);                            break;
+            case 'reshow-masks':        M.mod_masks.onReshowMasks(target);                          break;
+            case 'rehide-masks':        M.mod_masks.onRehideMasks(target);                          break;
+            case 'save-layout':         M.mod_masks.activateFrame( 'save-layout', null, 'no' );     break;
+            case 'reupload':            M.mod_masks.activateFrame( 'reupload', null, 'no' );        break;
+            case 'set-mask-style':      M.mod_masks.onSetMaskStyle(target);                         break;
 
             case 'mask-action':
                 // prevent the event from bubbling
@@ -279,6 +182,101 @@ M.mod_masks={
         }
     },
 
+    onShowMenu: function(target){
+        var menuName = target.attr('menu');
+        var fullName = '#masks-menu-'+menuName;
+        var menuNode = $( fullName );
+        menuNode.addClass( 'menu-show' );
+        M.mod_masks.contextMenuHide();
+    },
+
+    onGotoPage: function(target){
+        var pageNumber = target.attr('page');
+        M.mod_masks.gotoPage( pageNumber );
+        M.mod_masks.contextMenuHide();
+    },
+
+    onToggle: function(target){
+        M.mod_masks.clearAlertSuccess();
+        var toggleName = target.attr('arg');
+        M.mod_masks.toggleClass( toggleName );
+    },
+
+    onAddMask: function(target){
+        var maskType = target.attr('masktype');
+        M.mod_masks.activateFrame( 'add-mask', { masktype: maskType }, 'prompt' );
+    },
+
+    onEditMask: function(e,target){
+        // start by selecting the mask
+        var maskId = target.parent().attr('maskid');
+        M.mod_masks.selectMask(maskId);
+        // delegate to 'edit-question' to open the editor form
+        this.processImpulseEvent(e,target,'edit-question');
+    },
+
+    onEditQuestion: function(target){
+        var args = {
+            mid: M.mod_masks.selectedMask.id,
+            qid: M.mod_masks.selectedMask.question,
+            pageid: M.mod_masks.selectedMask.page
+        };
+        M.mod_masks.activateFrame( 'edit-question', args, 'no' );
+    },
+
+    onClickMask: function(target){
+        var pageIdx         = M.mod_masks.currentPage;
+        var pageId          = M.mod_masks_pages[ pageIdx ].id;
+        var clickedMaskIdx  = target.attr('maskidx');
+        var clickedMask     = M.mod_masks_masks.pages[ pageId ][ clickedMaskIdx ];
+        var flagGraded      = ( clickedMask.flags & this.FLAG_GRADED );
+        var flagDone        = ( clickedMask.userstate & this.FLAG_DONE );
+        var numUnanswered   = M.mod_masks.countUnpassedMasks( this.FLAG_GRADED );
+        var isLastQuestion = ( flagGraded !== 0 && flagDone === 0 && numUnanswered === 1 )? 1: 0;
+        M.mod_masks.selectedMask = clickedMask;
+        M.mod_masks.activateFrame( 'click-mask', { mid: clickedMask.id, qid: clickedMask.question, pageid: clickedMask.page, islast: isLastQuestion }, 'no' );
+    },
+
+    onReshowMasks: function(target){
+        // iterate over the mask data structure
+        for( var page in M.mod_masks_masks.pages ){
+            var maskSet = M.mod_masks_masks.pages[ page ];
+            for ( var maskId in maskSet ){
+                var mask = maskSet[ maskId ];
+                mask.userstate = 0;
+            }
+        }
+
+        // refresh the display of the current page
+        M.mod_masks.gotoPage( M.mod_masks.currentPage );
+    },
+
+    onRehideMasks: function(target){
+        // iterate over the mask data structure
+        for( var page in M.mod_masks_masks.pages ){
+            var maskSet = M.mod_masks_masks.pages[ page ];
+            for ( var maskId in maskSet ){
+                var mask = maskSet[ maskId ];
+                mask.userstate = mask.refuserstate;
+            }
+        }
+
+        // refresh the display of the current page
+        M.mod_masks.gotoPage( M.mod_masks.currentPage );
+    },
+
+    onSetMaskStyle: function(target){
+        var newStyle    = target.attr('mask-style');
+        var mask        = M.mod_masks.selectedMask;
+        var maskId      = mask.id;
+        $('#mask-'+maskId).removeClass( 'mask-style-'+ mask.family + '-' + mask.style ).addClass( 'mask-style-'+ mask.family + '-' + newStyle );
+        mask.style      = newStyle;
+        M.mod_masks.maskChanges[ maskId ] = mask;
+        M.mod_masks.setSaveLayoutMenu(true);
+        M.mod_masks.setAlertInfo('saveStyleChange');
+    },
+
+
     //------------------------------------------------------
     // DOM interaction
 
@@ -294,7 +292,7 @@ M.mod_masks={
         $( '#masks-page-num .nav-num-word' ).html( '' + ( newPage + 1 ) );
         var flagNode = $( '#masks' );
         flagNode.removeClass( 'first-page last-page' );
-        if ( newPage == 0 ){
+        if ( newPage === 0 ){
             flagNode.addClass( 'first-page' );
         }
         if ( newPage >= maxPage ){
@@ -303,7 +301,7 @@ M.mod_masks={
 
         // update the image tag
         var src = M.mod_masks_pages[ newPage ].imageurl;
-        if ( $( '#masks-page-space img' ).attr( 'src' ) != src ){
+        if ( $( '#masks-page-space img' ).attr( 'src' ) !== src ){
             var parentTag = $('#masks-page-space .img-parent');
             parentTag.html('');
             $('<img/>').attr( 'src', src ).appendTo( parentTag );
@@ -318,7 +316,7 @@ M.mod_masks={
 
         // setup the 'page hidden' class correctly
         var page         = M.mod_masks_pages[ M.mod_masks.currentPage ];
-        var pageIsHidden = ( page.flags & M.mod_masks.FLAG_HIDDEN ) != 0;
+        var pageIsHidden = ( page.flags & M.mod_masks.FLAG_HIDDEN ) !== 0;
         var rootNode     = $('#masks');
         var toggleNode   = $('#masks-toggle-page-hidden');
         rootNode.removeClass('page-hidden');
@@ -340,70 +338,74 @@ M.mod_masks={
         // apply logical state changes
         var isToggleActive = menuNode.hasClass( 'toggle' );
         switch( toggleName ){
-            case 'full-size':
-                $('#masks').removeClass('full-size');
-                if ( isToggleActive ){
-                    $('#masks').addClass('full-size');
-                }
-                break;
-
-            case 'page-hidden':
-                var pageNum  = M.mod_masks.currentPage;
-                var page     = M.mod_masks_pages[ pageNum ];
-                var rootNode = $('#masks');
-                var navNode  = $('#page-name-'+pageNum);
-                if ( isToggleActive ){
-                    rootNode.addClass('page-hidden');
-                    navNode.addClass('page-hidden');
-                    page.flags = page.flags | M.mod_masks.FLAG_HIDDEN;
-                    M.mod_masks.setAlertInfo('savePageHidden');
-                } else {
-                    rootNode.removeClass('page-hidden');
-                    navNode.removeClass('page-hidden');
-                    page.flags = page.flags & ~M.mod_masks.FLAG_HIDDEN;
-                    M.mod_masks.setAlertInfo('saveChanges');
-                }
-                M.mod_masks.pageChanges[ pageNum ] = page;
-                M.mod_masks.setSaveLayoutMenu(true);
-                break;
-
-            case 'mask-hidden':
-                var mask     = M.mod_masks.selectedMask;
-                var maskId   = mask.id;
-                var maskNode = $('#mask-'+maskId);
-                if ( isToggleActive ){
-                    maskNode.addClass('mask-hidden');
-                    mask.flags = mask.flags | M.mod_masks.FLAG_HIDDEN;
-                    M.mod_masks.setAlertInfo('saveMaskHidden');
-                } else {
-                    maskNode.removeClass('mask-hidden');
-                    mask.flags = mask.flags & ~M.mod_masks.FLAG_HIDDEN;
-                    M.mod_masks.setAlertInfo('saveChanges');
-                }
-                M.mod_masks.maskChanges[ maskId ] = mask;
-                M.mod_masks.setSaveLayoutMenu(true);
-                break;
-
-            case 'mask-deleted':
-                var mask     = M.mod_masks.selectedMask;
-                var maskId   = mask.id;
-                var maskNode = $('#mask-'+maskId);
-                if ( isToggleActive ){
-                    maskNode.addClass('mask-deleted');
-                    mask.flags = mask.flags | M.mod_masks.FLAG_DELETED;
-                    M.mod_masks.setAlertInfo('saveDeletion');
-                } else {
-                    maskNode.removeClass('mask-deleted');
-                    mask.flags = mask.flags & ~M.mod_masks.FLAG_DELETED;
-                    M.mod_masks.setAlertInfo('saveChanges');
-                }
-                M.mod_masks.maskChanges[ maskId ] = mask;
-                M.mod_masks.setSaveLayoutMenu(true);
-                break;
-
+            case 'full-size':       M.mod_masks.toggleFullSize( isToggleActive );       break;
+            case 'page-hidden':     M.mod_masks.togglePageHidden( isToggleActive );     break;
+            case 'mask-hidden':     M.mod_masks.toggleMaskHidden( isToggleActive );     break;
+            case 'mask-deleted':    M.mod_masks.toggleMaskDeleted( isToggleActive );    break;
             default:
                 console.warn('unrecognised toggle action: ', toggleName );
         }
+    },
+
+    toggleFullSize: function( isToggleActive ){
+        $('#masks').removeClass('full-size');
+        if ( isToggleActive ){
+            $('#masks').addClass('full-size');
+        }
+    },
+
+    togglePageHidden: function( isToggleActive ){
+        var pageNum  = M.mod_masks.currentPage;
+        var page     = M.mod_masks_pages[ pageNum ];
+        var rootNode = $('#masks');
+        var navNode  = $('#page-name-'+pageNum);
+        if ( isToggleActive ){
+            rootNode.addClass('page-hidden');
+            navNode.addClass('page-hidden');
+            page.flags = page.flags | M.mod_masks.FLAG_HIDDEN;
+            M.mod_masks.setAlertInfo('savePageHidden');
+        } else {
+            rootNode.removeClass('page-hidden');
+            navNode.removeClass('page-hidden');
+            page.flags = page.flags & ~M.mod_masks.FLAG_HIDDEN;
+            M.mod_masks.setAlertInfo('saveChanges');
+        }
+        M.mod_masks.pageChanges[ pageNum ] = page;
+        M.mod_masks.setSaveLayoutMenu(true);
+    },
+
+    toggleMaskHidden: function( isToggleActive ){
+        var mask     = M.mod_masks.selectedMask;
+        var maskId   = mask.id;
+        var maskNode = $('#mask-'+maskId);
+        if ( isToggleActive ){
+            maskNode.addClass('mask-hidden');
+            mask.flags = mask.flags | M.mod_masks.FLAG_HIDDEN;
+            M.mod_masks.setAlertInfo('saveMaskHidden');
+        } else {
+            maskNode.removeClass('mask-hidden');
+            mask.flags = mask.flags & ~M.mod_masks.FLAG_HIDDEN;
+            M.mod_masks.setAlertInfo('saveChanges');
+        }
+        M.mod_masks.maskChanges[ maskId ] = mask;
+        M.mod_masks.setSaveLayoutMenu(true);
+    },
+
+    toggleMaskDeleted: function( isToggleActive ){
+        var mask     = M.mod_masks.selectedMask;
+        var maskId   = mask.id;
+        var maskNode = $('#mask-'+maskId);
+        if ( isToggleActive ){
+            maskNode.addClass('mask-deleted');
+            mask.flags = mask.flags | M.mod_masks.FLAG_DELETED;
+            M.mod_masks.setAlertInfo('saveDeletion');
+        } else {
+            maskNode.removeClass('mask-deleted');
+            mask.flags = mask.flags & ~M.mod_masks.FLAG_DELETED;
+            M.mod_masks.setAlertInfo('saveChanges');
+        }
+        M.mod_masks.maskChanges[ maskId ] = mask;
+        M.mod_masks.setSaveLayoutMenu(true);
     },
 
 
@@ -463,6 +465,10 @@ M.mod_masks={
     // Managing iframe popups
 
     activateFrame: function( frameName, args, saveLayout ){
+        // cleanup args
+        if ( args === null ){
+            args = {};
+        }
         // if there's a previous 'success' alert being displayed then get rid of it
         this.clearAlertInfo();
 

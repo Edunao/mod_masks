@@ -338,7 +338,7 @@
 #masks.page-hidden #masks-masks{
     background-color: #C0C0C0;
     /* csslint ignore:start */
-    background-image: url([[pix: mod_masks|hide_page]]);
+    background-image: url([[pix:mod_masks|hide_page]]);
     /* csslint ignore:end */
     background-position: center 5%;
     background-repeat: no-repeat;
@@ -543,7 +543,7 @@
 
 #masks .mask-root.mask-deleted .masks-handle.m.c{
     /* csslint ignore:start */
-    background-image: url([[pix: i/invalid]]);
+    background-image: url([[pix:i/invalid]]);
     /* csslint ignore:end */
     background-position: center;
     background-repeat: no-repeat;

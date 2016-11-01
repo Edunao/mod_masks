@@ -39,7 +39,8 @@ script:
   - moodle-plugin-ci phpcpd
   - moodle-plugin-ci phpmd
 #  - moodle-plugin-ci codechecker
-  - moodle-plugin-ci csslint
+# css lint is disabled as it doesn't want to ignore the moodle pix format for div background images
+#  - moodle-plugin-ci csslint
 #  - moodle-plugin-ci shifter
   - moodle-plugin-ci jshint
 #  - moodle-plugin-ci validate

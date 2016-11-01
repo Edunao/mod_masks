@@ -46,10 +46,10 @@ form{
 #masks-frame .frame-body,
 #masks-frame .frame-footer,
 #masks-frame .frame-section{
+    box-sizing: border-box;
     display: block;
     position: relative;
     width: 100%;
-    box-sizing: border-box;
 }
 
 #masks-frame .frame-title{
