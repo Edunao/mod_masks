@@ -150,10 +150,10 @@ M.mod_masks={
             case 'toggle':              M.mod_masks.onToggle(target);                               break;
             case 'add-mask':            M.mod_masks.onAddMask(target);                              break;
             case 'edit-mask':           M.mod_masks.onEditMask(e,target);                           break;
-            case 'edit-question':       M.mod_masks.onEditQuestion(target);                         break;
+            case 'edit-question':       M.mod_masks.onEditQuestion();                               break;
             case 'click-mask':          M.mod_masks.onClickMask(target);                            break;
-            case 'reshow-masks':        M.mod_masks.onReshowMasks(target);                          break;
-            case 'rehide-masks':        M.mod_masks.onRehideMasks(target);                          break;
+            case 'reshow-masks':        M.mod_masks.onReshowMasks();                                break;
+            case 'rehide-masks':        M.mod_masks.onRehideMasks();                                break;
             case 'save-layout':         M.mod_masks.activateFrame( 'save-layout', null, 'no' );     break;
             case 'reupload':            M.mod_masks.activateFrame( 'reupload', null, 'no' );        break;
             case 'set-mask-style':      M.mod_masks.onSetMaskStyle(target);                         break;
@@ -215,7 +215,7 @@ M.mod_masks={
         this.processImpulseEvent(e,target,'edit-question');
     },
 
-    onEditQuestion: function(target){
+    onEditQuestion: function(){
         var args = {
             mid: M.mod_masks.selectedMask.id,
             qid: M.mod_masks.selectedMask.question,
@@ -237,7 +237,7 @@ M.mod_masks={
         M.mod_masks.activateFrame( 'click-mask', { mid: clickedMask.id, qid: clickedMask.question, pageid: clickedMask.page, islast: isLastQuestion }, 'no' );
     },
 
-    onReshowMasks: function(target){
+    onReshowMasks: function(){
         // iterate over the mask data structure
         for( var page in M.mod_masks_masks.pages ){
             var maskSet = M.mod_masks_masks.pages[ page ];
@@ -251,7 +251,7 @@ M.mod_masks={
         M.mod_masks.gotoPage( M.mod_masks.currentPage );
     },
 
-    onRehideMasks: function(target){
+    onRehideMasks: function(){
         // iterate over the mask data structure
         for( var page in M.mod_masks_masks.pages ){
             var maskSet = M.mod_masks_masks.pages[ page ];
