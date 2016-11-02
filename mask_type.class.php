@@ -25,6 +25,8 @@
 
 namespace mod_masks;
 
+defined('MOODLE_INTERNAL') || die;
+
 // use bit mask to compose field type
 define( 'mod_masks\FIELD_OPTIONAL'      , 0 );
 define( 'mod_masks\FIELD_REQUIRED'      , 1 );

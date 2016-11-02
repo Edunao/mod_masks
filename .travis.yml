@@ -40,8 +40,8 @@ script:
   - moodle-plugin-ci phpmd
 #  - moodle-plugin-ci codechecker
 # css lint is disabled as it doesn't want to ignore the moodle pix format for div background images
-#  - moodle-plugin-ci csslint
-#  - moodle-plugin-ci shifter
+  - moodle-plugin-ci csslint
+  - moodle-plugin-ci shifter
   - moodle-plugin-ci jshint
 #  - moodle-plugin-ci validate
 #  - moodle-plugin-ci phpunit

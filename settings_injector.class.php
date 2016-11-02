@@ -25,6 +25,8 @@
 
 namespace mod_masks;
 
+defined('MOODLE_INTERNAL') || die;
+
 class settingsinjector{
     private $settings   = null;
     private $pluginname = null;

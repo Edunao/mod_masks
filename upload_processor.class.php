@@ -19,11 +19,13 @@
  *
  * @copyright  2016 Edunao SAS (contact@edunao.com)
  * @author     Sadge (daniel@edunao.com)
- * @package    mod_rich_pdf
+ * @package    mod_masks
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_masks;
+
+defined('MOODLE_INTERNAL') || die;
 
 class upload_processor{
 
@@ -33,8 +35,8 @@ class upload_processor{
 
     /**
      * __construct()
-     * @param object $config   - the configuration object containing miscellaneous config parameters
      * @param object $policies - the interface object that will provide all of the back end interfacing
+     * @param object $config   - the configuration object containing miscellaneous config parameters
      */
     public function __construct($policies,$config){
         $this->policies = $policies;

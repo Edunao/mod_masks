@@ -24,7 +24,7 @@
  */
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // Set apache/php configuration directives to allow big files to be uploaded
 // and time to be taken in processing
 
@@ -44,13 +44,13 @@ set_time_limit( 0 );
 @ini_set('implicit_flush',1);
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // prepare to render a moodle page
 
 require_once('../../config.php');
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // _GET / _POST parameters
 
 $id             = required_param('id', PARAM_INT);
@@ -59,7 +59,7 @@ $firstUpload    = optional_param('firstUpload', false, PARAM_BOOL);
 $haveData       = array_key_exists( 'docfile', $_FILES );
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // Data from moodle
 
 $cm         = get_coursemodule_from_id('masks', $id, 0, false, MUST_EXIST);
@@ -67,7 +67,7 @@ $instance   = $DB->get_record('masks', array('id'=>$cm->instance), '*', MUST_EXI
 $course     = $DB->get_record('course', array('id'=>$cm->course), '*', MUST_EXIST);
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // Sanity tests
 
 require_course_login($course, false, $cm);
@@ -75,7 +75,7 @@ $context = context_module::instance($cm->id);
 require_capability('mod/masks:addinstance', $context);
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // page rendering
 
 // construct the 'move on to the next thing' js code to execute when we're all done
@@ -171,7 +171,7 @@ if ( $haveData !== true ){
     die();
 }
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // form data processing
 
 // fetch the config record for the plugin
@@ -191,7 +191,7 @@ $error = $processor->process( $_FILES['docfile'], $id );
 $logs = ob_get_contents();
 ob_end_clean();
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // Fetch data from the database
 
 require_once('database_interface.class.php');
@@ -200,7 +200,7 @@ $docData = $dbInterface->fetchDocData( $cm->id );
 $maskData = $dbInterface->fetchMaskData( $cm->id );
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // Output new data to the page and the script to apply it
 
 // generate the output script for setting up data structures
@@ -215,7 +215,7 @@ $jsAction .= 'parent.M.mod_masks.applyMaskData(masks_masks);';
 echo html_writer::script( $jsAction );
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // Append a 'done' button to close the frame
 
 $strDone    = get_string('label_upload_complete', 'mod_masks');
@@ -227,7 +227,7 @@ if (($error != -1) && (( count( $docData->pages ) > 0 ) && ! ( $config->debug > 
     echo \html_writer::script( 'parent.M.mod_masks.setAlertSuccess("uploadSuccess");' );
     echo $doneScript;
 } else {
-    ///////////////////////////////////////////////////////////////////////////
+    //------------------------------------------------------------------------------
     // form data processing
     // process the request data
     require_once('./locallib.php');

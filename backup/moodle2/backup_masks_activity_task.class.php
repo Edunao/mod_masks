@@ -45,7 +45,7 @@ class backup_masks_activity_task extends backup_activity_task {
      * backup plan.
      */
     protected function define_my_steps() {
-        $this->add_step(new backup_masks_activity_structure_step('masks_structure', 'masks.xml'));
+        $this->add_step( new backup_masks_activity_structure_step( 'masks_structure', 'masks.xml' ) );
     }
 
     /**
@@ -57,15 +57,15 @@ class backup_masks_activity_task extends backup_activity_task {
     static public function encode_content_links($content) {
         global $CFG;
 
-        $base = preg_quote($CFG->wwwroot,"/");
+        $base       = preg_quote( $CFG->wwwroot, "/" );
 
          // Link to the list of masks
-        $search="/(".$base."\/mod\/masks\/index.php\?id\=)([0-9]+)/";
-        $content= preg_replace($search, '$@MASKSINDEX*$2@$', $content);
+        $search     = "/(".$base."\/mod\/masks\/index.php\?id\=)([0-9]+)/";
+        $content    = preg_replace( $search, '$@MASKSINDEX*$2@$', $content );
 
         // Link to masks view by moduleid
-        $search="/(".$base."\/mod\/masks\/view.php\?id\=)([0-9]+)/";
-        $content= preg_replace($search, '$@MASKSVIEWBYID*$2@$', $content);
+        $search     = "/(".$base."\/mod\/masks\/view.php\?id\=)([0-9]+)/";
+        $content    = preg_replace( $search, '$@MASKSVIEWBYID*$2@$', $content );
 
         return $content;
     }

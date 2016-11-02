@@ -25,6 +25,9 @@
 
 namespace mod_masks;
 
+defined('MOODLE_INTERNAL') || die;
+
+
 //---------------------------------------------------------------------------------------------
 // Utility routines
 

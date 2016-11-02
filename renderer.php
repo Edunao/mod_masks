@@ -22,6 +22,9 @@
  * @package    mod_masks
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+defined('MOODLE_INTERNAL') || die;
+
 class mod_masks_renderer extends plugin_renderer_base {
 
     /**

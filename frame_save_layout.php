@@ -27,7 +27,7 @@
 require_once('../../config.php');
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // _GET / _POST parameters
 
 $id             = required_param('id', PARAM_INT);
@@ -40,7 +40,7 @@ $requireConfirm = optional_param('confirm', 0, PARAM_INT);
 $haveData       = array_key_exists( 'masks', $_GET );
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // Data from moodle
 
 $cm         = get_coursemodule_from_id('masks', $id, 0, false, MUST_EXIST);
@@ -48,7 +48,7 @@ $instance   = $DB->get_record('masks', array('id'=>$cm->instance), '*', MUST_EXI
 $course     = $DB->get_record('course', array('id'=>$cm->course), '*', MUST_EXIST);
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // Sanity tests
 
 require_course_login($course, false, $cm);
@@ -56,7 +56,7 @@ $context = context_module::instance($cm->id);
 require_capability('mod/masks:addinstance', $context);
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // page rendering
 
 // construct the 'move on to the next thing' js code to execute when we're all done
@@ -132,7 +132,7 @@ if ( $haveData !== true ){
     die();
 }
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // form data processing
 
 // Establish database connection
@@ -164,7 +164,7 @@ foreach( $decodedPages as $page ){
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // output generation
 
 // encode and output the updated mask data

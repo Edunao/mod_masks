@@ -26,6 +26,8 @@
 
 namespace mod_masks;
 
+defined('MOODLE_INTERNAL') || die;
+
 abstract class mask_family{
 
     //-------------------------------------------------------------------------

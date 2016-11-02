@@ -24,6 +24,8 @@
  */
 
 
+defined('MOODLE_INTERNAL') || die;
+
 // general strings - for use selecting a module type, or listing module types, etc
 $string['modulename']                   = 'Masks';
 $string['modulenameplural']             = 'Masks';
@@ -187,13 +189,13 @@ $string['title_edit_note']              = 'Note Permanente';
 $string['edithelpfeedback']             = ''
     . $string['label_goodanswerhint'] . ' / ' . $string['label_badanswerhint']
     . '<br>'
-	. 'Champ optionnel qui remplace le feedback par défaut après qu\'un apprenant ait répondu à une question.'
+    . 'Champ optionnel qui remplace le feedback par défaut après qu\'un apprenant ait répondu à une question.'
     ;
 $string['edithelphint']                 = ''
     . $string['label_userhint']
     . '<br>'
-	. 'Information optionnelle donnée aux apprenants ayant répondu au moins une fois de manière incorrect '
-	. 'et n\'ayant pas encore trouvé la réponse correcte à la question.<br><br>'
+    . 'Information optionnelle donnée aux apprenants ayant répondu au moins une fois de manière incorrect '
+    . 'et n\'ayant pas encore trouvé la réponse correcte à la question.<br><br>'
     ;
 $string['edithelp_qcm']                 = ''
         . 'Ce masks correspond à une question à choix multiples dont les différents réponses sont affichées dans un ordre aléatoire'

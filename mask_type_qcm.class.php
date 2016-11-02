@@ -26,6 +26,8 @@
 
 namespace mod_masks;
 
+defined('MOODLE_INTERNAL') || die;
+
 require_once(dirname(__FILE__).'/mask_type.class.php');
 
 class mask_type_qcm extends mask_type{

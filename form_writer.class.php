@@ -25,6 +25,8 @@
 
 namespace mod_masks;
 
+defined('MOODLE_INTERNAL') || die;
+
 class form_writer
 {
     private $refData0           = null;
@@ -61,7 +63,7 @@ class form_writer
 
     public function addTextField($propName, $requiredField, $hideHeading = null){
         $data   = $this->lookupRefData( $propName );
-        $args	= array( 'type' => 'text', 'name' => $propName, 'value' => $data );
+        $args   = array( 'type' => 'text', 'name' => $propName, 'value' => $data );
         if ( $this->firstElement == true ){
             $args['autofocus'] = 1;
             $this->firstElement = false;

@@ -22,9 +22,46 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// Directives for jshint
-/*jshint bitwise: false*/
 
+//------------------------------------------------------
+// Directives for eslint
+
+/*global $*/
+/*global console*/
+
+/*eslint no-bitwise: off*/
+/*eslint complexity: off*/
+/*eslint camelcase: off*/
+
+/*eslint space-before-blocks: off*/
+/*eslint spaced-comment: off*/
+/*eslint space-infix-ops: off*/
+/*eslint space-in-parens: off*/
+/*eslint space-unary-ops: off*/
+/*eslint no-multi-spaces: off*/
+/*eslint comma-spacing: off*/
+/*eslint computed-property-spacing: off*/
+/*eslint key-spacing: off*/
+/*eslint keyword-spacing: off*/
+/*eslint object-curly-spacing: off*/
+
+/*eslint brace-style: off*/
+/*eslint max-statements-per-line: off*/
+
+
+
+//------------------------------------------------------
+// Directives for jshint
+
+/*globals $*/
+/*globals console*/
+
+/*jshint bitwise: false*/
+/*jshint camelcase: false*/
+/*jshint maxlen: false*/
+
+
+//------------------------------------------------------
 // Namespace for the plugin code and data
 M.mod_masks={
     // the YUI instance
@@ -601,7 +638,7 @@ M.mod_masks={
                     break;
 
                 default:
-                    log.warn( 'bad mod_masks_state.type value: ', M.mod_masks_state.type );
+                    console.warn( 'bad mod_masks_state.type value: ', M.mod_masks_state.type );
             }
 
             // append the created node to the DOM node
@@ -616,7 +653,7 @@ M.mod_masks={
         if( pageId in M.mod_masks_masks.pages ){
             var pageMasks = M.mod_masks_masks.pages[pageId];
             for (var i=0; i < pageMasks.length; ++i){
-                if ( pageMasks[i].id === maskId ){
+                if ( ''+pageMasks[i].id === ''+maskId ){
                     mask = pageMasks[i];
                     break;
                 }
@@ -798,10 +835,10 @@ M.mod_masks={
             // clamp out-of bounds edges
             var maxX1 = 9999;
             var maxY1 = 9999;
-            if ( newX0 < 0 ){ newX0 = 0; dX0 = 0; }
-            if ( newY0 < 0 ){ newY0 = 0; dY0 = 0; }
-            if ( newX1 > maxX1 ){ newX1 = maxX1; dX1 = 0; }
-            if ( newY1 > maxY1 ){ newY1 = maxY1; dY1 = 0; }
+            if ( newX0 < 0 )        { newX0 = 0; dX0 = 0; }
+            if ( newY0 < 0 )        { newY0 = 0; dY0 = 0; }
+            if ( newX1 > maxX1 )    { newX1 = maxX1; dX1 = 0; }
+            if ( newY1 > maxY1 )    { newY1 = maxY1; dY1 = 0; }
             // derive new w, h
             var newW = newX1 - newX0;
             var newH = newY1 - newY0;

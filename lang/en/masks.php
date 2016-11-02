@@ -23,6 +23,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die;
+
 
 // general strings - for use selecting a module type, or listing module types, etc
 $string['modulename']                   = 'Masks';

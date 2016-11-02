@@ -27,7 +27,7 @@
 require_once('../../config.php');
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // _GET / _POST parameters
 
 $id             = required_param('id', PARAM_INT);
@@ -39,7 +39,7 @@ $isLastQuestion = required_param('islast', PARAM_INT);
 $hiddenFields   = array( 'id' => $id, 'mid' => $maskId, 'qid' => $questionId, 'islast' => $isLastQuestion );
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // Data from moodle
 
 $cm         = get_coursemodule_from_id('masks', $id, 0, false, MUST_EXIST);
@@ -47,7 +47,7 @@ $instance   = $DB->get_record('masks', array('id'=>$cm->instance), '*', MUST_EXI
 $course     = $DB->get_record('course', array('id'=>$cm->course), '*', MUST_EXIST);
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // Sanity tests
 
 require_course_login($course, false, $cm);
@@ -55,7 +55,7 @@ $context = context_module::instance($cm->id);
 require_capability('mod/masks:view', $context);
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // fetch the record to be editted from the database
 
 require_once('./database_interface.class.php');
@@ -64,7 +64,7 @@ $questionData = $dbInterface->fetchQuestionData( $questionId );
 $maskTypeName = $dbInterface->fetchQuestionType( $questionId );
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // looking up and instantiate the mask type handler
 
 require_once(dirname(__FILE__).'/mask_types_manager.class.php');
@@ -75,20 +75,20 @@ if ( $handler  == null ){
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // give the handler basic environment paramaters
 
 $handler->applyMoodleEnvironment( $course, $cm, $instance );
 $handler->setActiveMask( $maskId );
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // pass control off to the handler
 
 $passed = $handler->onClickMask( $questionId, $questionData, $hiddenFields, ($isLastQuestion == 1) );
 
 
-#///////////////////////////////////////////////////////////////////////////
+#//------------------------------------------------------------------------------
 
 #// if this was the last question and the user just answered it correctly
 #// then calculate their grade and apply it ot the grade book

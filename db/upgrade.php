@@ -23,12 +23,14 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die;
+
 function xmldb_masks_upgrade($oldversion) {
     global $DB;
     $dbman = $DB->get_manager();
 
     // Upgrade to initial version by creating tables and adding fields
-    $dbversion=2016010100;
+    $dbversion = 2016010100;
     if ($oldversion < $dbversion) {
 
         // include handy utility functions for setting up database fields with standardised settings
@@ -100,10 +102,10 @@ function xmldb_masks_upgrade($oldversion) {
         mod_masks\add_db_int_field( $newTable, 'state'       );  // flag indicating current state (see locallib.php for the flag list)
         mod_masks\add_db_date_field( $newTable, 'firstview'  );  // the time stamp of the last action
         mod_masks\add_db_date_field( $newTable, 'lastupdate' );  // the time stamp of the last action
-        $newTable->add_index('user', XMLDB_INDEX_NOTUNIQUE, array('user'));
-        $newTable->add_index('userquestion', XMLDB_INDEX_NOTUNIQUE, array('user','question'));
-        $newTable->add_index('question', XMLDB_INDEX_NOTUNIQUE, array('question'));
-        $dbman->create_table($newTable);
+        $newTable->add_index( 'user', XMLDB_INDEX_NOTUNIQUE, array( 'user' ) );
+        $newTable->add_index( 'userquestion', XMLDB_INDEX_NOTUNIQUE, array( 'user', 'question' ) );
+        $newTable->add_index( 'question', XMLDB_INDEX_NOTUNIQUE, array( 'question' ) );
+        $dbman->create_table( $newTable );
 
         // Add missing 'AUTO_INCREMENT' propertirs for id fields
         mod_masks\fix_id_field( 'masks_doc'       , 'id' );
@@ -112,20 +114,23 @@ function xmldb_masks_upgrade($oldversion) {
         mod_masks\fix_id_field( 'masks_question'  , 'id' );
         mod_masks\fix_id_field( 'masks_mask'      , 'id' );
         mod_masks\fix_id_field( 'masks_user_state', 'id' );
+        upgrade_mod_savepoint(true, $dbversion, 'masks');
     }
 
-    if ($oldversion < 2016102002){
-        $table = new xmldb_table('masks_question');
-        $field = new xmldb_field('type');
-        $field->set_attributes(XMLDB_TYPE_CHAR, '32', null, null, null,'', 'parentcm');
-        $dbman->add_field($table, $field);
+    $dbversion = 2016102002;
+    if ( $oldversion < $dbversion ) {
+        $table = new xmldb_table( 'masks_question' );
+        $field = new xmldb_field( 'type' );
+        $field->set_attributes( XMLDB_TYPE_CHAR, '32', null, null, null, '', 'parentcm' );
+        $dbman->add_field( $table, $field );
 
         //update masks type
-        $allmasksquestions = $DB->get_records('masks_question');
-        foreach($allmasksquestions as $question){
-            $question->type  = json_decode($question->data)->type ;
-            $DB->update_record('masks_question',$question);
+        $allmasksquestions = $DB->get_records( 'masks_question' );
+        foreach( $allmasksquestions as $question ){
+            $question->type  = json_decode( $question->data )->type ;
+            $DB->update_record( 'masks_question', $question );
         }
+        upgrade_mod_savepoint( true, $dbversion, 'masks' );
     }
 
     return true;

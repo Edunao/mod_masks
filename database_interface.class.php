@@ -25,6 +25,8 @@
 
 namespace mod_masks;
 
+defined('MOODLE_INTERNAL') || die;
+
 // Flags for pages
 define( 'mod_masks\PAGE_FLAG_HIDDEN', 1 );
 
@@ -41,10 +43,10 @@ define( 'mod_masks\MASK_FLAGS_QUESTION', MASK_FLAG_CLOSABLE | MASK_FLAG_GRADED )
 // User question state mask state flags
 // NOTE: the order of the constants is important as state changes will only be applied if the state value increases
 // NOTE: the js code assumes that the state flags occupy no more than the 16 low bits of an integer value
-define('MASKS_STATE_SEEN',0x10); // seen but not done
-define('MASKS_STATE_DONE',0x20); // seen and closed
-define('MASKS_STATE_FAIL',0x40); // at least one wrong answer given
-define('MASKS_STATE_PASS',0x80); // correct answer given with no wrong answers
+define( 'MASKS_STATE_SEEN', 0x10 ); // seen but not done
+define( 'MASKS_STATE_DONE', 0x20 ); // seen and closed
+define( 'MASKS_STATE_FAIL', 0x40 ); // at least one wrong answer given
+define( 'MASKS_STATE_PASS', 0x80 ); // correct answer given with no wrong answers
 
 
 class database_interface {
@@ -55,7 +57,7 @@ class database_interface {
      * @param integer $cmid The course module instance id ($cm->id)
      * @return struct the document representation
      */
-    public function fetchDocData( $cmid ){
+    public function fetchDocData( $cmid ) {
         global $DB;
 
         // initalise the result container
@@ -64,8 +66,8 @@ class database_interface {
         // fetch the set of records from the database
         $query =
             'SELECT page.orderkey, page.id, page.flags, page.docpage, docpage.doc, docpage.pagenum, docpage.imagename, docpage.w, docpage.h'.
-            ' FROM {masks_page} AS page'.
-            ' JOIN {masks_doc_page} AS docpage ON docpage.id = page.docpage'.
+            ' FROM {masks_page} page'.
+            ' JOIN {masks_doc_page} docpage ON docpage.id = page.docpage'.
             ' WHERE page.parentcm = :cmid'.
             ' ORDER BY page.orderkey'.
             '';
@@ -74,7 +76,7 @@ class database_interface {
 
         // generate image urls from image names
         $context = \context_module::instance( $cmid );
-        foreach( $result->pages as $page ){
+        foreach ( $result->pages as $page ) {
             $url = \moodle_url::make_pluginfile_url( $context->id, 'mod_masks', 'masks_doc_page', $page->docpage, '/', $page->imagename );
             $page->imageurl = strval( $url );
         }
@@ -88,7 +90,7 @@ class database_interface {
      * @param integer $cmid The course module instance id ($cm->id)
      * @return struct the mask set representation
      */
-    public function fetchMaskData( $cmid ){
+    public function fetchMaskData( $cmid ) {
         require_once(dirname(__FILE__).'/mask_types_manager.class.php');
         global $DB, $USER;
 
@@ -98,10 +100,10 @@ class database_interface {
         // fetch the set of mask records from the database
         $query =
             'SELECT mask.*, question.type , user.state AS userstate'.
-            ' FROM {masks_page} AS page'.
-            ' JOIN {masks_mask} AS mask ON page.id = mask.page'.
-            ' LEFT JOIN {masks_user_state} AS user ON user.question = mask.question AND user.user = :user'.
-            ' LEFT JOIN {masks_question} AS question ON question.id = mask.question ' .
+            ' FROM {masks_page} page'.
+            ' JOIN {masks_mask} mask ON page.id = mask.page'.
+            ' LEFT JOIN {masks_user_state} user ON user.question = mask.question AND user.user = :user'.
+            ' LEFT JOIN {masks_question} question ON question.id = mask.question ' .
             ' WHERE page.parentcm = :cmid'.
             ' AND (mask.flags & '.MASK_FLAG_DELETED.') = 0'.
             ' ORDER BY page.id, mask.id'.
@@ -111,9 +113,9 @@ class database_interface {
         // construct the result, group the masks by page
         $result->pages = array();
         $result->count = count( $masks );
-        foreach($masks as $mask){
+        foreach ($masks as $mask) {
             $page = $mask->page;
-            if ( ! array_key_exists( $page, $result->pages ) ){
+            if ( ! array_key_exists( $page, $result->pages ) ) {
                 $result->pages[$page] = array();
             }
             $mask->family    = mask_types_manager::getTypeFamily($mask->type);
@@ -130,7 +132,7 @@ class database_interface {
      * @param integer $questionId The question id
      * @return the decode question data record
      */
-    public function fetchQuestionData( $questionId ){
+    public function fetchQuestionData( $questionId ) {
         global $DB;
 
         // initalise the result container
@@ -145,7 +147,13 @@ class database_interface {
         return $result;
     }
 
-    public function fetchQuestionType( $questionId ){
+    /**
+     * Fetch the question type property that is required to identify question family and select appropriate styling for masks
+     *
+     * @param integer $questionId The question id
+     * @return the question type value
+     */
+    public function fetchQuestionType( $questionId ) {
          global $DB;
 
         // initalise the result container
@@ -163,12 +171,12 @@ class database_interface {
     /**
      * Instantiate a new masks_doc database row
      *
-     * @param integer $cmId The course module id ($cm->id) of the cm object representing the masks activity instance
+     * @param integer $cmid The course module id ($cm->id) of the cm object representing the masks activity instance
      * @param string $fileName The name of the file that has been uploaded
      * @param integer $pageCount The number of page images that have been extracted from the uploaded file
      * @return integer identifier of new row
      */
-    public function getNewDoc( $cmid, $fileName, $pageCount ){
+    public function getNewDoc( $cmid, $fileName, $pageCount ) {
         global $DB;
         $row = new \stdClass;
         $row->parentcm  = $cmid;
@@ -186,7 +194,7 @@ class database_interface {
      * @param integer $pageNumber The pdf file page number that the new object is intended to represent
      * @return integer identifier of new row
      */
-    public function getNewDocPage( $docId, $pageNumber ){
+    public function getNewDocPage( $docId, $pageNumber ) {
         global $DB;
         $row = new \stdClass;
         $row->doc       = $docId;
@@ -203,7 +211,7 @@ class database_interface {
      * @param integer $width The width of the image that represents the page
      * @param integer $height The height of the image that represents the page
      */
-    public function populateDocPage( $docPageId, $imageName, $width, $height ){
+    public function populateDocPage( $docPageId, $imageName, $width, $height ) {
         global $DB;
         $row = new \stdClass;
         $row->id        = $docPageId;
@@ -219,7 +227,7 @@ class database_interface {
      * @param integer $cmid The course module instance id ($cm->id)
      * @param array $docPageIds An array of integer masks_doc_page identifiers that identify the images to be used
      */
-    public function assignPages( $cmid, $docPageIds ){
+    public function assignPages( $cmid, $docPageIds ) {
         global $DB;
         // start by retrieving the identifiers of any existing masks_page records
         // that exist for this module instance
@@ -231,8 +239,8 @@ class database_interface {
         // iterate over the new pages and old pages together
         $idx = 0;
         $oldCount = count( $oldPages );
-        foreach( $docPageIds as $docPage ){
-            if ( $idx < $oldCount ){
+        foreach ( $docPageIds as $docPage ) {
+            if ( $idx < $oldCount ) {
                 // we have a spare record to use so go for it
                 $row = new \stdClass;
                 $row->id        = $oldPages[ $idx ]->id;
@@ -252,10 +260,10 @@ class database_interface {
 
         // consider deleting any leftover pages
         $rowsToDelete = array();
-        for(; $idx < $oldCount; ++$idx ){
+        for (; $idx < $oldCount; ++$idx ) {
             // look to see if any masks exist for this page
             $maskCount = $DB->count_records( 'masks_mask', array( 'page' => $oldPages[ $idx ]->id ) );
-            if ( $maskCount > 0 ){
+            if ( $maskCount > 0 ) {
                 // we have masks for this page so just update the flags
                 $row = new \stdClass;
                 $row->id        = $oldPages[ $idx ]->id;
@@ -269,7 +277,7 @@ class database_interface {
         }
 
         // if we have any rows to delete then go for it
-        if ( ! empty( $rowsToDelete ) ){
+        if ( ! empty( $rowsToDelete ) ) {
             $DB->delete_records_list( 'masks_page', 'id', $rowsToDelete );
         }
     }
@@ -279,12 +287,13 @@ class database_interface {
      *
      * @param integer $cmId The course module instance id ($cm->id)
      * @param integer $pageId the masks_page on which the mask is being added
+     * @param string $maskType the masks_type identifier
      * @param string $questionData the json encoded question data blob
      * @param integer $flags - a bitmask of flags composed from the mask flags constants defined above
      * @param integer $style - represents the id of the style
-     * @returns integer mask id for newly created mask
+     * @return integer mask id for newly created mask
      */
-    public function addMask( $cmId, $pageId, $maskType ,$questionData, $flags, $style = 0 ){
+    public function addMask( $cmId, $pageId, $maskType, $questionData, $flags, $style = 0 ) {
         global $DB;
 
         // start by instantiating the new question record
@@ -313,15 +322,15 @@ class database_interface {
     /**
      * Update a question object
      *
-     * @param integer $id The masks_question row for the question being updated
+     * @param integer $questionId The masks_question row for the question being updated
      * @param object $questionChanges the question content that has changed
      */
-    public function updateQuestion( $questionId, $questionChanges ){
+    public function updateQuestion( $questionId, $questionChanges ) {
         global $DB;
 
         $questionData = $this->fetchQuestionData( $questionId );
 
-        foreach( $questionChanges as $field => $value ){
+        foreach ( $questionChanges as $field => $value ) {
             $questionData->$field = $value;
         }
         $jsonData = json_encode( $questionData );
@@ -334,19 +343,17 @@ class database_interface {
     }
 
     /**
-     *
      * Update style of masks object with id = $maskid
      *
-     * @global type $DB
      * @param integer $maskid
      * @param integer $style
      */
-    public function updateStyle($maskid, $style){
+    public function updateStyle($maskid, $style) {
         global $DB;
         $data = new \stdClass;
         $data->id = $maskid;
         $data->style = $style;
-        $DB->update_record('masks_mask',$data);
+        $DB->update_record('masks_mask', $data);
     }
 
     /**
@@ -356,7 +363,7 @@ class database_interface {
      * @param integer $questionId The masks_question row for the question being updated
      * @return boolean true if the user has submitted no wrong for this question yet, else false
      */
-    public function isFirstQuestionAttempt( $userId, $questionId ){
+    public function isFirstQuestionAttempt( $userId, $questionId ) {
         global $DB;
         $failCount = $DB->get_field( 'masks_user_state', 'failcount', array( 'user'=>$userId, 'question'=>$questionId ) );
         return ( $failCount == null ) || ( $failCount == 0 );
@@ -379,7 +386,7 @@ class database_interface {
      *      'PASS' - the mask popup contained a graded question - the supplied answer was correct - the mask should now be hidden
      * @return integer $stateValue if the state was updated, 0 if it was not
      */
-    public function updateUserQuestionState( $cm, $userId, $questionId, $stateName ){
+    public function updateUserQuestionState( $cm, $userId, $questionId, $stateName ) {
         global $DB;
 
         // convert the state name to a flag set value
@@ -394,16 +401,16 @@ class database_interface {
 
         // fetch the existing state record (if there is one)
         $record = $DB->get_record('masks_user_state', array('question'=>$questionId, 'user'=>$userId), 'id,state,failcount' );
-        if ( $record ){
+        if ( $record ) {
             // Look for a state regression
             $oldStateValue  = $record->state;
-            if ( $stateValue <= $oldStateValue ){
+            if ( $stateValue <= $oldStateValue ) {
                 // the state change goes backwards so ignore it
                 return 0;
             }
 
             // If we have previously failed then convert a new 'pass,done,seen' to just 'done,seen'
-            if ( ( $record->state & MASKS_STATE_FAIL ) != 0 ){
+            if ( ( $record->state & MASKS_STATE_FAIL ) != 0 ) {
                 $stateValue = $stateValue & ~MASKS_STATE_PASS;
             }
 
@@ -415,7 +422,7 @@ class database_interface {
             $DB->update_record( 'masks_user_state', $record );
 
             // if we've failed then we're done as there is no chance of needing to update the PASS count
-            if ( $stateName == 'FAIL' ){
+            if ( $stateName == 'FAIL' ) {
                 return $record->state;
             }
             $haveFailed         = ( $record->failcount > 0 );
@@ -445,15 +452,15 @@ class database_interface {
      * @param integer $userId The $USER->id value for the user in question
      * @return number $gradeValue in the range 0.0 .. 100.0
      */
-    public function gradeUser( $cm, $userId ){
+    public function gradeUser( $cm, $userId ) {
         global $CFG, $DB;
         require_once($CFG->libdir.'/gradelib.php');
 
         // count the number of questions
         $query=''
             .'SELECT count(*) AS result'
-            .' FROM {masks_page} AS p'
-            .' JOIN {masks_mask} AS m ON m.page = p.id'
+            .' FROM {masks_page} p'
+            .' JOIN {masks_mask} m ON m.page = p.id'
             .' WHERE p.parentcm = :cmid'
             .' AND (m.flags & '.(MASK_FLAG_GRADED|MASK_FLAG_HIDDEN).')='.MASK_FLAG_GRADED
             ;
@@ -474,7 +481,7 @@ class database_interface {
         $gradeValue     = ( $passes == $numQuestions)? 100.0: ( $passes * 100.0 / $numQuestions );
         $gradeRecord    = array( 'userid'=>$userId, 'rawgrade'=>$gradeValue );
         $gradeResult    = \grade_update('mod/masks', $cm->course, 'mod', 'masks', $cm->instance, 0, $gradeRecord, null);
-        if ( $gradeResult != GRADE_UPDATE_OK ){
+        if ( $gradeResult != GRADE_UPDATE_OK ) {
             throw new \moodle_exception( 'Failed to update gradebook' );
         }
 

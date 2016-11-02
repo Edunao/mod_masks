@@ -42,11 +42,11 @@ class backup_masks_activity_structure_step extends backup_activity_structure_ste
         // Define each element separated.
         $masks = new backup_nested_element('masks', array('id'), array('name'));
 
-        //docs
+        // docs
         $docs = new backup_nested_element('docs');
 
         $doc = new backup_nested_element('doc', array('id'), array(
-            'parentcm','created', 'filename', 'pages'
+            'parentcm', 'created', 'filename', 'pages'
         ));
 
         $doc_pages = new backup_nested_element('doc_pages');
@@ -55,20 +55,20 @@ class backup_masks_activity_structure_step extends backup_activity_structure_ste
             'pagenum', 'imagename', 'w', 'h'
         ));
 
-        //pages
+        // pages
         $pages = new backup_nested_element('pages');
         $page = new backup_nested_element('page', array('id'), array(
             'orderkey', 'docpage', 'flags'
         ));
         $page_masks = new backup_nested_element('page_masks');
         $page_mask = new backup_nested_element('page_mask', array('id'), array(
-            'x','y','w','h','style', 'question', 'flags'
+            'x', 'y', 'w', 'h', 'style', 'question', 'flags'
         ));
 
-        //question
+        // question
         $questions = new backup_nested_element('questions');
         $question = new backup_nested_element('question', array('id'), array(
-            'type','data'
+            'type', 'data'
         ));
 
         // Build the tree.
@@ -85,10 +85,10 @@ class backup_masks_activity_structure_step extends backup_activity_structure_ste
         $page->add_child($page_masks);
         $page_masks->add_child($page_mask);
 
-        //user state
+        // user state
         $user_states = new backup_nested_element('user_states');
         $user_state = new backup_nested_element('user_state', array('id'), array(
-            'user','failcount','state', 'firstview', 'lastupdate'
+            'user', 'failcount', 'state', 'firstview', 'lastupdate'
         ));
         $question->add_child($user_states);
         $user_states->add_child($user_state);
@@ -110,7 +110,7 @@ class backup_masks_activity_structure_step extends backup_activity_structure_ste
         $page_mask->annotate_ids('masks_question', 'question');
         $page->annotate_ids('masks_doc_page', 'docpage');
 
-        //annotate files
+        // annotate files
         $doc_page->annotate_files('mod_masks', 'masks_doc_page', 'id');
 
         // Return the root element (masks), wrapped into standard activity structure.

@@ -295,7 +295,7 @@
 
 
 /*-----------------------------------------
-  Frame edit title 
+  Frame edit title
 */
 
 #masks-frame.mask-edit-question .frame-title{
@@ -509,7 +509,7 @@
   Frame submit and confirm save button: green style
 */
 
-#masks-frame .frame-footer .confirmsavebutton:hover, 
+#masks-frame .frame-footer .confirmsavebutton:hover,
 #masks-frame .frame-footer button[type="submit"]:hover,
 #masks-frame .frame-footer input[type="submit"]:hover
 {

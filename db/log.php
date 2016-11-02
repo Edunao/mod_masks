@@ -23,10 +23,21 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die;
 
 // add log event defintins here
 $logs = array(
-    array('module'=>'masks', 'action'=>'view', 'mtable'=>'masks', 'field'=>'name'),
-    array('module'=>'masks', 'action'=>'view all', 'mtable'=>'masks', 'field'=>'name'),
+    array( 
+        'module'    => 'masks', 
+        'action'    => 'view', 
+        'mtable'    => 'masks',
+        'field'     => 'name'
+    ),
+    array(
+        'module'    => 'masks',
+        'action'    => 'view all',
+        'mtable'    => 'masks',
+        'field'     => 'name'
+    ),
 );
 

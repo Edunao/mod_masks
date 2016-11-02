@@ -26,6 +26,8 @@
 
 namespace mod_masks;
 
+defined('MOODLE_INTERNAL') || die;
+
 require_once(dirname(__FILE__).'/mask_family.class.php');
 
 class mask_family_note extends mask_family{

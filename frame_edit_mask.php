@@ -27,7 +27,7 @@
 require_once('../../config.php');
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // _GET / _POST parameters
 
 $id             = required_param('id', PARAM_INT);
@@ -35,7 +35,7 @@ $maskId         = required_param('mid', PARAM_INT);
 $questionId     = required_param('qid', PARAM_INT);
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // Data from moodle
 
 $cm         = get_coursemodule_from_id('masks', $id, 0, false, MUST_EXIST);
@@ -43,7 +43,7 @@ $instance   = $DB->get_record('masks', array('id'=>$cm->instance), '*', MUST_EXI
 $course     = $DB->get_record('course', array('id'=>$cm->course), '*', MUST_EXIST);
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // Sanity tests
 
 require_course_login($course, false, $cm);
@@ -51,14 +51,14 @@ $context = context_module::instance($cm->id);
 require_capability('mod/masks:addinstance', $context);
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // fetch the record to be editted from the database
 
 require_once('./database_interface.class.php');
 $dbInterface  = new \mod_masks\database_interface;
 $maskTypeName = $dbInterface->fetchQuestionType( $questionId );
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // looking up the mask type handler
 
 require_once(dirname(__FILE__).'/mask_types_manager.class.php');
@@ -69,7 +69,7 @@ if ( $handler  == null ){
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // pass control off to the handler
 $questionData = $dbInterface->fetchQuestionData( $questionId );
 $handler->onEditMask( $id, $maskId, $questionId, $questionData );

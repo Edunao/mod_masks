@@ -23,6 +23,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die;
+
 function xmldb_masks_install() {
     // Note: In order to avoid maintenance of different code paths for installation and upgrade
     // we delegate execution to the upgrade script.

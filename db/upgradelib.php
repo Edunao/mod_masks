@@ -25,30 +25,32 @@
 
 namespace mod_masks;
 
-function fix_id_field( $table, $field ){
+defined('MOODLE_INTERNAL') || die;
+
+function fix_id_field( $table, $field ) {
     global $DB;
-    $sql ="ALTER TABLE `mdl_$table` MODIFY COLUMN `$field` BIGINT( 10 ) NOT NULL AUTO_INCREMENT";
+    $sql = "ALTER TABLE `mdl_$table` MODIFY COLUMN `$field` BIGINT( 10 ) NOT NULL AUTO_INCREMENT";
     $DB->change_database_structure( $sql );
 }
 
-function add_db_id_field( $tbl, $field ){
+function add_db_id_field( $tbl, $field ) {
     $tbl->add_field( $field, XMLDB_TYPE_INTEGER, 10, null, XMLDB_NOTNULL );
     $tbl->add_key( 'primary', XMLDB_KEY_PRIMARY, array($field) );
 }
 
-function add_db_int_field( $tbl, $field ){
+function add_db_int_field( $tbl, $field ) {
     $tbl->add_field( $field, XMLDB_TYPE_INTEGER, 10, null, XMLDB_NOTNULL, null, 0 );
 }
 
-function add_db_txt_field( $tbl, $field ){
+function add_db_txt_field( $tbl, $field ) {
     $tbl->add_field( $field, XMLDB_TYPE_TEXT, null, null, null, null, null );
 }
 
-function add_db_date_field( $tbl, $field ){
+function add_db_date_field( $tbl, $field ) {
     $tbl->add_field( $field, XMLDB_TYPE_INTEGER, 10, null, XMLDB_NOTNULL, null, 0 );
 }
 
-function add_db_chr_field( $tbl, $field, $size ){
+function add_db_chr_field( $tbl, $field, $size ) {
     $tbl->add_field( $field, XMLDB_TYPE_CHAR, $size, null, null, null, '' );
 }
 

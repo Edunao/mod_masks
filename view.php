@@ -26,7 +26,7 @@
 // This is view.php - add all view routines here (for generating output for author, instructor & student)
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // includes
 
 require_once('../../config.php');
@@ -34,14 +34,14 @@ require_once(dirname(__FILE__).'/locallib.php');
 //require_once($CFG->libdir . '/completionlib.php');
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // _GET / _POST parameters
 
 $id         = optional_param('id', 0, PARAM_INT);           // Course module ID
 $docPage    = optional_param('docpage', 0, PARAM_INT);      // the page of the document that the user shouls start on
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // Data from moodle
 
 $cm         = get_coursemodule_from_id('masks', $id, 0, false, MUST_EXIST);
@@ -49,7 +49,7 @@ $instance   = $DB->get_record('masks', array('id'=>$cm->instance), '*', MUST_EXI
 $course     = $DB->get_record('course', array('id'=>$cm->course), '*', MUST_EXIST);
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // Sanity tests
 
 require_course_login($course, false, $cm);
@@ -57,7 +57,7 @@ $context = context_module::instance($cm->id);
 require_capability('mod/masks:view', $context);
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // Prime the page object
 
 // Setup PAGE properties
@@ -68,7 +68,7 @@ $PAGE->requires->jquery();
 $PAGE->requires->js_init_call('M.mod_masks.init');
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // Include family css file
 
 require_once('./mask_families_manager.class.php');
@@ -78,13 +78,13 @@ foreach($families as $family){
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // Include other css file
 
 $PAGE->requires->css('/mod/masks/skin_enit.css');
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // Moodle event logging & state update
 
 $params = array(
@@ -98,7 +98,7 @@ $event->add_record_snapshot('masks', $instance);
 $event->trigger();
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // Fetch data from the database
 
 require_once('database_interface.class.php');
@@ -107,7 +107,7 @@ $docData = $model->fetchDocData( $cm->id );
 $maskData = $model->fetchMaskData( $cm->id );
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // Render the page body to a string
 
 // start by getting hold of a renderer object to work with
@@ -157,7 +157,7 @@ if ($isTeacher){
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // Encode data and suchlike to be passed to the client as raw scipt
 
 $jsPagesScript = \mod_masks\generateMasksJSPageData( $docData, 'M.mod_masks_pages');
@@ -190,7 +190,7 @@ $rawScript  .= 'M.mod_masks_texts = '.json_encode( array(
 $jsStateScript = html_writer::script( $rawScript );
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // Encode frame urls to be passed to the client as raw scipt
 
 // write the doc data to the javascript
@@ -206,7 +206,7 @@ $rawScript                  = 'M.mod_masks_frames = ' . json_encode( $frameUrls 
 $jsFramesScript             = html_writer::script( $rawScript );
 
 
-///////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
 // Output everything
 
 echo $OUTPUT->header();

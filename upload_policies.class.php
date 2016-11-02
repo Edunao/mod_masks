@@ -19,11 +19,13 @@
  *
  * @copyright  2016 Edunao SAS (contact@edunao.com)
  * @author     Sadge (daniel@edunao.com)
- * @package    mod_rich_pdf
+ * @package    mod_masks
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_masks;
+
+defined('MOODLE_INTERNAL') || die;
 
 class upload_policies{
 
@@ -33,6 +35,7 @@ class upload_policies{
 
     /**
      * __construct()
+     * @param integer $cm the course module identifier
      */
     public function __construct( $cm ) {
         // instantiate the database interface

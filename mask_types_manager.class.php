@@ -25,6 +25,8 @@
 
 namespace mod_masks;
 
+defined('MOODLE_INTERNAL') || die;
+
 require_once(dirname(__FILE__).'/mask_type_qcm.class.php');
 require_once(dirname(__FILE__).'/mask_type_qtxt.class.php');
 require_once(dirname(__FILE__).'/mask_type_basic.class.php');
@@ -52,7 +54,7 @@ class mask_types_manager{
     // Public API
 
     /* Get the array of registered type names
-     * @returns array of string type names
+     * @return array of string type names
      */
     public static function getTypeNames(){
         self::populateTypeList();
@@ -61,7 +63,7 @@ class mask_types_manager{
 
     /* Get the handler object corresponding to the given type name
      * @param string mask type name (as one of the entries provided by getTypeNames())
-     * @returns mixed instance of the mask_type_... class or null if the type name was not recognised
+     * @return mixed instance of the mask_type_... class or null if the type name was not recognised
      */
     public static function getTypeHandler( $typeName ){
         self::populateTypeList();
@@ -70,7 +72,7 @@ class mask_types_manager{
 
     /* Lookup the family name corresponding to the given type name
      * @param string mask type name (as one of the entries provided by getTypeNames())
-     * @returns string - in the case of errors it would be an empty string
+     * @return string - in the case of errors it would be an empty string
      */
     public static function getTypeFamily( $typeName ){
         $handler = self::getTypeHandler( $typeName );
