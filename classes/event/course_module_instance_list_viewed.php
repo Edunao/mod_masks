@@ -27,8 +27,7 @@
 
 namespace mod_masks\event;
 
-// the following line is not needed as the file produces no output
-// defined('MOODLE_INTERNAL') || die();
+defined('MOODLE_INTERNAL') || die;
 
 class course_module_instance_list_viewed extends \core\event\course_module_instance_list_viewed {
 }
