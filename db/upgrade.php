@@ -114,7 +114,10 @@ function xmldb_masks_upgrade($oldversion) {
         mod_masks\fix_id_field( 'masks_question'  , 'id' );
         mod_masks\fix_id_field( 'masks_mask'      , 'id' );
         mod_masks\fix_id_field( 'masks_user_state', 'id' );
-        upgrade_mod_savepoint(true, $dbversion, 'masks');
+        if ( $oldversion != 0 ){
+            // if this isn't a first time install then we need to set a save point
+            upgrade_mod_savepoint(true, $dbversion, 'masks');
+        }
     }
 
     $dbversion = 2016102002;
@@ -130,7 +133,10 @@ function xmldb_masks_upgrade($oldversion) {
             $question->type  = json_decode( $question->data )->type ;
             $DB->update_record( 'masks_question', $question );
         }
-        upgrade_mod_savepoint( true, $dbversion, 'masks' );
+        if ( $oldversion != 0 ){
+            // if this isn't a first time install then we need to set a save point
+            upgrade_mod_savepoint(true, $dbversion, 'masks');
+        }
     }
 
     return true;
