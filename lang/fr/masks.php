@@ -23,17 +23,17 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
 defined('MOODLE_INTERNAL') || die;
 
+
 // general strings - for use selecting a module type, or listing module types, etc
-$string['modulename']                   = 'Masks';
-$string['modulenameplural']             = 'Masks';
+$string['modulename']                   = 'Mask';
+$string['modulenameplural']             = 'Instances de Mask';
 $string['modulename_help']              = 'Importez votre fichier PDF, masquez des zones et ajoutez des questions à destination des apprenants pour qu\'ils puissent révéler la totalité du document.';
 
 // plugin administration strings
 $string['pluginadministration']         = 'Administration du module Masks';
-$string['pluginname']                   = 'Masks';
+$string['pluginname']                   = 'Mask';
 
 // plugin capacities
 $string['masks:addinstance']            = 'Ajouter une activité Masks' ;
@@ -49,6 +49,7 @@ $string['settingname_maskedit']         = 'Champs additionels dans l\'éditeur d
 $string['setting_fields_none']          = 'Aucun';
 $string['setting_fields_h']             = 'Indice';
 $string['setting_fields_hf']            = 'Indice et feedback';
+$string['settingname_showghosts']       = 'Afficher les empreintes des masques passés';
 
 // instance settings
 $string['name']                         = 'Nom de l\'activité';
@@ -99,8 +100,8 @@ $string['label_badanswer1']             = 'Autre réponse incorrect';
 $string['label_badanswer2']             = 'Autre réponse incorrect';
 $string['label_badanswer3']             = 'Autre réponse incorrect';
 $string['label_badanswers']             = 'Réponses incorrectes';
-$string['label_goodanswerhint']         = 'Correct answer response';
-$string['label_badanswerhint']          = 'Incorrect answer response';
+$string['label_goodanswerhint']         = 'Retour en cas de bonne réponse';
+$string['label_badanswerhint']          = 'Retour en cas de mauvaise réponse';
 $string['label_userhint']               = 'Indice';
 $string['label_showhint']               = 'Voir l\'indice';
 $string['label_hidehint']               = 'Cacher l\'indice';

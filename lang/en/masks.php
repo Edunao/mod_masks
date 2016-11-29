@@ -27,13 +27,13 @@ defined('MOODLE_INTERNAL') || die;
 
 
 // general strings - for use selecting a module type, or listing module types, etc
-$string['modulename']                   = 'Masks';
-$string['modulenameplural']             = 'Masks';
+$string['modulename']                   = 'Mask';
+$string['modulenameplural']             = 'Mask Instances';
 $string['modulename_help']              = 'Upload PDF files, mask out zones and add questions for students to answer in order to see the full page';
 
 // plugin administration strings
 $string['pluginadministration']         = 'Masks module administration';
-$string['pluginname']                   = 'Masks';
+$string['pluginname']                   = 'Mask';
 
 // plugin capacities
 $string['masks:addinstance']            = 'Add a new masks activity' ;
