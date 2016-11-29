@@ -57,9 +57,8 @@ class mod_masks_mod_form extends moodleform_mod {
 
         // text fields
         $this->addtextfield('name',255);
-    }
 
-    function definition_after_data(){
+	// standard moodle elements
         $this->standard_coursemodule_elements();
         $this->add_action_buttons();
     }
