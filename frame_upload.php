@@ -76,6 +76,21 @@ require_capability('mod/masks:addinstance', $context);
 
 
 //------------------------------------------------------------------------------
+// instantiate upload processor
+
+// fetch the config record for the plugin
+$config = get_config('mod_masks');
+
+// instantiate an LMS interface object
+require_once('upload_policies.class.php');
+$policies   = new \mod_masks\upload_policies( $cm );
+
+// instantiate a pdf upload processor object
+require_once('upload_processor.class.php');
+$processor  = new \mod_masks\upload_processor( $policies, $config );
+
+
+//------------------------------------------------------------------------------
 // page rendering
 
 // construct the 'move on to the next thing' js code to execute when we're all done
@@ -91,75 +106,98 @@ if ( $haveData !== true ){
     // open root tag
     echo \html_writer::start_tag( 'div', array( 'id' => 'masks-frame', 'class' => 'upload' ));
 
-    // open a tag for englobing the input form and related content
-    echo \html_writer::start_tag( 'div', array( 'class' => 'upload-input' ) );
-    echo \html_writer::start_tag('form', array(
-        'action'=>new moodle_url( '/mod/masks/frame_upload.php' ),
-        'method'=>'post',
-        'enctype'=>'multipart/form-data',
-        'onsubmit'=>'document.getElementById("masks-frame").classList.toggle("upload-running");parent.M.mod_masks.iframeUpdateHeight($("#masks-frame").height())'
-    ));
-    echo \html_writer::tag('input','',array('type'=>'hidden', 'name'=>'id', 'value'=>$id));
+    if($processor->can_processing()){
+        // open a tag for englobing the input form and related content
+        echo \html_writer::start_tag( 'div', array( 'class' => 'upload-input' ) );
+        echo \html_writer::start_tag('form', array(
+            'action'=>new moodle_url( '/mod/masks/frame_upload.php' ),
+            'method'=>'post',
+            'enctype'=>'multipart/form-data',
+            'onsubmit'=>'document.getElementById("masks-frame").classList.toggle("upload-running");parent.M.mod_masks.iframeUpdateHeight($("#masks-frame").height())'
+        ));
+        echo \html_writer::tag('input','',array('type'=>'hidden', 'name'=>'id', 'value'=>$id));
 
-    // add page header
-    $title = get_string('upload-input-title', 'mod_masks');
-    echo \html_writer::start_div( 'frame-header' );
-    echo \html_writer::div( $title, 'frame-title' );
-    echo \html_writer::end_div();
+        // add page header
+        $title = get_string('upload-input-title', 'mod_masks');
+        echo \html_writer::start_div( 'frame-header' );
+        echo \html_writer::div( $title, 'frame-title' );
+        echo \html_writer::end_div();
 
-    // open page body
-    $body = get_string('upload-input-text', 'mod_masks');
-    echo \html_writer::start_div( 'frame-body' );
+        // open page body
+        $body = get_string('upload-input-text', 'mod_masks');
+        echo \html_writer::start_div( 'frame-body' );
 
-    // display the upload instructions
-    echo \html_writer::start_div( 'frame-section instructions' );
-    echo \html_writer::div( $body, 'frame-text frame-text-look' );
-    echo \html_writer::end_div();
+        // display the upload instructions
+        echo \html_writer::start_div( 'frame-section instructions' );
+        echo \html_writer::div( $body, 'frame-text frame-text-look' );
+        echo \html_writer::end_div();
 
-    // construct the file selector
-    echo \html_writer::start_div( 'frame-section upload-widget', array( 'ondrop' => 'event.stopPropagation();' ) );
-    echo html_writer::tag('input','',array('id'=>'fileselector', 'type'=>'file', 'accept'=>'application/pdf', 'name'=>'docfile' , 'required' => 'required'));
-    echo \html_writer::end_div();
+        // construct the file selector
+        echo \html_writer::start_div( 'frame-section upload-widget', array( 'ondrop' => 'event.stopPropagation();' ) );
+        echo html_writer::tag('input','',array('id'=>'fileselector', 'type'=>'file', 'accept'=>'application/pdf', 'name'=>'docfile' , 'required' => 'required'));
+        echo \html_writer::end_div();
 
-    // close page body
-    echo \html_writer::end_div();
+        // close page body
+        echo \html_writer::end_div();
 
-    // add page footer
-    echo \html_writer::start_div( 'frame-footer' );
-    $strCancel  = get_string( 'label_cancel', 'mod_masks' );
-    $strUpload  = get_string( 'label_upload', 'mod_masks' );
-    if(!$firstUpload){
-        echo \html_writer::tag( 'button', $strCancel, array( 'onclick' => $jsCloseFrame , 'class' => 'cancel-button' ) );
+        // add page footer
+        echo \html_writer::start_div( 'frame-footer' );
+        $strCancel  = get_string( 'label_cancel', 'mod_masks' );
+        $strUpload  = get_string( 'label_upload', 'mod_masks' );
+        if(!$firstUpload){
+            echo \html_writer::tag( 'button', $strCancel, array( 'onclick' => $jsCloseFrame , 'class' => 'cancel-button' ) );
+        }
+        echo \html_writer::tag('input','',array('type'=>'submit','value'=>$strUpload , 'class' => 'standard-button normal-button') );
+        echo \html_writer::end_div();
+
+        // close input-englobing tag
+        echo \html_writer::end_tag('form');
+        echo \html_writer::end_tag( 'div' );
+
+        // open  a parent tag for content to be displayed while waiting for upload to complete
+        echo \html_writer::start_tag( 'div', array( 'class' => 'upload-wait' ) );
+
+        // add page header
+        $title = get_string('upload-wait-title', 'mod_masks');
+        echo \html_writer::start_div( 'frame-header' );
+        echo \html_writer::div( $title, 'frame-title' );
+        echo \html_writer::end_div();
+
+        // add page body
+        $body = get_string('upload-wait-text', 'mod_masks');
+        echo \html_writer::start_div( 'frame-body' );
+        echo \html_writer::start_div( 'frame-section wait-text' );
+        echo \html_writer::div( $body, 'frame-text frame-text-look' );
+        echo \html_writer::end_div();
+        echo \html_writer::end_div();
+
+        // add a rotating gif to keep people patient
+        echo \html_writer::div( '', 'uploading-img' );
+
+        // close the 'waiting' parent tag
+        echo \html_writer::end_tag( 'div' );
+    
+    }else{
+        $title = get_string('failedcmdline-title', 'mod_masks');
+        echo \html_writer::start_div( 'frame-header' );
+        echo \html_writer::div( $title, 'frame-title' );
+        echo \html_writer::end_div();
+        
+        $body = get_string('failedcmdline-text', 'mod_masks');
+        echo \html_writer::start_div( 'frame-body' );
+        echo \html_writer::start_div( 'frame-section wait-text' );
+        echo \html_writer::div( $body, 'frame-text frame-text-look' );
+        echo \html_writer::end_div();
+        echo \html_writer::end_div();
+        
+        echo \html_writer::start_div( 'frame-footer' );
+        $strCancel  = get_string( 'label_cancel', 'mod_masks' );
+        $strUpload  = get_string( 'label_upload', 'mod_masks' );
+        if(!$firstUpload){
+            echo \html_writer::tag( 'button', $strCancel, array( 'onclick' => $jsCloseFrame , 'class' => 'cancel-button' ) );
+        }
+        echo \html_writer::end_div();
     }
-    echo \html_writer::tag('input','',array('type'=>'submit','value'=>$strUpload , 'class' => 'standard-button normal-button') );
-    echo \html_writer::end_div();
-
-    // close input-englobing tag
-    echo \html_writer::end_tag('form');
-    echo \html_writer::end_tag( 'div' );
-
-    // open  a parent tag for content to be displayed while waiting for upload to complete
-    echo \html_writer::start_tag( 'div', array( 'class' => 'upload-wait' ) );
-
-    // add page header
-    $title = get_string('upload-wait-title', 'mod_masks');
-    echo \html_writer::start_div( 'frame-header' );
-    echo \html_writer::div( $title, 'frame-title' );
-    echo \html_writer::end_div();
-
-    // add page body
-    $body = get_string('upload-wait-text', 'mod_masks');
-    echo \html_writer::start_div( 'frame-body' );
-    echo \html_writer::start_div( 'frame-section wait-text' );
-    echo \html_writer::div( $body, 'frame-text frame-text-look' );
-    echo \html_writer::end_div();
-    echo \html_writer::end_div();
-
-    // add a rotating gif to keep people patient
-    echo \html_writer::div( '', 'uploading-img' );
-
-    // close the 'waiting' parent tag
-    echo \html_writer::end_tag( 'div' );
 
     // close root tag
     echo \html_writer::end_div();
@@ -171,19 +209,9 @@ if ( $haveData !== true ){
     die();
 }
 
+
 //------------------------------------------------------------------------------
 // form data processing
-
-// fetch the config record for the plugin
-$config = get_config('mod_masks');
-
-// instantiate an LMS interface object
-require_once('upload_policies.class.php');
-$policies   = new \mod_masks\upload_policies( $cm );
-
-// instantiate a pdf upload processor object
-require_once('upload_processor.class.php');
-$processor  = new \mod_masks\upload_processor( $policies, $config );
 
 // process the request data and put logs in var logs (to print this after)
 ob_start();

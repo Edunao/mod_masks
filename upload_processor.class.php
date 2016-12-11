@@ -103,8 +103,28 @@ class upload_processor{
         $this->policies->logProgress("Generating Moodle Exercise From PDF Pages");
         $this->policies->finaliseUpload( $cmid );
     }
+    
+    /**
+     * Return true if pdf can be convert to svg with the command line in mod masks config
+     * @return boolean
+     */
+    public function can_processing(){
+        $cmdLine = $this->config->cmdline_pdf2svg;
+        if($cmdLine === ''){
+            return false;
+        }else{
+            //try to convert dummy pdf to svg
+            $dummypdf = 'assets/dummypdf.pdf';
+            $workPath = $this->policies->getWorkFolderName();
+            system($cmdLine." $dummypdf $workPath/dummypdfconvert.svg all");
 
+           if(file_exists("$workPath/dummypdfconvert.svg") && file_get_contents("$workPath/dummypdfconvert.svg")){
+               return true;
+           }
+        }
 
+    }
+    
     //-------------------------------------------------------------------------
     // Private Data
     //-------------------------------------------------------------------------

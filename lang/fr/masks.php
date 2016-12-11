@@ -150,6 +150,12 @@ $string['label_upload_complete']        = 'Terminé';
 $string['failed-upload-title']          = 'Erreur';
 $string['failed-upload-text']           = 'L\'importation a échouée, merci de réessayer ou de contacter l\'administrateur de la plateforme';
 
+// cmdline_pdf2svg isn't correct
+$string['failedcmdline-title']          = 'Ligne de commande incorrecte';
+$string['failedcmdline-text']           = ''
+        . 'La ligne de commande permettant d\'exécuter l\'utilitaire pdf2svg est incorrecte.<br>'
+        . 'Merci de contacter l\'administrateur de la plateforme';
+
 // Alert texts
 $string['alert_uploadnofile']           = 'Pour commencer, merci d\'importer un fichier PDF';
 $string['alert_uploadsuccess']          = 'Félicitations, votre document a bien été importé.';

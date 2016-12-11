@@ -1,40 +1,40 @@
-MASKS : Maskable PDF Activity Module
+MASK : Maskable PDF Activity Module
 -----------------------------------
 
-Purpose of this plugin
-----------------------
-This plugin is intended to provide a SIMPLE solution for teaching staff to create an interactive experience from pre-existing pdf files.
+Purpose
+-------
+MASK provides a simple solution for creating an interactive activity from a pdf document.
 
 The teacher can upload their pdf file to Moodle, lay down masks that obscure parts of the underlying document and add questions for the students to answer in order to make the masks disappear.
 
-The student is encouraged to try to answer questions correctrly on their first attempt and receives a corresponding grade in the Moodle gradebook when they have found the correct answers to all of the questions in the document.
+The student is encouraged to try to answer questions correctly on their first attempt and receives a corresponding grade in the Moodle grade book when they have found the correct answers to all of the questions in the document.
 The teacher can add hint texts to be displayed after a student answers questions incorrectly in order to help them to identify the correct answer.
 
-The teacher can additionally hide pages such as title pages and blank pages in the original pdf that are not of interets for their use within Moodle.
+The teacher can additionally hide pages such as title pages and blank pages in the original pdf that are not of interest for their use within Moodle.
 
-NOTE: For anyone considering using this module in assessments it is important to know that a student who uses the web developper functionality built into all modern browsers is able to view the document pages without the overlayed masks. As a result, in an assessment context the answers to questions should not be present in the pdf document
+NOTE: For anyone considering using this module in assessments it is important to know that a student who uses the web developper functionality built into all modern browsers is able to view the document pages without the overlaid masks. As a result, in an assessment context the answers to questions should not be present in the pdf document.
 
 
 Installation
 ------------
 This plugin relies on the presence on the server of the free to use application 'pdf2svg' which is available as a standard package under Debian and Ubuntu linux distributions and also exists for Microsft Windows and Mac.
 
-Other than this requirement, MASKS is a very standard Moodle plugin and can be installed and uninstalled via standard Moodle processes.
+Other than this requirement, MASK is a very standard Moodle plugin and can be installed and uninstalled via standard Moodle processes.
 
 The only configuration option that needs to be set at install time is the command line to execute to run the pdf2svg application.
 
 
 Getting Started
 ---------------
-Once installed the MASKS plugin allows a teacher editing a course to add 'Maskable PDF' activities.
+Once installed the plugin allows a teacher editing a course to add MASK activities.
 
 Each such activity is based on a single pdf file, so the teacher's first job is to select the pdf file that they would like to upload.
 
-Once the document is uploaded one can browse through its pages using the standard page navigation menu diaplyed at the top right of the screen, add masks and popup notes to the page by clicking the ADD button or perform maintenance operations (such as hiding and unhiding pages) by clicking on the cog icon to the left of the ADD button.
+Once the document is uploaded they can browse through its pages using the standard page navigation menu dispalyed at the top right of the screen, add masks and popup notes to the page by clicking the ADD button or perform maintenance operations (such as hiding and unhiding pages) by clicking on the cog icon.
 
-Masks can be selected, moved and resized by clicking and dragging with the mouse. They can be edited, hidden, deleted and recoloured via the buttons that appear next to the ADD button whenever a mask is selected.
+Masks can be selected, moved and resized by clicking and dragging with the mouse. They can be edited, hidden, deleted and recoloured via the context menu that appears whenever a mask is selected.
 
-Changes to the layout are not immediately saved to the server. They will be prompted to save changes whenever they change pages and can click the 'Save Now' button to apply the changes immediately.
+Changes to the layout are not automatically saved. A SAVE buttonn appears next to the ADD button whenever there are unsaved changes.
 
 
 Copyright & License

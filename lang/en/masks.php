@@ -152,6 +152,12 @@ $string['label_upload_complete']        = 'Done';
 $string['failed-upload-title']          = 'Error';
 $string['failed-upload-text']           = 'Upload failed - please repload and try again or contact your system administrator';
 
+// cmdline_pdf2svg isn't correct
+$string['failedcmdline-title']          = 'Incorrect pdf2svg command line';
+$string['failedcmdline-text']           = ''
+        . 'Command line for executing pdf2svg utility isn\'t correct.<br>'
+        . 'Please contact your system administrator';
+
 // Alert texts
 $string['alert_uploadnofile']           = 'To get started please upload a PDF file';
 $string['alert_uploadsuccess']          = 'Congratulations. Your document has been uploaded.';

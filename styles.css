@@ -30,6 +30,7 @@
 #masks{
     position: relative;
     width: 100%;
+    z-index: 0;
 }
 
 #masks .masks-header{

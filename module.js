@@ -131,7 +131,7 @@ M.mod_masks={
 
         // setup load event handler for iframe
         var frame=$('#popup-mdl-frame');
-        frame.load( this.iframeLoaded );
+        frame.on( "load", this.iframeLoaded ); // modified for jquery 3.0 compatibility
 
         // start at first page
         if ( M.mod_masks_pages.length > 0 ){
@@ -1107,7 +1107,7 @@ M.mod_masks={
         for( var p in M.mod_masks_masks.pages ){
             var maskSet = M.mod_masks_masks.pages[ p ];
             for ( var m in maskSet ){
-                if ( maskSet[ m ].id === maskId ){
+                if ( parseInt(maskSet[ m ].id) === maskId ){
                     maskSet[ m ].userstate = parseInt(newState);
                     maskSet[ m ].refuserstate = parseInt(newState);
                 }
