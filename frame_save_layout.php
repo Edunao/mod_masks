@@ -86,7 +86,7 @@ if ( $haveData !== true ){
 
     // initalise rendering helper, rendering an invisible form to hold the data to upload
     require_once('./form_writer.class.php');
-    $formWriter = new \mod_masks\form_writer( $_GET );
+    $formWriter = new \mod_masks\form_writer();
     $formWriter->openForm('frame_save_layout.php',$hiddenFields);
     $formWriter->closeForm(false);
 

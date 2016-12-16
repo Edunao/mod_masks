@@ -114,28 +114,18 @@ function xmldb_masks_upgrade($oldversion) {
         mod_masks\fix_id_field( 'masks_question'  , 'id' );
         mod_masks\fix_id_field( 'masks_mask'      , 'id' );
         mod_masks\fix_id_field( 'masks_user_state', 'id' );
-        if ( $oldversion != 0 ){
-            // if this isn't a first time install then we need to set a save point
-            upgrade_mod_savepoint(true, $dbversion, 'masks');
-        }
     }
 
     $dbversion = 2016102002;
     if ( $oldversion < $dbversion ) {
         $table = new xmldb_table( 'masks_question' );
-        $field = new xmldb_field( 'type' );
-        $field->set_attributes( XMLDB_TYPE_CHAR, '32', null, null, null, '', 'parentcm' );
-        $dbman->add_field( $table, $field );
+        mod_masks\add_db_chr_field( $table, 'type', 32   );  // the question type - used to determine which handler object type to instantiate in frames
 
         //update masks type
         $allmasksquestions = $DB->get_records( 'masks_question' );
         foreach( $allmasksquestions as $question ){
             $question->type  = json_decode( $question->data )->type ;
             $DB->update_record( 'masks_question', $question );
-        }
-        if ( $oldversion != 0 ){
-            // if this isn't a first time install then we need to set a save point
-            upgrade_mod_savepoint(true, $dbversion, 'masks');
         }
     }
 

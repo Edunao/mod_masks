@@ -28,8 +28,8 @@ namespace mod_masks;
 defined('MOODLE_INTERNAL') || die;
 
 function fix_id_field( $table, $field ) {
-    global $DB;
-    $sql = "ALTER TABLE `mdl_$table` MODIFY COLUMN `$field` BIGINT( 10 ) NOT NULL AUTO_INCREMENT";
+    global $DB, $CFG;
+    $sql = 'ALTER TABLE ' . $CFG->prefix . $table . ' MODIFY COLUMN ' . $field . ' BIGINT( 10 ) NOT NULL AUTO_INCREMENT';
     $DB->change_database_structure( $sql );
 }
 

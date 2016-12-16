@@ -97,10 +97,10 @@ class form_writer
 
     private function lookupRefData($propName){
         if ( array_key_exists( $propName, $this->refData0 ) ){
-            return $this->refData0[ $propName ];
+            return \htmlentities( $this->refData0[ $propName ] );
         }
         if ( array_key_exists( $propName, $this->refData1 ) ){
-            return $this->refData1[ $propName ];
+            return \htmlentities( $this->refData1[ $propName ] );
         }
         return '';
     }

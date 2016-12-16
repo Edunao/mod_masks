@@ -4,134 +4,119 @@
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-
-    <TABLE NAME="masks" COMMENT="each record represents one module instance">
-
-      <FIELDS>
-      	<!-- Fields REQUIRED by MOODLE -->
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
-        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
-      </FIELDS>
-
-      <!-- primary key -->
-      <KEYS><KEY NAME="primary" TYPE="primary" FIELDS="id"/></KEYS>
-
-    </TABLE>
-
-    <!--
-        RANT
-        ====
-        After fighting with broken plugins that had failed to maintain an absolute correspondance between the database
-        structures generated when installing afresh and those generated when applying updates I've taken the decision
-        to NOT maintain my databse structure definitions in this file.
-        The database structure is entirely managed in db/upgrade.php
-
-        If in a future version of moodle it becomes possilbe to ONLY manage the database definitions here then I would
-        plan to throw out the upgrade.php code, which is less readable, and maintain this xml file instead.
-
-        The xml here below is a good starting point for understanding the plugin's database structure anyway so it makes
-        sense to keep it here, but be warned - it is not being actively maintained.
-
-
         <TABLE NAME="masks" COMMENT="each record represents one module instance">
             <FIELDS>
--
+      	        <!-- Fields REQUIRED by MOODLE -->
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
                 <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
-                <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="intro" TYPE="text" NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
             </FIELDS>
             <KEYS>
+                <!-- primary key -->
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
             </KEYS>
         </TABLE>
         <TABLE NAME="masks_doc" COMMENT="each record represents one mask doc">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-                <FIELD NAME="parentcm" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="created" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="filename" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="pages" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="parentcm" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="created"  TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="filename" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
+                <FIELD NAME="pages" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-                <KEY NAME="masks" TYPE="foreign" FIELDS="parentcm" REFTABLE="masks" REFFIELDS="id" COMMENT="The instance of mod_masks this doc belongs to."/>
             </KEYS>
         </TABLE>
         <TABLE NAME="masks_doc_page" COMMENT="each record represents one mask doc page">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-                <FIELD NAME="doc" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="pagenum" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="doc" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="pagenum" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
                 <FIELD NAME="imagename" TYPE="char" LENGTH="16" NOTNULL="false" SEQUENCE="false"/>
-                <FIELD NAME="w" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="h" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="w" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="h" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-                <KEY NAME="masks_doc" TYPE="foreign" FIELDS="doc" REFTABLE="masks_doc" REFFIELDS="id"/>
+                <KEY NAME="masks_doc" TYPE="foreign" FIELDS="doc" REFTABLE="masks_doc" REFFIELDS="id" COMMENT=""/>
             </KEYS>
+            <INDEXES>
+                <INDEX NAME="doc" UNIQUE="false" FIELDS="doc"/>
+            </INDEXES>
         </TABLE>
         <TABLE NAME="masks_page" COMMENT="each record represents one mask page">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-                <FIELD NAME="parentcm" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="orderkey" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="docpage" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
-                <FIELD NAME="flags" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="parentcm" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="orderkey" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="docpage" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="flags" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-                <KEY NAME="masks" TYPE="foreign" FIELDS="parentcm" REFTABLE="masks" REFFIELDS="id" COMMENT="The instance of mod_masks this page belongs to."/>
+                <KEY NAME="masks_doc_page" TYPE="foreign" FIELDS="docpage" REFTABLE="masks_doc_page" REFFIELDS="id" COMMENT=""/>
             </KEYS>
+            <INDEXES>
+                <INDEX NAME="parentcm" UNIQUE="false" FIELDS="parentcm"/>
+            </INDEXES>
         </TABLE>
         <TABLE NAME="masks_question" COMMENT="each record represents one question">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-                <FIELD NAME="parentcm" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="parentcm" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
                 <FIELD NAME="type" TYPE="char" LENGTH="32" NOTNULL="false" SEQUENCE="false"/>
                 <FIELD NAME="data" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-                <KEY NAME="masks" TYPE="foreign" FIELDS="parentcm" REFTABLE="masks" REFFIELDS="id" COMMENT="The instance of mod_masks this page belongs to."/>
             </KEYS>
+            <INDEXES>
+                <INDEX NAME="parentcm" UNIQUE="false" FIELDS="parentcm"/>
+            </INDEXES>
         </TABLE>
         <TABLE NAME="masks_mask" COMMENT="each record represents one page mask">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-                <FIELD NAME="page" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="x" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="y" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
-                <FIELD NAME="w" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="h" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="style" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="question" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="flags" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="page" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="x" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="y" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="w" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="h" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="style" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="question" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="flags" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-                <KEY NAME="masks_page" TYPE="foreign" FIELDS="page" REFTABLE="masks_page" REFFIELDS="id" COMMENT="The instance of page this mask belongs to."/>
-                <KEY NAME="masks_question" TYPE="foreign" FIELDS="question" REFTABLE="masks_question" REFFIELDS="id" COMMENT="The instance of question this mask belongs to."/>
+                <KEY NAME="masks_page" TYPE="foreign" FIELDS="page" REFTABLE="masks_page" REFFIELDS="id" COMMENT=""/>
+                <KEY NAME="masks_question" TYPE="foreign" FIELDS="question" REFTABLE="masks_question" REFFIELDS="id" COMMENT=""/>
             </KEYS>
+            <INDEXES>
+                <INDEX NAME="question" UNIQUE="false" FIELDS="question"/>
+                <INDEX NAME="page" UNIQUE="false" FIELDS="page"/>
+            </INDEXES>
         </TABLE>
         <TABLE NAME="masks_user_state" COMMENT="each record represents one user state">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-                <FIELD NAME="user" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="question" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="failcount" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="state" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="firstview" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="lastupdate" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="user" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="question" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="failcount" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="state" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="firstview" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="lastupdate" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+                <KEY NAME="masks_question" TYPE="foreign" FIELDS="question" REFTABLE="masks_question" REFFIELDS="id" COMMENT=""/>
             </KEYS>
+            <INDEXES>
+                <INDEX NAME="question" UNIQUE="false" FIELDS="question"/>
+                <INDEX NAME="userquestion" UNIQUE="false" FIELDS="user,question"/>
+                <INDEX NAME="user" UNIQUE="false" FIELDS="user"/>
+            </INDEXES>
         </TABLE>
-        -->
 
   </TABLES>
 </XMLDB>

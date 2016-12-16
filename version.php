@@ -25,10 +25,10 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version   = 2016120700;        // The current module version (Date: YYYYMMDDXX)
+$plugin->version   = 2016121500;        // The current module version (Date: YYYYMMDDXX)
 $plugin->requires  = 2014050800;        // Requires this Moodle version
 $plugin->component = 'mod_masks';       // Full name of the plugin (used for diagnostics)
 $plugin->cron      = 1;                 // Don't limit the frequency at which the CRON gets called (it will look after it for itself)
-$plugin->release   = '2.7.004';         // Mask-specific Versiuon number
+$plugin->release   = '2.7.005';         // Mask-specific Versiuon number
 $plugin->maturity  = MATURITY_STABLE;   // This version's maturity level.
 
