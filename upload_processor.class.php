@@ -118,11 +118,8 @@ class upload_processor{
             $workPath = $this->policies->getWorkFolderName();
             system($cmdLine." $dummypdf $workPath/dummypdfconvert.svg all");
 
-           if(file_exists("$workPath/dummypdfconvert.svg") && file_get_contents("$workPath/dummypdfconvert.svg")){
-               return true;
-           }
+            return (file_exists("$workPath/dummypdfconvert.svg") && file_get_contents("$workPath/dummypdfconvert.svg"));
         }
-
     }
     
     //-------------------------------------------------------------------------
