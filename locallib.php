@@ -28,7 +28,7 @@ namespace mod_masks;
 defined('MOODLE_INTERNAL') || die;
 
 
-//---------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------
 // Utility routines
 
 function generateMasksJSPageData( $docData, $jsVarName){
@@ -73,3 +73,21 @@ function endFrameOutput(){
     echo \html_writer::end_tag( 'html' );
 }
 
+function getConfig( $cmid ){
+    global $DB;
+
+    // start by grabbing the global configuration
+    $result = \get_config( 'mod_masks' );
+
+    // look to see if we have any instance-specific configuration to add
+    try{
+        $cm             = get_coursemodule_from_id( 'masks', $cmid, 0, false, MUST_EXIST );
+        $encodedConfig  = $DB->get_field( 'masks', 'config', array( 'id' => $cm->instance ) );
+        $config         = json_decode( $encodedConfig, true );
+        $result         = (object)array_merge( (array)$result, (array)$config );
+    } catch( \Exception $e ){
+    }
+
+    // return the result
+    return $result;
+}

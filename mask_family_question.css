@@ -27,13 +27,13 @@
   Question family - Mask styles
 */
 
-#masks .mask-root.mask-family-question .mask-back{
+#masks .mask-root.mask-family-question .mask-back {
     border-style: solid;
     border-width: 1px;
     box-sizing: border-box;
 }
 
-#masks .mask-root.mask-family-question .mask-main{
+#masks .mask-root.mask-family-question .mask-main {
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
@@ -56,42 +56,42 @@
   Mask colors
 */
 
-#masks .mask-root.mask-style-question-3 .mask-back{
+#masks .mask-root.mask-style-question-3 .mask-back {
     background-color: darkgrey;
     border-color: lightgrey;
 }
 
-#masks .mask-root.mask-style-question-2 .mask-back{
+#masks .mask-root.mask-style-question-2 .mask-back {
     background-color: darkblue;
     border-color: lightgrey;
 }
 
-#masks .mask-root.mask-style-question-1 .mask-back{
+#masks .mask-root.mask-style-question-1 .mask-back {
     background-color: darkgreen;
     border-color: lightgrey;
 }
 
-#masks .mask-root.mask-style-question-0 .mask-back{
+#masks .mask-root.mask-style-question-0 .mask-back {
     background-color: darkred;
     border-color: darkgrey;
 }
 
-#masks .mask-root.mask-style-question-4 .mask-back{
+#masks .mask-root.mask-style-question-4 .mask-back {
     background-color: palevioletred;
     border-color: darkgrey;
 }
 
-#masks .mask-root.mask-style-question-5 .mask-back{
+#masks .mask-root.mask-style-question-5 .mask-back {
     background-color: palegreen;
     border-color: darkgrey;
 }
 
-#masks .mask-root.mask-style-question-6 .mask-back{
+#masks .mask-root.mask-style-question-6 .mask-back {
     background-color: paleturquoise;
     border-color: darkgrey;
 }
 
-#masks .mask-root.mask-style-question-7 .mask-back{
+#masks .mask-root.mask-style-question-7 .mask-back {
     background-color: lightgrey;
     border-color: darkgrey;
 }
@@ -103,14 +103,14 @@
 #masks .mask-root.mask-style-question-0 .mask-main,
 #masks .mask-root.mask-style-question-1 .mask-main,
 #masks .mask-root.mask-style-question-2 .mask-main,
-#masks .mask-root.mask-style-question-3 .mask-main{
+#masks .mask-root.mask-style-question-3 .mask-main {
     background-image: url('pix/mask_qtxt_white.png');
 }
 
 #masks .mask-root.mask-style-question-4 .mask-main,
 #masks .mask-root.mask-style-question-5 .mask-main,
 #masks .mask-root.mask-style-question-6 .mask-main,
-#masks .mask-root.mask-style-question-7 .mask-main{
+#masks .mask-root.mask-style-question-7 .mask-main {
     background-image: url('pix/mask_qtxt.png');
 }
 

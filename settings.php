@@ -34,11 +34,11 @@ if ($ADMIN->fulltree) {
     require_once($CFG->libdir.'/moodlelib.php');
 
     // instantiate a settings injector object to simplify settings definition
-    $settingsinjector   = new \mod_masks\settingsinjector($settings,'mod_masks');
+    $settingsinjector   = new \mod_masks\settingsinjector($settings, 'mod_masks');
 
     // Basic settings
     $settingsinjector->addheading('basics');
-    $settingsinjector->addsetting('cmdline_pdf2svg','pdf2svg');
+    $settingsinjector->addsetting('cmdline_pdf2svg', 'pdf2svg');
 
     // Begin Main configuration settings
     $settingsinjector->addheading('configuration');
@@ -49,17 +49,21 @@ if ($ADMIN->fulltree) {
         \mod_masks\FIELDS_H     => get_string('setting_fields_h', 'mod_masks'),
         \mod_masks\FIELDS_HF    => get_string('setting_fields_hf', 'mod_masks'),
     );
-    $settingsinjector->addsetting('maskedit',\mod_masks\FIELDS_H,'ADMIN_SETTING_TYPE_SELECT',$maskEditOptions);
+    $settingsinjector->addsetting('maskedit', \mod_masks\FIELDS_NONE, 'ADMIN_SETTING_TYPE_SELECT', $maskEditOptions);
 
     // Add settings for each of the mask types
-    $typeNames = \mod_masks\mask_types_manager::getTypeNames();
+    $typeNames    = \mod_masks\mask_types_manager::getTypeNames();
+    $defaultTypes = array_flip( \mod_masks\mask_types_manager::getDefaultTypeNames() );
     foreach($typeNames as $typeName){
-        $settingsinjector->addsetting('disable_'.$typeName,0,'ADMIN_SETTING_TYPE_CHECKBOX');
+        $defaultValue = array_key_exists( $typeName, $defaultTypes )? 0: 1;
+        $settingsinjector->addsetting('disable_'.$typeName, $defaultValue, 'ADMIN_SETTING_TYPE_CHECKBOX');
     }
-    $settingsinjector->addsetting('showghosts',0,'ADMIN_SETTING_TYPE_CHECKBOX');
+
+    // add checkbox for activiating or deactivating ghosts for cleared masks
+    $settingsinjector->addsetting('showghosts', 1, 'ADMIN_SETTING_TYPE_CHECKBOX');
 
     // add debug settings
     $settingsinjector->addheading('advanced');
-    $settingsinjector->addsetting('debug',0,'ADMIN_SETTING_TYPE_CHECKBOX');
+    $settingsinjector->addsetting('debug', 0, 'ADMIN_SETTING_TYPE_CHECKBOX');
 }
 

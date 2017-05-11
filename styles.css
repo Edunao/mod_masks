@@ -27,17 +27,18 @@
   General page layout
 */
 
-#masks{
+#masks {
     position: relative;
     width: 100%;
     z-index: 0;
+    min-height: 650px;
 }
 
-#masks .masks-header{
+#masks .masks-header {
     background-color: #505a7c;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
-    color: #FFFFFF;
+    color: #fff;
     display: inline-block;
     padding: 0;
     position: relative;
@@ -45,7 +46,7 @@
     z-index: 2;
 }
 
-#masks .masks-body{
+#masks .masks-body {
     z-index: 1;
 }
 
@@ -54,12 +55,12 @@
   Alerts
 */
 
-#page-mod-masks-view .alert.hidden{
+#page-mod-masks-view .alert.hidden {
     display: block;
     visibility: hidden;
 }
 
-#masks .alert{
+#masks .alert {
     margin-bottom: 8px;
 }
 
@@ -68,45 +69,40 @@
   Menu bar
 */
 
-#masks .menu-bar{
+#masks .menu-bar {
     padding: 8px 14px;
 }
 
-#masks .menu-bar-group{
+#masks .menu-bar-group {
     display: inline-block;
     position: relative;
 }
 
-#masks .menu-bar-group>div{
+#masks .menu-bar-group > div {
     cursor: pointer;
     display: inline-block;
     height: 1.2em;
     position: relative;
 }
 
-#masks .menu-bar-group.left-group>div{
+#masks .menu-bar-group.left-group > div {
     margin-right: 0.75em;
 }
 
-#masks .menu-bar-group.right-group>div{
+#masks .menu-bar-group.right-group > div {
     margin-left: 0.75em;
 }
 
-/*#masks .menu-button:hover,
-#masks .menu-button:hover>.nav-page-name{
-    text-decoration: underline;
-}*/
-
-#masks .menu-bar-group>div>img{
+#masks .menu-bar-group > div > img {
     margin-right: 0.25em;
 }
 
-#masks .menu-bar-group>div.menu-bar-group-title{
+#masks .menu-bar-group > div.menu-bar-group-title {
     cursor: default;
     font-weight: bold;
 }
 
-#masks .menu-bar-group.right-group{
+#masks .menu-bar-group.right-group {
     float: right;
 }
 
@@ -115,7 +111,7 @@
   Menu bar - student result
 */
 
-#masks .masks-header #student-menu-bar .menu-bar-group.right-group{
+#masks .masks-header #student-menu-bar .menu-bar-group.right-group {
     box-sizing: border-box;
     padding-top: 5px;
 }
@@ -126,36 +122,35 @@
     margin-top: 23px;
 }
 
-#masks .masks-header #correct-answers-container{
+#masks .masks-header #correct-answers-container {
     display: none;
 }
 
-#masks .menu-bar-group.left-group .grade-container{
+#masks .menu-bar-group.left-group .grade-container {
     cursor: initial;
     height: auto;
     margin-top: -5px;
 }
 
-#masks .menu-bar-group.left-group .grade-container #congratulation-container{
+#masks .menu-bar-group.left-group .grade-container #congratulation-container {
     color: #34c795;
     font-size: 22px;
     font-weight: 600;
     text-transform: uppercase;
 }
 
-#masks .menu-bar-group.left-group .grade-container:not(.display-congratulation) #congratulation-container{
+#masks .menu-bar-group.left-group .grade-container:not(.display-congratulation) #congratulation-container {
     display: none;
 }
 
-#masks .menu-bar-group.left-group .grade-container>div{
+#masks .menu-bar-group.left-group .grade-container > div {
     cursor: initial;
     display: inline-block;
     margin-right: 20px;
 }
 
 
-
-#masks .menu-bar-group .circle-value{
+#masks .menu-bar-group .circle-value {
     background-color: #48516e;
     border: 1px #7383bf solid;
     border-radius: 50px;
@@ -167,30 +162,30 @@
     width: 40px;
 }
 
-#masks .menu-bar-group .circle-value.correct-answers-circle{
+#masks .menu-bar-group .circle-value.correct-answers-circle {
     border-color: #34c795;
 }
 
-#masks .menu-bar-group .circle-label{
+#masks .menu-bar-group .circle-label {
     display: inline-block;
     margin-left: 10px;
     vertical-align: middle;
 }
 
-@media (max-width:660px){
-    #masks .menu-bar-group.left-group .grade-container #congratulation-container{
+@media (max-width:660px) {
+    #masks .menu-bar-group.left-group .grade-container #congratulation-container {
         margin-top: 10px;
     }
 }
 
-@media (max-width:420px){
-    #masks .menu-bar-group .circle-label{
+@media (max-width:420px) {
+    #masks .menu-bar-group .circle-label {
         font-size: 14px !important; /* csslint allow: important */
     }
 }
 
-@media (max-width:400px){
-    #masks #questions-remaining-container{
+@media (max-width:400px) {
+    #masks #questions-remaining-container {
         margin-top: 10px;
     }
 
@@ -201,11 +196,11 @@
   Menu bar - context-dependent buttons
 */
 
-#masks.hide-mask-actions-group .mask-actions-group{
+#masks.hide-mask-actions-group .mask-actions-group {
     display: none;
 }
 
-#masks.hide-layout-save-group .layout-save-group{
+#masks.hide-layout-save-group .layout-save-group {
     display: none;
 }
 
@@ -214,15 +209,15 @@
   Menu bar - drop down menu buttons
 */
 
-#masks .menu-button>img{
+#masks .menu-button > img {
     margin-left: 0.25em;
 }
 
-#masks .menu-wrapper{
+#masks .menu-wrapper {
     z-index: 2;
 }
 
-#masks .menu-button{
+#masks .menu-button {
     display: inline-block;
     position: relative;
     vertical-align: middle;
@@ -233,7 +228,7 @@
   Drop down menus
 */
 
-#masks .menu-popup{
+#masks .menu-popup {
     background-color: #393f53;
     border: solid black 1px;
     display: none;
@@ -246,7 +241,7 @@
     width: inherit;
 }
 
-#masks .menu-entry{
+#masks .menu-entry {
     display: inline-block;
     left: 0;
     padding-bottom: 0.25em;
@@ -257,29 +252,30 @@
     width: 100%;
 }
 
-#masks .menu-bar .menu-entry{
+#masks .menu-bar .menu-entry {
     padding-right: 0.9em;
 }
 
-#masks .page-nav .menu-entry{
+#masks .page-nav .menu-entry {
     padding-left: 0.5em;
     padding-right: 0.5em;
+    box-sizing: content-box;
 }
 
-#masks .menu-entry:hover{
+#masks .menu-entry:hover {
     background: #505a7c;
 }
 
 #masks .menu-entry:hover,
-#masks .menu-entry:hover .nav-page-name{
+#masks .menu-entry:hover .nav-page-name {
     text-decoration: underline;
 }
 
-#masks .menu-show .menu-popup{
+#masks .menu-show .menu-popup {
     display: block;
 }
 
-#masks .menu-entry img{
+#masks .menu-entry img {
     height: 30px;
     padding-left: 5px;
     padding-right: 5px;
@@ -290,20 +286,20 @@
   Drop down menus - per menu configuration
 */
 
-#masks #drop-down-add-mask{
+#masks #drop-down-add-mask {
     margin-left: -14px;
     padding-right: 0.5em;
 }
 
-#masks #drop-down-page-select{
+#masks #drop-down-page-select {
     left: -0.5em;
 }
 
-#masks #drop-down-options{
+#masks #drop-down-options {
     left: -1px;
 }
 
-#masks #drop-down-options .reupload-entry img{
+#masks #drop-down-options .reupload-entry img {
     height: 26px;
 }
 
@@ -313,11 +309,11 @@
 */
 
 #masks-page-space .img-parent,
-#masks-page-space img{
+#masks-page-space img {
     width: 100%;
 }
 
-#masks .masks-body{
+#masks .masks-body {
     left: 0;
     margin: 0;
     padding: 0;
@@ -326,7 +322,7 @@
     width: 100%;
 }
 
-#masks-page-space{
+#masks-page-space {
     display: block;
     left: 0;
     margin: 0;
@@ -336,7 +332,7 @@
     width: 100%;
 }
 
-#masks.page-hidden #masks-masks{
+#masks.page-hidden #masks-masks {
     background-color: #C0C0C0;
     /* csslint ignore:start */
     background-image: url([[pix:mod_masks|hide_page]]);
@@ -350,22 +346,22 @@
   Context Menu
 */
 
-#masks #masks-context-menu.hidden{
+#masks #masks-context-menu.hidden {
     display: block;
     visibility: hidden;
 }
 
-#masks #masks-context-menu{
+#masks #masks-context-menu {
     position: absolute;
     z-index: 2;
 }
 
-#masks .context-menu-pane{
+#masks .context-menu-pane {
     left: 0;
     top: 0;
 }
 
-#masks .context-menu-pane > div{
+#masks .context-menu-pane > div {
     background-color: #505a7c;
     border: solid gray 1px;
     color: white;
@@ -375,16 +371,16 @@
     white-space: nowrap;
 }
 
-#masks .context-menu-pane > div img{
+#masks .context-menu-pane > div img {
     padding-right: 8px;
     width: 12px;
 }
 
-#masks .context-menu-pane > div.context-menu-row{
+#masks .context-menu-pane > div.context-menu-row {
     cursor: default;
 }
 
-#masks .context-menu-style{
+#masks .context-menu-style {
     display: inline-block;
     height: 2em;
     margin: 4px 6px 0 6px;
@@ -392,12 +388,12 @@
     position: relative;
     width: 2em;
 }
-#masks .context-menu-style:hover{
+#masks .context-menu-style:hover {
     opacity: 0.7;
 }
 
 
-#masks .context-menu-style .mask-root{
+#masks .context-menu-style .mask-root {
     cursor: pointer;
     height: 100%;
     padding: 0;
@@ -409,7 +405,7 @@
   Masks
 */
 
-#masks-masks{
+#masks-masks {
     display: block;
     height: 100%;
     left: 0;
@@ -420,13 +416,13 @@
     width: 100%;
 }
 
-#masks .mask-root{
+#masks .mask-root {
     cursor: pointer;
     position: absolute;
     z-index: 1;
 }
 
-#masks .menu-entry .mask-root{
+#masks .menu-entry .mask-root {
     display: inline-block;
     height: 2em;
     padding-left: 0.25em;
@@ -436,7 +432,7 @@
 
 #masks .mask-back,
 #masks .mask-main,
-#masks .mask-front{
+#masks .mask-front {
     height: 100%;
     position: absolute;
     width: 100%;
@@ -444,16 +440,16 @@
 
 #masks.dragging-mask .selected-mask .mask-back,
 #masks.dragging-mask .selected-mask .mask-main,
-#masks.dragging-mask .selected-mask .mask-front{
+#masks.dragging-mask .selected-mask .mask-front {
     opacity: 0.75;
 }
 
-#masks .mask-front{
+#masks .mask-front {
     background-position: center;
     background-repeat: no-repeat;
 }
 
-#masks .masks-handle{
+#masks .masks-handle {
     bottom: 0.25em;
     left: 0.25em;
     position: absolute;
@@ -462,13 +458,13 @@
 }
 
 
-#masks .masks-handle:hover{
-    background: #FFF;
+#masks .masks-handle:hover {
+    background: #fff;
     border: 1px rgba(0, 0, 0, 0.2) solid;
     opacity: 0.3;
 }
 
-#masks .masks-handle.l{
+#masks .masks-handle.l {
     cursor: ew-resize;
     left: -0.5em;
     max-width: 0.75em;
@@ -476,7 +472,7 @@
     width: 100%;
 }
 
-#masks .masks-handle.r{
+#masks .masks-handle.r {
     cursor: ew-resize;
     left: initial;
     max-width: 0.75em;
@@ -485,7 +481,7 @@
     width: 100%;
 }
 
-#masks .masks-handle.t{
+#masks .masks-handle.t {
     cursor: ns-resize;
     height: 100%;
     max-height: 0.75em;
@@ -493,7 +489,7 @@
     top: -0.5em;
 }
 
-#masks .masks-handle.b{
+#masks .masks-handle.b {
     bottom: -0.5em;
     cursor: ns-resize;
     height: 100%;
@@ -503,16 +499,16 @@
 }
 
 #masks .masks-handle.t.l,
-#masks .masks-handle.b.r{
+#masks .masks-handle.b.r {
     cursor: nwse-resize;
 }
 
 #masks .masks-handle.t.r,
-#masks .masks-handle.b.l{
+#masks .masks-handle.b.l {
     cursor: nesw-resize;
 }
 
-#masks .masks-handle.m.c{
+#masks .masks-handle.m.c {
     bottom: 0;
     cursor: move;
     left: 0;
@@ -520,29 +516,29 @@
     top: 0;
 }
 
-/*#masks .selected-mask .mask-front{
+/*#masks .selected-mask .mask-front {
 }*/
 
-#masks .mask-root.mask-hidden div{
+#masks .mask-root.mask-hidden div {
     opacity: 0.25;
 }
 
 #masks .mask-root.mask-hidden div.masks-handle.t,
 #masks .mask-root.mask-hidden div.masks-handle.l,
 #masks .mask-root.mask-hidden div.masks-handle.b,
-#masks .mask-root.mask-hidden div.masks-handle.r{
+#masks .mask-root.mask-hidden div.masks-handle.r {
     display: none;
 }
 
-#masks .mask-root.mask-hidden.selected-mask div{
+#masks .mask-root.mask-hidden.selected-mask div {
     opacity: 0.5;
 }
 
-#masks .mask-root.mask-deleted .mask-layer{
+#masks .mask-root.mask-deleted .mask-layer {
     opacity: 0.25;
 }
 
-#masks .mask-root.mask-deleted .masks-handle.m.c{
+#masks .mask-root.mask-deleted .masks-handle.m.c {
     /* csslint ignore:start */
     background-image: url([[pix:i/invalid]]);
     /* csslint ignore:end */
@@ -554,7 +550,7 @@
 #masks .mask-root.mask-deleted div.masks-handle.t,
 #masks .mask-root.mask-deleted div.masks-handle.l,
 #masks .mask-root.mask-deleted div.masks-handle.b,
-#masks .mask-root.mask-deleted div.masks-handle.r{
+#masks .mask-root.mask-deleted div.masks-handle.r {
     display: none;
 }
 
@@ -563,7 +559,7 @@
 #masks .selected-mask .masks-handle.t.r,
 #masks .selected-mask .masks-handle.b.l,
 #masks .selected-mask .masks-handle.b.r {
-    background: #FFF;
+    background: #fff;
     border: 1px rgba(0, 0, 0, 0.5) solid;
     border-radius: 50%;
 }
@@ -573,31 +569,31 @@
   Page nav
 */
 
-#masks .page-nav{
+#masks .page-nav {
     float: right;
 }
 
-#masks .nav-button{
+#masks .nav-button {
     cursor: pointer;
 }
 
-#masks .nav-button:hover{
+#masks .nav-button:hover {
     background: #F0F0F0;
     border-radius: 0.1em;
     color: blue;
     text-decoration: underline;
 }
 
-#masks .nav-left{
+#masks .nav-left {
     margin-right: 0.4em;
 }
 
-#masks .nav-right{
+#masks .nav-right {
     margin-left: 0.4em;
 }
 
 #masks.first-page .nav-left,
-#masks.last-page .nav-right{
+#masks.last-page .nav-right {
     background: inherit;
     color: inherit;
     cursor: default;
@@ -605,7 +601,17 @@
     text-decoration: inherit;
 }
 
-#masks .nav-page-name{
+#masks .page-nav .menu-entry.hidden-page .nav-page-word {
+    color: lightgray;
+    text-decoration: line-through;
+}
+
+#masks .page-nav .menu-entry.false-page {
+    cursor: not-allowed;
+    background: grey;
+}
+
+#masks .nav-page-name {
     display: inline-block;
     height: 100%;
     position: relative;
@@ -613,16 +619,16 @@
 }
 
 #masks .nav-page-name.page-hidden,
-#masks.page-hidden .menu-button .nav-page-name{
+#masks.page-hidden .menu-button .nav-page-name {
     color: lightgray;
     text-decoration: line-through;
 }
 
-#masks .nav-page-word{
+#masks .nav-page-word {
     padding-right: 0.5em;
 }
 
-#masks-menu-page-select{
+#masks-menu-page-select {
     cursor: pointer;
     display: inline-block;
     height: 1.2em;
@@ -631,7 +637,7 @@
     position: relative;
 }
 
-#masks-menu-page-select img{
+#masks-menu-page-select img {
     margin-left: 0;
 }
 
@@ -640,19 +646,19 @@
   Toggles
 */
 
-#masks .toggle-off{
+#masks .toggle-off {
     display: inline;
 }
 
-#masks .toggle-on{
+#masks .toggle-on {
     display: none;
 }
 
-#masks .toggle .toggle-off{
+#masks .toggle .toggle-off {
     display: none;
 }
 
-#masks .toggle .toggle-on{
+#masks .toggle .toggle-on {
     display: inline;
 }
 
@@ -661,11 +667,11 @@
   Overlay
 */
 
-#masks #page-overlay{
+#masks #page-overlay {
     display: none;
 }
 
-#masks.have-popup #page-overlay{
+#masks.have-popup #page-overlay {
     display: block;
     height: 100%;
     position: absolute;
@@ -673,29 +679,30 @@
     z-index: 3;
 }
 
-#masks #page-mask{
+#masks #page-mask {
     background-color: #E0E0E0;
     display: block;
     height: 100%;
     opacity: 0.85;
     position: absolute;
     width: 100%;
+    min-height : 600px;
 }
 
-#masks #popup-parent-iframe{
+#masks #popup-parent-iframe {
     max-height: 1px;
     opacity: 0.0;
     overflow-y: visible;
     width: 80%;
 }
 
-#masks #popup-parent-iframe.popup-active{
+#masks #popup-parent-iframe.popup-active {
     max-height: none;
     max-width: 100%;
     width: 700px;
 }
 
-#masks #popup-parent-iframe.loaded{
+#masks #popup-parent-iframe.loaded {
     left: 0;
     margin: auto;
     opacity: 1.0;
@@ -703,13 +710,13 @@
     right: 0;
 }
 
-#masks iframe{
+#masks iframe {
     border: 0;
     margin: 0;
     padding: 0;
 }
 
-#masks #popup-mdl-frame{
+#masks #popup-mdl-frame {
     overflow-y: visible;
     top: 5em;
     width: 100%;
@@ -720,18 +727,18 @@
     General mask style
 */
 
-#masks .mask-main{
+#masks .mask-main {
     box-sizing: border-box;
 }
 
-#masks .mask-root.mask-passed{
+#masks .mask-root.mask-passed {
     cursor: default;
     opacity: 0.25;
     z-index: 0;
 }
 
 #masks .mask-passed > .mask-front,
-#masks .mask-passed > .mask-main{
+#masks .mask-passed > .mask-main {
     display: none;
 }
 

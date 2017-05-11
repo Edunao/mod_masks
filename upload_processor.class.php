@@ -29,24 +29,24 @@ defined('MOODLE_INTERNAL') || die;
 
 class upload_processor{
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Public API - Basics
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 
     /**
      * __construct()
      * @param object $policies - the interface object that will provide all of the back end interfacing
      * @param object $config   - the configuration object containing miscellaneous config parameters
      */
-    public function __construct($policies,$config){
+    public function __construct( $policies, $config ){
         $this->policies = $policies;
         $this->config   = $config;
     }
 
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Public API - Main methods
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 
     /**
      * process()
@@ -71,7 +71,6 @@ class upload_processor{
         move_uploaded_file( $uploadLocation, $pdfFile );
         flush();
 
-        // get hold of the
         // convert the uploaded pdf file to a set of pages
         $cmdLine = $this->config->cmdline_pdf2svg;
         $this->policies->logProgressHeading('Converting PDF File to Pages');
@@ -93,7 +92,7 @@ class upload_processor{
         // iterate over the page files to store them away
         $this->policies->logProgressHeading("Storing Generated Pages in Moodle");
         foreach( $pageFiles as $pageFile ){
-            preg_match('/([0-9]+)[^0-9]*$/',$pageFile,$matches);
+            preg_match( '/([0-9]+)[^0-9]*$/', $pageFile, $matches );
             $pageNum  = $matches[ 1 ];
             $this->policies->logProgress('Storing Page: '.$pageNum);
             $pageId  = $this->policies->storePageImage( $pageNum, $workPath.'/'.$pageFile );
@@ -103,28 +102,39 @@ class upload_processor{
         $this->policies->logProgress("Generating Moodle Exercise From PDF Pages");
         $this->policies->finaliseUpload( $cmid );
     }
-    
+
+    /**
+     * test whether the action resulted in a change to the image pages behind the doc
+     *
+     * @return boolean true if process() resulted in an update of the document pages
+     */
+    public function docHasChanged(){
+        return $this->policies->docHasChanged();
+    }
+
     /**
      * Return true if pdf can be convert to svg with the command line in mod masks config
+     *
      * @return boolean
      */
-    public function can_processing(){
+    public function testFileConvertionTool(){
         $cmdLine = $this->config->cmdline_pdf2svg;
         if($cmdLine === ''){
             return false;
         }else{
-            //try to convert dummy pdf to svg
+            // try to convert dummy pdf to svg
             $dummypdf = 'assets/dummypdf.pdf';
             $workPath = $this->policies->getWorkFolderName();
             system($cmdLine." $dummypdf $workPath/dummypdfconvert.svg all");
 
-            return (file_exists("$workPath/dummypdfconvert.svg") && file_get_contents("$workPath/dummypdfconvert.svg"));
+            return ( file_exists( "$workPath/dummypdfconvert.svg" ) && file_get_contents( "$workPath/dummypdfconvert.svg" ) );
         }
     }
-    
-    //-------------------------------------------------------------------------
+
+
+    // -------------------------------------------------------------------------
     // Private Data
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 
     // The policies object provides all of the interfacing to the server back end
     // It can be re-implemented for testing purposes

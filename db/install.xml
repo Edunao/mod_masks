@@ -10,6 +10,8 @@
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
                 <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
                 <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
+                <!-- Additional optional config parameters, json encoded -->
+                <FIELD NAME="config" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
             </FIELDS>
             <KEYS>
                 <!-- primary key -->
@@ -100,7 +102,7 @@
         <TABLE NAME="masks_user_state" COMMENT="each record represents one user state">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-                <FIELD NAME="user" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
                 <FIELD NAME="question" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
                 <FIELD NAME="failcount" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
                 <FIELD NAME="state" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
@@ -113,8 +115,8 @@
             </KEYS>
             <INDEXES>
                 <INDEX NAME="question" UNIQUE="false" FIELDS="question"/>
-                <INDEX NAME="userquestion" UNIQUE="false" FIELDS="user,question"/>
-                <INDEX NAME="user" UNIQUE="false" FIELDS="user"/>
+                <INDEX NAME="userquestion" UNIQUE="false" FIELDS="userid,question"/>
+                <INDEX NAME="user" UNIQUE="false" FIELDS="userid"/>
             </INDEXES>
         </TABLE>
 

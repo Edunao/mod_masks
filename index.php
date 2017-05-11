@@ -29,9 +29,9 @@ require('../../config.php');
 
 $id = required_param('id', PARAM_INT); // course id
 
-$course = $DB->get_record('course', array('id'=>$id), '*', MUST_EXIST);
+$course = $DB->get_record('course', array('id' => $id), '*', MUST_EXIST);
 
-require_course_login($course, true);
+require_login($course, true);
 $PAGE->set_pagelayout('incourse');
 
 $params = array(
@@ -95,12 +95,12 @@ foreach ($instances as $instance) {
     }
 
     $class = $instance->visible ? '' : 'class="dimmed"'; // hidden modules are dimmed
-    $tabledata= array ();
+    $tabledata = array ();
     if ($usesections) {
-         $tabledata[]=$printsection;
+         $tabledata[] = $printsection;
     }
-    $tabledata[]="<a $class $extra href=\"view.php?id=$cm->id\">".$icon.format_string($url->name)."</a>";
-    $table->data[]=$tabledata;
+    $tabledata[] = "<a $class $extra href=\"view.php?id=$cm->id\">".$icon.format_string($url->name)."</a>";
+    $table->data[] = $tabledata;
 }
 
 echo html_writer::table($table);

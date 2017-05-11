@@ -33,18 +33,18 @@ class settingsinjector{
 
     // constructor
     // record the name of the plugin and the settings container object, both for later use
-    public function __construct($settings,$pluginname){
+    public function __construct( $settings, $pluginname ){
         $this->settings     = $settings;
         $this->pluginname   = $pluginname;
     }
 
     // add a section heading to the settings
-    function addheading($name){
+    function addheading( $name ){
         $heading = new \admin_setting_heading( $this->pluginname.'/settinghead_'.$name, get_string('settinghead_'.$name, $this->pluginname), "" );
         $this->settings->add($heading);
     }
 
-    function addsetting($name,$defaultvalue,$settingtype='ADMIN_SETTING_TYPE_TEXT',$data=null){
+    function addsetting( $name, $defaultvalue, $settingtype = 'ADMIN_SETTING_TYPE_TEXT', $data=null ){
         $uniquename  = $this->pluginname.'/'.$name;
         $displayname = get_string("settingname_".$name, $this->pluginname);
         $displayinfo = /*get_string("settingdesc_".$name, $this->pluginname)*/ "";

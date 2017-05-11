@@ -31,7 +31,7 @@ defined('MOODLE_INTERNAL') || die;
 require_once(dirname(__FILE__).'/mask_type.class.php');
 
 class mask_type_qtxt extends mask_type{
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // data
 
     private $maskType       = 'qtxt';
@@ -39,7 +39,7 @@ class mask_type_qtxt extends mask_type{
     private $fields         = null;
 
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // basics
 
     public function __construct(){
@@ -58,7 +58,7 @@ class mask_type_qtxt extends mask_type{
     }
 
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // mask_type API
 
     public function onNewMask( $id, $pageId ){
@@ -73,7 +73,7 @@ class mask_type_qtxt extends mask_type{
 
     public function onClickMask( $questionId, $questionData, $hiddenFields, $isLastQuestion ){
 
-        // has the user submitted ananswer?
+        // has the user submitted an answer?
         if ( ! array_key_exists( 'response', $_GET ) ){
             // no, so we need to render the question
 
@@ -86,7 +86,7 @@ class mask_type_qtxt extends mask_type{
             ob_end_clean();
 
             // render the page (updating database etc as we do)
-            $hintText       = property_exists( $questionData, 'userhint' )? $questionData->userhint: '';
+            $hintText       = property_exists( $questionData, 'userhint' ) ? $questionData->userhint : '';
             $questionText   = $questionData->question;
             $this->renderQuestionPage( $hintText, $questionText, $answerHTML, $hiddenFields, $this->dbInterface, $questionId );
 
@@ -106,7 +106,7 @@ class mask_type_qtxt extends mask_type{
             $rawAnswers = preg_replace( "/\n\n+/", "\n", $rawAnswers ); // Multiple \n => single \n
             $rawAnswers = preg_replace( "/\n$/", '', $rawAnswers );     // Remove \n at end of text
             $rawAnswers = preg_replace( "/^\n/", '', $rawAnswers );     // Remove \n at start of text
-            $options = explode("\n",$rawAnswers);
+            $options = explode("\n", $rawAnswers);
 
             // get hold of and clean up the user's answer
             $answer = $_GET[ 'response' ];
@@ -122,10 +122,10 @@ class mask_type_qtxt extends mask_type{
             }
 
             // render the response page (updating database etc as we do)
-            $goodAnswerResponse = ( property_exists( $questionData, 'goodanswerhint' ) )? $questionData->goodanswerhint: '';
-            $badAnswerResponse  = ( property_exists( $questionData, 'badanswerhint' ) )? $questionData->badanswerhint: '';
-            $hintText           = ( property_exists( $questionData, 'userhint' ) )? $questionData->userhint: '';
-            if ( $badAnswerResponse=='' ){
+            $goodAnswerResponse = ( property_exists( $questionData, 'goodanswerhint' ) ) ? $questionData->goodanswerhint : '';
+            $badAnswerResponse  = ( property_exists( $questionData, 'badanswerhint' ) ) ? $questionData->badanswerhint : '';
+            $hintText           = ( property_exists( $questionData, 'userhint' ) ) ? $questionData->userhint : '';
+            if ( $badAnswerResponse == '' ){
                 $badAnswerResponse  = $hintText;
                 $hintText           = '';
             }

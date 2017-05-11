@@ -33,9 +33,10 @@ require_once(dirname(__FILE__).'/mask_type_basic.class.php');
 require_once(dirname(__FILE__).'/mask_type_note.class.php');
 
 class mask_types_manager{
-    private static $types = null;
+    private static $types           = null;
+    private static $defaultTypes    = null;
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Private utility methods
 
     private static function populateTypeList(){
@@ -46,11 +47,18 @@ class mask_types_manager{
                 'basic' => new mask_type_basic,
                 'note'  => new mask_type_note,
             );
+            self::$defaultTypes = array(
+                'qcm',
+                'note',
+            );
+            if ( count( self::$defaultTypes ) != count( array_intersect( self::$defaultTypes, array_keys( self::$types ) ) ) ){
+                throw new \Exception( 'default types must all be members of types !!' );
+            }
         }
     }
 
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Public API
 
     /* Get the array of registered type names
@@ -61,13 +69,21 @@ class mask_types_manager{
         return array_keys( self::$types );
     }
 
+    /* Get the array of default types (to be available in the module settings)
+     * @return array of string type names
+     */
+    public static function getDefaultTypeNames(){
+        self::populateTypeList();
+        return self::$defaultTypes;
+    }
+
     /* Get the handler object corresponding to the given type name
      * @param string mask type name (as one of the entries provided by getTypeNames())
      * @return mixed instance of the mask_type_... class or null if the type name was not recognised
      */
     public static function getTypeHandler( $typeName ){
         self::populateTypeList();
-        return array_key_exists( $typeName, self::$types )? self::$types[ $typeName ]: null;
+        return array_key_exists( $typeName, self::$types ) ? self::$types[ $typeName ] : null;
     }
 
     /* Lookup the family name corresponding to the given type name
@@ -76,7 +92,7 @@ class mask_types_manager{
      */
     public static function getTypeFamily( $typeName ){
         $handler = self::getTypeHandler( $typeName );
-        return ( $handler == null )? "": $handler->getMaskTypeFamily();
+        return ( $handler == null ) ? "" : $handler->getMaskTypeFamily();
     }
 }
 

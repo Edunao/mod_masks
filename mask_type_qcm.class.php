@@ -31,7 +31,7 @@ defined('MOODLE_INTERNAL') || die;
 require_once(dirname(__FILE__).'/mask_type.class.php');
 
 class mask_type_qcm extends mask_type{
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // data
 
     private $maskType       = 'qcm';
@@ -39,7 +39,7 @@ class mask_type_qcm extends mask_type{
     private $fields         = null;
 
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // basics
 
     public function __construct(){
@@ -62,7 +62,7 @@ class mask_type_qcm extends mask_type{
     }
 
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // mask_type API
 
     public function onNewMask( $id, $pageId ){
@@ -78,7 +78,7 @@ class mask_type_qcm extends mask_type{
     public function onClickMask( $questionId, $questionData, $hiddenFields, $isLastQuestion ){
         // identify the set of available answers
         $choices = array( 'goodanswer', 'badanswer0' );
-        for ($i = 1; array_key_exists('badanswer'.$i,$this->fields); ++$i ){
+        for ($i = 1; array_key_exists('badanswer'.$i, $this->fields); ++$i ){
             $propName = 'badanswer'.$i;
             if ( property_exists( $questionData, $propName ) && ! empty( $questionData->$propName ) ){
                 $choices[] = $propName;
@@ -122,7 +122,7 @@ class mask_type_qcm extends mask_type{
             }
 
             // render the page (updating database etc as we do)
-            $hintText       = property_exists( $questionData, 'userhint' )? $questionData->userhint: '';
+            $hintText       = property_exists( $questionData, 'userhint' ) ? $questionData->userhint : '';
             $questionText   = $questionData->question;
             $this->renderQuestionPage( $hintText, $questionText, $answerHTML, $hiddenFields, $this->dbInterface, $questionId );
 
@@ -134,10 +134,10 @@ class mask_type_qcm extends mask_type{
             $answerIsCorrect    = ( ( $answer >= 0 ) && ( $answer < count( $choiceIndex ) ) && ( $choiceIndex[ $answer ] == 0 ) );
 
             // render the response page (updating database etc as we do)
-            $goodAnswerResponse = ( property_exists( $questionData, 'goodanswerhint' ) )? $questionData->goodanswerhint: '';
-            $badAnswerResponse  = ( property_exists( $questionData, 'badanswerhint' ) )? $questionData->badanswerhint: '';
-            $hintText           = ( property_exists( $questionData, 'userhint' ) )? $questionData->userhint: '';
-            if ( $badAnswerResponse=='' ){
+            $goodAnswerResponse = ( property_exists( $questionData, 'goodanswerhint' ) ) ? $questionData->goodanswerhint : '';
+            $badAnswerResponse  = ( property_exists( $questionData, 'badanswerhint' ) ) ? $questionData->badanswerhint : '';
+            $hintText           = ( property_exists( $questionData, 'userhint' ) ) ? $questionData->userhint : '';
+            if ( $badAnswerResponse == '' ){
                 $badAnswerResponse  = $hintText;
                 $hintText           = '';
             }

@@ -27,7 +27,7 @@
 require_once('../../config.php');
 
 
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 // _GET / _POST parameters
 
 $id             = required_param('id', PARAM_INT);
@@ -40,29 +40,29 @@ $requireConfirm = optional_param('confirm', 0, PARAM_INT);
 $haveData       = array_key_exists( 'masks', $_GET );
 
 
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 // Data from moodle
 
 $cm         = get_coursemodule_from_id('masks', $id, 0, false, MUST_EXIST);
-$instance   = $DB->get_record('masks', array('id'=>$cm->instance), '*', MUST_EXIST);
-$course     = $DB->get_record('course', array('id'=>$cm->course), '*', MUST_EXIST);
+$instance   = $DB->get_record('masks', array('id' => $cm->instance), '*', MUST_EXIST);
+$course     = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
 
 
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 // Sanity tests
 
-require_course_login($course, false, $cm);
+require_login($course, false, $cm);
 $context = context_module::instance($cm->id);
 require_capability('mod/masks:addinstance', $context);
 
 
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 // page rendering
 
 // construct the 'move on to the next thing' js code to execute when we're all done
 $jsCloseFrame       = 'parent.M.mod_masks.closeFrame();';
 $jsGotoNextFrame    = 'window.location = "'.$nextFrame.'";';
-$jsFinalise         = empty( $nextFrame )? $jsCloseFrame: $jsGotoNextFrame;
+$jsFinalise         = empty( $nextFrame ) ? $jsCloseFrame : $jsGotoNextFrame;
 
 // if the required parameters weren't found then just resubmit the form
 if ( $haveData !== true ){
@@ -87,7 +87,7 @@ if ( $haveData !== true ){
     // initalise rendering helper, rendering an invisible form to hold the data to upload
     require_once('./form_writer.class.php');
     $formWriter = new \mod_masks\form_writer();
-    $formWriter->openForm('frame_save_layout.php',$hiddenFields);
+    $formWriter->openForm('frame_save_layout.php', $hiddenFields);
     $formWriter->closeForm(false);
 
     if ( $requireConfirm == 1 ){
@@ -132,7 +132,7 @@ if ( $haveData !== true ){
     die();
 }
 
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 // form data processing
 
 // Establish database connection
@@ -164,11 +164,11 @@ foreach( $decodedPages as $page ){
 }
 
 
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 // output generation
 
 // encode and output the updated mask data
-$newMaskData        = $databaseInterface->fetchMaskData($id);
+$newMaskData        = $databaseInterface->fetchMaskData($id, true);
 $encodedMaskData    = json_encode( $newMaskData );
 $jsMaskData         = 'var maskData =' . $encodedMaskData . ';';
 echo html_writer::script( $jsMaskData );
@@ -179,13 +179,18 @@ $encodedPageData    = json_encode( $newPageData );
 $jsPageData         = 'var pageData =' . $encodedPageData . ';';
 echo html_writer::script( $jsPageData );
 
+// encode and output the updated nav data
+$navPages          = $databaseInterface->getPages($cm->id);
+$encodednavData    = json_encode( $navPages );
+$jsNavData         = 'var navData =' . $encodednavData . ';';
+echo html_writer::script( $jsNavData );
+
 // generate a bit of script to apply the changes to the server, clear out the change lists and close the iframe
 $jsAction = '';
 $jsAction .= 'parent.M.mod_masks.applyMaskData(maskData);';
-$jsAction .= 'parent.M.mod_masks.applyPageData(pageData);';
+$jsAction .= 'parent.M.mod_masks.applyPageData(pageData,navData);';
 $jsAction .= 'parent.M.mod_masks.clearChangeLists();';
 $jsAction .= 'parent.M.mod_masks.setAlertSuccess("changesSaved");';
 $jsAction .= $jsFinalise;
-//$jsAction .= 'parent.M.mod_masks.closeFrame();';
 echo html_writer::script( $jsAction );
 

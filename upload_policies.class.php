@@ -29,9 +29,9 @@ defined('MOODLE_INTERNAL') || die;
 
 class upload_policies{
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Public API - Basics
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 
     /**
      * __construct()
@@ -61,9 +61,9 @@ class upload_policies{
     }
 
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Public API - Main API
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 
     /**
      * Create a new record for the document object
@@ -72,7 +72,7 @@ class upload_policies{
      * @param integer $fileName - the name of the uploaded pdf file
      * @param integer $pageCount - the number of pages extracted from the file
      *
-     * @returns integer row number of newly created entry in masks_doc table
+     * @return integer row number of newly created entry in masks_doc table
      */
     public function initDocument( $cmid, $fileName, $pageCount ) {
         // add a record to the database to hold the new page record and store it away for later use
@@ -120,12 +120,22 @@ class upload_policies{
      */
     public function finaliseUpload( $cmid ){
         $this->databaseInterface->assignPages( $cmid, $this->pageIds );
+        $this->haveChangedDoc = $this->databaseInterface->haveReuploadedDoc();
+    }
+
+    /**
+     * test whether the action resulted in a change to the image pages behind the doc
+     *
+     * @return boolean true if finaliseUpload() resulted in an update of the document pages
+     */
+    public function docHasChanged(){
+        return $this->haveChangedDoc;
     }
 
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Public API - Utilities - File System
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 
     /**
      * getWorkFolderName()
@@ -145,9 +155,9 @@ class upload_policies{
     }
 
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Public API - Utilities - Logging
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 
     private function outputCSSRules(){
         echo '<style>';
@@ -179,12 +189,12 @@ class upload_policies{
     }
 
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Private Utility Routines - Standard PHP
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 
     static private function delTree($dir) {
-        $files = array_diff(scandir($dir), array('.','..'));
+        $files = array_diff(scandir($dir), array('.', '..'));
         foreach ($files as $file) {
             if ( is_dir( "$dir/$file" ) ){
                 self::delTree("$dir/$file");
@@ -212,9 +222,9 @@ class upload_policies{
     }
 
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Private Utility Routines - Image File Analysis
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 
     private function getPageImageSize( $fileName ){
         // this method works on the assumption that, given that the svg files are written
@@ -227,13 +237,13 @@ class upload_policies{
             $line = fgets( $inf );
             // We're looking for a line something like this:
             // <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="720pt" height="540pt" viewBox="0 0 720 540" version="1.1">
-            preg_match('/viewBox[^=]*=[ \t]*[^ \t]0[ \t]+0[ \t]+([0-9]+)[ \t]+([0-9]+)/',$line,$matches);
+            preg_match( '/viewBox[^=]*=[ \t]*[^ \t]0[ \t]+0[ \t]+([0-9]+)[ \t]+([0-9]+)/', $line, $matches );
             if ( count( $matches ) == 3 ){
                 // match found!
                 fclose($inf);
                 $width = intval( $matches[1] );
                 $height = intval( $matches[2] );
-                if ( $width <= 0 || $height <=0 ){
+                if ( $width <= 0 || $height <= 0 ){
                     // there's something wrong with the matches - they appear not to be numeric
                     $this->logWarning( 'Failed to extract width and height from svg file: ' . $fileName . ': <' . $width . '> <' . $height . '>' );
                     return array( 1024, 1448 ); // assume A4
@@ -248,14 +258,15 @@ class upload_policies{
     }
 
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Private Data
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 
     private $context            = null;
     private $workFolder         = null;
     private $databaseInterface  = null;
     private $docId              = null;
     private $pageIds            = array();
+    private $haveChangedDoc     = false;
 }
 

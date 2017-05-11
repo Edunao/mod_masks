@@ -28,14 +28,14 @@
   note family - Mask styles
 */
 
-#masks .mask-root.mask-family-note .mask-back{
+#masks .mask-root.mask-family-note .mask-back {
     border-radius: 8px;
     border-style: solid;
     border-width: 2px;
     box-sizing: border-box;
 }
 
-#masks .mask-root.mask-family-note .mask-main{
+#masks .mask-root.mask-family-note .mask-main {
     background-image: url('pix/mask_note.png');
     background-position: center;
     background-repeat: no-repeat;
@@ -62,7 +62,7 @@
 #masks .mask-root.mask-family-note.mask-style-note-4 .mask-back,
 #masks .mask-root.mask-family-note.mask-style-note-5 .mask-back,
 #masks .mask-root.mask-family-note.mask-style-note-6 .mask-back,
-#masks .mask-root.mask-family-note.mask-style-note-7 .mask-back{
+#masks .mask-root.mask-family-note.mask-style-note-7 .mask-back {
     border-radius: 100%;
 }
 
@@ -72,25 +72,25 @@
 */
 
 #masks .mask-root.mask-style-note-4 .mask-back,
-#masks .mask-root.mask-style-note-0 .mask-back{
+#masks .mask-root.mask-style-note-0 .mask-back {
     background-color: yellow;
     border-color: darkgrey;
 }
 
 #masks .mask-root.mask-style-note-5 .mask-back,
-#masks .mask-root.mask-style-note-1 .mask-back{
+#masks .mask-root.mask-style-note-1 .mask-back {
     background-color: lightpink;
     border-color: darkgrey;
 }
 
 #masks .mask-root.mask-style-note-6 .mask-back,
-#masks .mask-root.mask-style-note-2 .mask-back{
+#masks .mask-root.mask-style-note-2 .mask-back {
     background-color: lightgreen;
     border-color: darkgrey;
 }
 
 #masks .mask-root.mask-style-note-7 .mask-back,
-#masks .mask-root.mask-style-note-3 .mask-back{
+#masks .mask-root.mask-style-note-3 .mask-back {
     background-color: lightcyan;
     border-color: darkgrey;
 }

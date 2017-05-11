@@ -92,7 +92,7 @@ function masks_update_instance($data, $mform) {
     global $CFG, $DB;
 
     $parameters = array();
-    for ($i=0; $i < 100; $i++) {
+    for ($i = 0; $i < 100; $i++) {
         $parameter = "parameter_$i";
         $variable  = "variable_$i";
         if (empty($data->$parameter) or empty($data->$variable)) {
@@ -128,7 +128,7 @@ function masks_update_instance($data, $mform) {
 function masks_delete_instance($id) {
     global $DB;
 
-    if (!$instance = $DB->get_record('masks', array('id'=>$id))) {
+    if (!$instance = $DB->get_record('masks', array('id' => $id))) {
         return false;
     }
 
@@ -140,16 +140,16 @@ function masks_delete_instance($id) {
     $subSelect = "SELECT id FROM {masks_question} WHERE parentcm = ?";
     $DB->delete_records_select('masks_user_state', "question IN ($subSelect)", array($cm->id));
     $DB->delete_records_select('masks_mask', "question IN ($subSelect)", array($cm->id));
-    $DB->delete_records('masks_question', array('parentcm'=>$cm->id));
+    $DB->delete_records('masks_question', array('parentcm' => $cm->id));
 
     // Delete records from doc_page, page and doc
     $subSelect = "SELECT id FROM {masks_doc} WHERE parentcm = ?";
-    $DB->delete_records('masks_page', array('parentcm'=>$cm->id));
+    $DB->delete_records('masks_page', array('parentcm' => $cm->id));
     $DB->delete_records_select('masks_doc_page', "doc IN ($subSelect)", array($cm->id));
-    $DB->delete_records('masks_doc', array('parentcm'=>$cm->id));
+    $DB->delete_records('masks_doc', array('parentcm' => $cm->id));
 
     // note: all context files are deleted automatically
-    $DB->delete_records('masks', array('id'=>$id));
+    $DB->delete_records('masks', array('id' => $id));
 
     return true;
 }
@@ -166,7 +166,7 @@ function masks_delete_instance($id) {
  * @param array $options additional options affecting the file serving
  * @return bool false if file not found, does not return if found - just send the file
  */
-function mod_masks_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options=array()) {
+function mod_masks_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array()) {
     if ($context->contextlevel != CONTEXT_MODULE) {
         return false;
     }

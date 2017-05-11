@@ -88,7 +88,7 @@ class backup_masks_activity_structure_step extends backup_activity_structure_ste
         // user state
         $user_states = new backup_nested_element('user_states');
         $user_state = new backup_nested_element('user_state', array('id'), array(
-            'user', 'failcount', 'state', 'firstview', 'lastupdate'
+            'userid', 'failcount', 'state', 'firstview', 'lastupdate'
         ));
         $question->add_child($user_states);
         $user_states->add_child($user_state);

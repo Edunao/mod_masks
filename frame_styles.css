@@ -28,50 +28,52 @@
   General frame layout
 */
 
-html, body{
+html,
+body {
     border: 0;
     margin: 0;
-    overflow-y: hidden;
+    /*overflow-y: hidden;*/
+    overflow : auto;
     padding: 0;
 }
 
-form{
+form {
     margin: 0;
 }
 
-#masks-frame{
+#masks-frame {
     text-align: center;
 }
 
 #masks-frame .frame-header,
 #masks-frame .frame-body,
 #masks-frame .frame-footer,
-#masks-frame .frame-section{
+#masks-frame .frame-section {
     box-sizing: border-box;
     display: block;
     position: relative;
     width: 100%;
 }
 
-#masks-frame .frame-title{
+#masks-frame .frame-title {
     font-size: xx-large;
     padding-bottom: 0.25em;
     padding-top: 0.5em;
 }
 
-#masks-frame .frame-text{
+#masks-frame .frame-text {
     background-color: #f5f5f5;
     border: 1px solid #e3e3e3;
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
     border-radius: 4px;
-    -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
+    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0 , 0.05);
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
     color: black;
 }
 
-#masks-frame .frame-text{
+#masks-frame .frame-text {
     display: inline-block;
     left: 0;
     margin: 1em auto 1em auto;
@@ -85,7 +87,7 @@ form{
 }
 
 #masks-frame .frame-footer input,
-#masks-frame .frame-footer button{
+#masks-frame .frame-footer button {
     margin: 1em;
 }
 
@@ -93,7 +95,7 @@ form{
   Question Editing layout
 */
 
-#masks-frame.mask-edit-form .frame-body{
+#masks-frame.mask-edit-form .frame-body {
     display: block;
     left: 0;
     margin-left: auto;
@@ -122,7 +124,7 @@ form{
     display: none;
 }
 
-#masks-frame.mask-edit-form.show-hint .hint-section{
+#masks-frame.mask-edit-form.show-hint .hint-section {
     bottom: 0;
     display: block;
     left: 0;
@@ -133,21 +135,21 @@ form{
     z-index: 2;
 }
 
-#masks-frame.mask-edit-form .hint-section .button-sub-section{
+#masks-frame.mask-edit-form .hint-section .button-sub-section {
     position: absolute;
     right: 2px;
     top: 0;
 }
 
-#masks-frame.mask-edit-form .hint-section .text-sub-section{
+#masks-frame.mask-edit-form .hint-section .text-sub-section {
     width: 100%;
 }
 
-#masks-frame.mask-edit-form.show-hint .question-section{
+#masks-frame.mask-edit-form.show-hint .question-section {
     visibility: hidden;
 }
 
-#masks-frame.mask-edit-form .question-section{
+#masks-frame.mask-edit-form .question-section {
     display: block;
     left: 0;
     margin: auto;
@@ -161,23 +163,27 @@ form{
 }
 
 #masks-frame.mask-edit-form textarea,
-#masks-frame.mask-edit-form input[type=text]{
+#masks-frame.mask-edit-form input[type=text] {
     width: 100%;
 }
 
-#masks-frame .form-field.with-heading{
+#masks-frame.mask-edit-form textarea {
+    resize: vertical;
+}
+
+#masks-frame .form-field.with-heading {
     margin: 0.5em 0 0.5em 0;
 }
 
-#masks-frame .form-field{
+#masks-frame .form-field {
     position: relative;
 }
 
-#masks-frame .pre-noheading{
+#masks-frame .pre-noheading {
     margin-top: -0.5em;
 }
 
-#masks-frame .post-noheading{
+#masks-frame .post-noheading {
     margin-bottom: 0.5em;
 }
 
@@ -186,32 +192,33 @@ form{
   Question / Answer layout (Student view)
 */
 
-#masks-frame .answer{
+#masks-frame .answer {
     display: inline-block;
     left: 0;
     margin: 1em auto 1em auto;
     position: relative;
     right: 0;
     text-align: left;
+    max-width: 95%;
 }
 
-#masks-frame .answer input[type=text]{
-    max-width: 95%;
+#masks-frame .answer input[type=text] {
+    max-width: 80%;
     width: 400px;
 }
 
-#masks-frame .option{
+#masks-frame .option {
     cursor: pointer;
     display: block;
     margin: 0.125em 0 0.125em 0;
     position: relative;
 }
 
-#masks-frame .option input{
+#masks-frame .option input {
     cursor: pointer;
 }
 
-#masks-frame .option:hover{
+#masks-frame .option:hover {
     text-decoration: underline;
 }
 
@@ -220,31 +227,31 @@ form{
   Upload frame
 */
 
-#masks-frame.upload .upload-widget input{
+#masks-frame.upload .upload-widget input {
     border: solid lightgray 1px;
     margin-bottom: 2em;
     margin-top: 2em;
     padding: 2px;
 }
 
-#masks-frame .upload-wait{
+#masks-frame .upload-wait {
     display: none;
 }
 
-#masks-frame .upload-input{
+#masks-frame .upload-input {
     display: block;
 }
 
 
-#masks-frame.upload-running .upload-wait{
+#masks-frame.upload-running .upload-wait {
     display: block;
 }
 
-#masks-frame.upload-running .upload-input{
+#masks-frame.upload-running .upload-input {
     display: none;
 }
 
-#masks-frame .uploading-img{
+#masks-frame .uploading-img {
     background-image: url("pix/loading.gif");
     background-position: center;
     background-repeat: no-repeat;
@@ -256,3 +263,7 @@ form{
     width: 80px;
 }
 
+#masks-frame.upload-error {
+    height : 100%;
+    overflow : auto;
+}

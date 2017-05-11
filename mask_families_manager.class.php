@@ -35,7 +35,7 @@ require_once(dirname(__FILE__).'/mask_family_question.class.php');
 class mask_families_manager{
     private static $families   = null;
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Private utility methods
 
     private static function populateFamilyList(){
@@ -47,7 +47,7 @@ class mask_families_manager{
         }
     }
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Public API
 
     /**

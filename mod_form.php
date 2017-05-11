@@ -29,44 +29,120 @@ require_once ($CFG->dirroot.'/course/moodleform_mod.php');
 
 class mod_masks_mod_form extends moodleform_mod {
 
-    public function __construct($current, $section, $cm, $course) {
+    public function __construct( $current, $section, $cm, $course ) {
         // store away properties that we may need later
-        $this->cm=$cm;
-        $this->course=$course;
+        $this->cm = $cm;
+        $this->course = $course;
         // delegate to parent
-        parent::__construct($current, $section, $cm, $course);
+        parent::__construct( $current, $section, $cm, $course );
     }
 
-    private function addtextfield($fieldnamebase,$maxlen,$defaultvalue=null,$fieldsuffix=''){
+    private function addTextField( $fieldName, $maxlen, $defaultValue=null, $locaPrefix='' ){
+        $strFieldName = get_string( $locaPrefix . $fieldName, 'mod_masks');
         $mform = $this->_form;
-        $fieldname=$fieldnamebase.$fieldsuffix;
-        $mform->addElement('text', $fieldname, get_string($fieldnamebase,'masks'), array('size'=>'60'));
-        $mform->setType($fieldname, PARAM_TEXT);
-        $mform->addRule($fieldname, null, 'required', null, 'client');
-        $mform->addRule($fieldname, get_string('maximumchars', '', $maxlen), 'maxlength', $maxlen, 'client');
-        if ($defaultvalue){
-            $mform->setDefault($fieldname, $defaultvalue);
+        $mform->addElement('text', $fieldName, $strFieldName, array('size' => '60'));
+        $mform->setType( $fieldName, PARAM_TEXT );
+        $mform->addRule( $fieldName, null, 'required', null, 'client');
+        $mform->addRule( $fieldName, get_string('maximumchars', '', $maxlen), 'maxlength', $maxlen, 'client');
+        if ( $defaultValue ){
+            $mform->setDefault( $fieldName, $defaultValue );
+        }
+    }
+
+    private function addCheckbox( $fieldName, $defaultValue=null, $locaPrefix='' ){
+        $strFieldName = get_string( $locaPrefix . $fieldName, 'mod_masks');
+        $mform = $this->_form;
+        $mform->addElement( 'checkbox', $fieldName, $strFieldName );
+        $mform->setType( $fieldName, PARAM_TEXT );
+        if ( $defaultValue ){
+            $mform->setDefault( $fieldName, $defaultValue );
+        }
+    }
+
+    private function addSelect( $fieldName, $options, $defaultValue=null, $locaPrefix='' ){
+        $strFieldName = get_string( $locaPrefix . $fieldName, 'mod_masks' );
+        $mform = $this->_form;
+        $mform->addElement( 'select', $fieldName, $strFieldName, $options );
+        $mform->setType( $fieldName, PARAM_TEXT );
+        if ( $defaultValue ){
+            $mform->setDefault( $fieldName, $defaultValue );
         }
     }
 
     function definition() {
         $mform = $this->_form;
 
-        //-------------------------------------------------------
-        $mform->addElement('header', 'general', get_string('general', 'form'));
+        // basics
+        $mform->addElement( 'header', 'general', get_string( 'general', 'form' ) );
+        $this->addTextField( 'name', 255 );
 
-        // text fields
-        $this->addtextfield('name',255);
+        // lookup module config to get hold of default values for everything
+        require_once( __DIR__ . '/mask_type.class.php' );
+        require_once( __DIR__ . '/mask_types_manager.class.php' );
+        $moduleConfig = \get_config( 'mod_masks' );
 
-	// standard moodle elements
+        // Add settings for overriding site defaults for module parameters
+        $mform->addElement( 'header', 'configuration', get_string( 'settinghead_configuration', 'mod_masks' ) );
+        $maskEditOptions = array(
+            \mod_masks\FIELDS_NONE  => get_string( 'setting_fields_none' , 'mod_masks' ),
+            \mod_masks\FIELDS_H     => get_string( 'setting_fields_h'    , 'mod_masks' ),
+            \mod_masks\FIELDS_HF    => get_string( 'setting_fields_hf'   , 'mod_masks' ),
+        );
+        $this->addSelect( 'maskedit', $maskEditOptions, $moduleConfig->maskedit, 'settingname_' );
+        $typeNames = \mod_masks\mask_types_manager::getTypeNames();
+        foreach($typeNames as $typeName){
+            $configElement = 'disable_' . $typeName;
+            $this->addCheckbox( $configElement, $moduleConfig->$configElement, 'settingname_' );
+        }
+        $this->addCheckbox( 'showghosts', $moduleConfig->showghosts, 'settingname_' );
+
+        // standard moodle elements
         $this->standard_coursemodule_elements();
         $this->add_action_buttons();
     }
 
-    function validation($data, $files) {
+    function validation( $data, $files ) {
         // delegate to parent class
-        $errors = parent::validation($data, $files);
+        $errors = parent::validation( $data, $files );
         return $errors;
+    }
+
+    function set_data( $data ) {
+        // if we have an encoded json config blob in our data then decode it into the core data
+        if ( property_exists( $data, 'config' ) ){
+            $decodedConfig = json_decode( $data->config, true );
+            if ( $decodedConfig ){
+                foreach ( $decodedConfig as $key => $val ){
+                    $data->$key = $val;
+                }
+            }
+        }
+
+        return parent::set_data($data);
+    }
+
+    function get_data() {
+        // fetch data from parent and drop out if none found as this implies that the form hasn't been displayed yet
+        $data = parent::get_data();
+        if (!$data) {
+            return false;
+        }
+
+        // prime the container of data properties with the list of fixed properties in our form
+        $configData = [];
+        $prop = 'maskedit';   $configData[ $prop ] = property_exists( $data, $prop )? $data->$prop: '';
+        $prop = 'showghosts'; $configData[ $prop ] = property_exists( $data, $prop )? $data->$prop: 0;
+
+        // encode properties that we recognise into a json config blob
+        require_once( __DIR__ . '/mask_types_manager.class.php' );
+        $typeNames = \mod_masks\mask_types_manager::getTypeNames();
+        foreach( $typeNames as $typeName ){
+            $prop = 'disable_' . $typeName;
+            $configData[ $prop ] = property_exists( $data, $prop )? $data->$prop: 0;
+        }
+        $data->config = json_encode( $configData );
+
+        return $data;
     }
 }
 

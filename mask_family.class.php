@@ -30,7 +30,7 @@ defined('MOODLE_INTERNAL') || die;
 
 abstract class mask_family{
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Protected Data
 
     protected $familyName   = null;
@@ -38,7 +38,7 @@ abstract class mask_family{
     protected $cssfile      = null;
 
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // public helper functions
 
     public function getStylesTag( ){
@@ -54,7 +54,7 @@ abstract class mask_family{
     }
 
     public function getStyleClass(){
-        return 'mask-family-' . $this->familyName ;
+        return 'mask-family-' . $this->familyName;
     }
 
     public function getFamilyName(){

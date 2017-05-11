@@ -26,15 +26,15 @@
 defined('MOODLE_INTERNAL') || die;
 
 function xmldb_masks_upgrade($oldversion) {
-    global $DB;
+    global $DB, $CFG;
     $dbman = $DB->get_manager();
+
+    // include handy utility functions for setting up database fields with standardised settings
+    require_once(dirname(__FILE__).'/upgradelib.php');
 
     // Upgrade to initial version by creating tables and adding fields
     $dbversion = 2016010100;
     if ($oldversion < $dbversion) {
-
-        // include handy utility functions for setting up database fields with standardised settings
-        require_once(dirname(__FILE__).'/upgradelib.php');
 
         // Create the doc database table
         $newTable = new xmldb_table('masks_doc');
@@ -96,14 +96,14 @@ function xmldb_masks_upgrade($oldversion) {
         // event.
         $newTable = new xmldb_table('masks_user_state');
         mod_masks\add_db_id_field ( $newTable, 'id'          );
-        mod_masks\add_db_int_field( $newTable, 'user'        );  // a $user->id value
+        mod_masks\add_db_int_field( $newTable, 'userid'        );  // a $user->id value
         mod_masks\add_db_int_field( $newTable, 'question'    );  // an masks_question row reference
         mod_masks\add_db_int_field( $newTable, 'failcount'   );  // the number of times that this question has been failed
         mod_masks\add_db_int_field( $newTable, 'state'       );  // flag indicating current state (see locallib.php for the flag list)
         mod_masks\add_db_date_field( $newTable, 'firstview'  );  // the time stamp of the last action
         mod_masks\add_db_date_field( $newTable, 'lastupdate' );  // the time stamp of the last action
-        $newTable->add_index( 'user', XMLDB_INDEX_NOTUNIQUE, array( 'user' ) );
-        $newTable->add_index( 'userquestion', XMLDB_INDEX_NOTUNIQUE, array( 'user', 'question' ) );
+        $newTable->add_index( 'user', XMLDB_INDEX_NOTUNIQUE, array( 'userid' ) );
+        $newTable->add_index( 'userquestion', XMLDB_INDEX_NOTUNIQUE, array( 'userid', 'question' ) );
         $newTable->add_index( 'question', XMLDB_INDEX_NOTUNIQUE, array( 'question' ) );
         $dbman->create_table( $newTable );
 
@@ -114,6 +114,8 @@ function xmldb_masks_upgrade($oldversion) {
         mod_masks\fix_id_field( 'masks_question'  , 'id' );
         mod_masks\fix_id_field( 'masks_mask'      , 'id' );
         mod_masks\fix_id_field( 'masks_user_state', 'id' );
+
+        upgrade_mod_savepoint(true, $dbversion, 'masks');
     }
 
     $dbversion = 2016102002;
@@ -121,12 +123,45 @@ function xmldb_masks_upgrade($oldversion) {
         $table = new xmldb_table( 'masks_question' );
         mod_masks\add_db_chr_field( $table, 'type', 32   );  // the question type - used to determine which handler object type to instantiate in frames
 
-        //update masks type
+        // update masks type
         $allmasksquestions = $DB->get_records( 'masks_question' );
         foreach( $allmasksquestions as $question ){
-            $question->type  = json_decode( $question->data )->type ;
+            $question->type  = json_decode( $question->data )->type;
             $DB->update_record( 'masks_question', $question );
         }
+        upgrade_mod_savepoint(true, $dbversion, 'masks');
+    }
+
+    $dbversion = 2017041301;
+    if ( $oldversion < $dbversion ) {
+        // user is keyword for pgsql and can't be used in sql
+        try {
+            if($CFG->dbtype == 'pgsql'){
+                $sql = 'ALTER TABLE ' . $CFG->prefix  . 'masks_user_state RENAME COLUMN "user" TO "userid" ';
+                $DB->change_database_structure( $sql );
+            }else{
+                $sql = 'ALTER TABLE ' . $CFG->prefix  . 'masks_user_state CHANGE COLUMN `user` `userid` INT(10) NOT NULL;';
+                $DB->change_database_structure( $sql );
+            }
+        } catch (Exception $ex) {
+        }
+        upgrade_mod_savepoint(true, $dbversion, 'masks');
+    }
+
+    $dbversion = 2017050103;
+    if ($oldversion < $dbversion) {
+
+        // Define field toto to be added to masks.
+        $table = new xmldb_table('masks');
+        $field = new xmldb_field('config', XMLDB_TYPE_TEXT, null, null, null, null, null, 'name');
+
+        // Conditionally launch add field toto.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Masks savepoint reached.
+        upgrade_mod_savepoint(true, $dbversion, 'masks');
     }
 
     return true;

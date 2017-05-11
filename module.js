@@ -23,7 +23,7 @@
  */
 
 
-//------------------------------------------------------
+// ------------------------------------------------------
 // Directives for eslint
 
 /*global $*/
@@ -49,8 +49,7 @@
 /*eslint max-statements-per-line: off*/
 
 
-
-//------------------------------------------------------
+// ------------------------------------------------------
 // Directives for jshint
 
 /*globals $*/
@@ -61,7 +60,7 @@
 /*jshint maxlen: false*/
 
 
-//------------------------------------------------------
+// ------------------------------------------------------
 // Namespace for the plugin code and data
 M.mod_masks={
     // the YUI instance
@@ -87,7 +86,7 @@ M.mod_masks={
     FLAG_CLOSABLE   : 0x04, // the mask can be closed
     FLAG_DELETED    : 0x80, // the page or flag is deleted
 
-    //------------------------------------------------------
+    // ------------------------------------------------------
     // Init methods
 
     init: function(Y){
@@ -143,7 +142,7 @@ M.mod_masks={
     },
 
 
-    //------------------------------------------------------
+    // ------------------------------------------------------
     // Event Handlers
 
     onDblClick: function(e){
@@ -152,6 +151,9 @@ M.mod_masks={
         var action = target.attr('dblclick-action');
         while ( !action ){
             target = target.parent();
+            if(target.length == 0){
+                target = $('body');
+            }
             action = target.attr('dblclick-action');
         }
 
@@ -165,9 +167,12 @@ M.mod_masks={
         var action = target.attr('click-action');
         while ( !action ){
             target = target.parent();
+            if(target.length == 0){
+                target = $('body');
+            }
             action = target.attr('click-action');
         }
-
+        
         // delegate processing to a shared routine
         M.mod_masks.processImpulseEvent(e,target,action);
     },
@@ -194,6 +199,9 @@ M.mod_masks={
             case 'save-layout':         M.mod_masks.activateFrame( 'save-layout', null, 'no' );     break;
             case 'reupload':            M.mod_masks.activateFrame( 'reupload', null, 'no' );        break;
             case 'set-mask-style':      M.mod_masks.onSetMaskStyle(target);                         break;
+            case 'masks-shift-right':   M.mod_masks.shiftMasks(true);                               break;
+            case 'masks-shift-left':    M.mod_masks.shiftMasks(false);                              break;
+            case 'masks-retrieve-masks':M.mod_masks.retrieveMasks();                                break;
 
             case 'mask-action':
                 // prevent the event from bubbling
@@ -205,7 +213,7 @@ M.mod_masks={
                 // this wasn't a click on a mask or on an associated widget so hide the context menu
                 M.mod_masks.selectMask(-1);
                 // prevent the event from bubbling
-                e.stopPropagation();
+                // e.stopPropagation();
                 e.preventDefault();
                 break;
 
@@ -223,6 +231,41 @@ M.mod_masks={
         var menuName = target.attr('menu');
         var fullName = '#masks-menu-'+menuName;
         var menuNode = $( fullName );
+
+        // if current page has masks, hide shift left button
+        var currentPrevPage = M.mod_masks_pages[(M.mod_masks.currentPage-1)];
+        var currentPageId = M.mod_masks_pages[M.mod_masks.currentPage].id;
+        var currentPageHasMasks = ((currentPageId in M.mod_masks_masks.pages) && M.mod_masks_masks.pages[currentPageId].length > 0 );
+        
+        if ( !currentPageHasMasks ||
+                ( !currentPrevPage ||
+                    (currentPrevPage &&
+                        ((currentPrevPage.id in M.mod_masks_masks.pages) &&
+                        M.mod_masks_masks.pages[currentPrevPage.id].length > 0 )
+                    )
+                )
+            ) {
+            $('.masks-shift-left-entry.menu-entry').hide();
+        } else {
+            $('.masks-shift-left-entry.menu-entry').show();
+        }
+        
+        // hide shift right button if page hasn't masks
+        var currentPageIsLast = (M.mod_masks_pages.slice(-1)[0].id == currentPageId);
+        if (!currentPageHasMasks || currentPageIsLast){
+            $('.masks-shift-right-entry.menu-entry').hide();
+        }else{
+            $('.masks-shift-right-entry.menu-entry').show();
+        }
+        
+        // if current page hasn't mask and is last page and has false page after, show retrieve masks button
+        var hasFalsePage = this.docHasFalsePage();
+        if (currentPageIsLast && !currentPageHasMasks && hasFalsePage) {
+            $('.masks-retrieve-masks-entry.menu-entry').show();
+        } else {
+            $('.masks-retrieve-masks-entry.menu-entry').hide();
+        }
+        
         menuNode.addClass( 'menu-show' );
         M.mod_masks.contextMenuHide();
     },
@@ -314,7 +357,7 @@ M.mod_masks={
     },
 
 
-    //------------------------------------------------------
+    // ------------------------------------------------------
     // DOM interaction
 
     gotoPage: function(pageNumber){
@@ -446,7 +489,7 @@ M.mod_masks={
     },
 
 
-    //------------------------------------------------------
+    // ------------------------------------------------------
     // Alert messages for the teacher
 
     setAlertSuccess: function( msgId ){
@@ -498,7 +541,7 @@ M.mod_masks={
     },
 
 
-    //------------------------------------------------------
+    // ------------------------------------------------------
     // Managing iframe popups
 
     activateFrame: function( frameName, args, saveLayout ){
@@ -510,7 +553,7 @@ M.mod_masks={
         this.clearAlertInfo();
 
         // update the properties of the iframe DOM tag
-        var pageId = ( M.mod_masks_pages.length > 0 )? M.mod_masks_pages[ M.mod_masks.currentPage ].id: -1;
+        var pageId = ( M.mod_masks_pages.length > 0 ) ? M.mod_masks_pages[ M.mod_masks.currentPage ].id : -1;
         var url = M.mod_masks_frames[ frameName ];
         url += '&pageid='+pageId;
         for(var key in args){
@@ -520,7 +563,7 @@ M.mod_masks={
 
         // if the save layout value is set here then indirect us through the save layout page
         if ( saveLayout !== 'no' && ! $('#masks').hasClass('hide-layout-save-group') ){
-            var confirm = ( saveLayout === 'prompt' )? 1: 0;
+            var confirm = ( saveLayout === 'prompt' ) ? 1 : 0;
             this.activateFrame( 'save-layout', { id: M.mod_masks_state.cmid, confirm: confirm, nextframe: encodeURIComponent(url) }, 'no' );
         } else {
             // activate the iframe popup
@@ -552,7 +595,7 @@ M.mod_masks={
     },
 
 
-    //------------------------------------------------------
+    // ------------------------------------------------------
     // mask display
 
     clearMasks: function(){
@@ -677,9 +720,19 @@ M.mod_masks={
         // return the selected mask object
         return mask;
     },
+    
+    // shift masks of current and next pages
+    shiftMasks : function(toRight){
+        var currentOrderKey = M.mod_masks.currentPage;
+        this.activateFrame( 'shift-masks', { currentorderkey: currentOrderKey , roright : toRight }, 'prompt' );
+    },
+    
+    retrieveMasks: function(){
+        var currentOrderKey = M.mod_masks.currentPage;
+        this.activateFrame( 'shift-masks', { currentorderkey: currentOrderKey , retrievemasks : true }, 'prompt' );
+    },
 
-
-    //------------------------------------------------------
+    // ------------------------------------------------------
     // mask moving / resizing
 
     // on mouse button pressed
@@ -709,12 +762,12 @@ M.mod_masks={
             var y1 = parseInt(mask.y) + parseInt(mask.h);
 
             // lookup the specifier classes present on the target
-            var hasT = target.hasClass('t')? 1: 0;
-            var hasM = target.hasClass('m')? 1: 0;
-            var hasB = target.hasClass('b')? 1: 0;
-            var hasL = target.hasClass('l')? 1: 0;
-            var hasC = target.hasClass('c')? 1: 0;
-            var hasR = target.hasClass('r')? 1: 0;
+            var hasT = target.hasClass('t') ? 1 : 0;
+            var hasM = target.hasClass('m') ? 1 : 0;
+            var hasB = target.hasClass('b') ? 1 : 0;
+            var hasL = target.hasClass('l') ? 1 : 0;
+            var hasC = target.hasClass('c') ? 1 : 0;
+            var hasR = target.hasClass('r') ? 1 : 0;
             var isMv = ( hasC & hasM );
 
             // setup a tracking record to represent the mask that we're starting to drag
@@ -845,13 +898,13 @@ M.mod_masks={
             // clamp min w/h to keep it in bounds
             var minWH = 100;
             if ( newW < minWH ){
-                newX0 = ( dX0 === 0 )? newX0: newX1 - minWH;
-                newX1 = ( dX1 === 0 )? newX1: newX0 + minWH;
+                newX0 = ( dX0 === 0 ) ? newX0 : newX1 - minWH;
+                newX1 = ( dX1 === 0 ) ? newX1 : newX0 + minWH;
                 newW = minWH;
             }
             if ( newH < minWH ){
-                newY0 = ( dY0 === 0 )? newY0: newY1 - minWH;
-                newY1 = ( dY1 === 0 )? newY1: newY0 + minWH;
+                newY0 = ( dY0 === 0 ) ? newY0 : newY1 - minWH;
+                newY1 = ( dY1 === 0 ) ? newY1 : newY0 + minWH;
                 newH = minWH;
             }
             // store the draginfo for later use
@@ -876,7 +929,7 @@ M.mod_masks={
         }
     },
 
-    //------------------------------------------------------
+    // ------------------------------------------------------
     // context menu
 
     contextMenuShow:function(){
@@ -937,7 +990,7 @@ M.mod_masks={
         $('#masks-context-menu').addClass('hidden');
     },
 
-    //------------------------------------------------------
+    // ------------------------------------------------------
     // activating / deactivating menu-bar menus
 
     setMaskActionMenu:function(desiredState){
@@ -979,7 +1032,7 @@ M.mod_masks={
         }
 
         // if the menu is enabled then add a 'wait one moment - dont' run off yet' message
-        window.onbeforeunload = ( desiredState === false )? null: M.mod_masks.promptBeforeLeavingPage;
+        window.onbeforeunload = ( desiredState === false ) ? null : M.mod_masks.promptBeforeLeavingPage;
     },
 
     promptBeforeLeavingPage: function(){
@@ -987,7 +1040,7 @@ M.mod_masks={
     },
 
 
-    //------------------------------------------------------
+    // ------------------------------------------------------
     // API used by save-layout frame
 
     getMaskChanges: function(){
@@ -1016,7 +1069,7 @@ M.mod_masks={
     },
 
 
-    //------------------------------------------------------
+    // ------------------------------------------------------
     // API used by sub-frames
 
     // callback when iframe contents is loaded for us to resize the iframe node to fit its contents
@@ -1065,7 +1118,7 @@ M.mod_masks={
         M.mod_masks.renderMasks();
     },
 
-    applyPageData: function(data){
+    applyPageData: function(data, navdata){
         M.mod_masks_pages = data;
 
         // grab hold of a copy of the first child of the page menu (to use as a reference node)
@@ -1085,19 +1138,39 @@ M.mod_masks={
             return;
         }
 
-        // reset and re-apply page-hidden flags in the page nav drop-down menu
-        for (var pageNum in M.mod_masks_pages){
-            var page     = M.mod_masks_pages[ pageNum ];
-            var isHidden = page.flags & M.mod_masks.FLAG_HIDDEN;
-            refNode.attr('page',pageNum);
-            refChild.removeClass('page-hidden');
-            if ( isHidden ){
-                refChild.addClass('page-hidden');
+        // reset and re-apply page-hidden flags and false-page tag in the page nav drop-down menu
+        if(!navdata){
+            for (var pageNum in M.mod_masks_pages){
+                var page     = M.mod_masks_pages[ pageNum ];
+                var isHidden = page.flags & M.mod_masks.FLAG_HIDDEN;
+                refNode.attr('page',pageNum);
+                refChild.removeClass('page-hidden');
+                if ( isHidden ){
+                    refChild.addClass('page-hidden');
+                }
+                refNum.html( 1 + parseInt( pageNum ) );
+                var newNode  = refNode.clone();
+                menuRoot.append( newNode );
             }
-            refNum.html( 1 + parseInt( pageNum ) );
-            var newNode  = refNode.clone();
-            menuRoot.append( newNode );
-        }
+        }else{
+            for (var pageNum in navdata){
+                var page     = navdata[ pageNum ];
+                var isHidden = page.flags & M.mod_masks.FLAG_HIDDEN;
+                refNode.attr('page',pageNum);
+                refNode.removeClass('hidden-page');
+                if ( isHidden ){
+                    refNode.addClass('hidden-page');
+                }
+                if(page.docpage == 0){
+                    refNode.addClass('false-page');
+                    refNode.removeAttr('page');
+                    refNode.removeAttr('click-action');
+                }
+                refNum.html( 1 + parseInt( pageNum ) );
+                var newNode  = refNode.clone();
+                menuRoot.append( newNode );
+            }
+        }  
 
         // refresh the display of the page itself
         M.mod_masks.gotoPage( M.mod_masks.currentPage );
@@ -1132,7 +1205,7 @@ M.mod_masks={
     },
 
 
-    //------------------------------------------------------
+    // ------------------------------------------------------
     // Grade management
 
     showGradeSuccess: function(){
@@ -1147,15 +1220,15 @@ M.mod_masks={
     updateGradeInfo: function(){
         var perfectAnswersPercent = 0;
         var gradeData = this.calculateGradeData();
-        //correct answers
+        // correct answers
         if((gradeData.goodPasses + gradeData.badPasses + gradeData.fails) > 0){
-            perfectAnswersPercent = (gradeData.goodPasses * 100 )/ (gradeData.goodPasses + gradeData.badPasses + gradeData.fails) ;
+            perfectAnswersPercent = (gradeData.goodPasses * 100 )/ (gradeData.goodPasses + gradeData.badPasses + gradeData.fails);
 
             $('#correct-answers-container .circle-value').text(Math.round(perfectAnswersPercent) + '%');
             $('#correct-answers-container').css('display','inline-block');
         }
 
-        //question remaining
+        // question remaining
         $('#questions-remaining-container .circle-value').text(gradeData.numQuestions - gradeData.goodPasses - gradeData.badPasses );
 
         // if no question remaining and only perfect answers : display congratulation
@@ -1183,15 +1256,15 @@ M.mod_masks={
                 var isToDo     = ( ( mask.refuserstate & ( this.FLAG_FAIL + this.FLAG_DONE ) ) === 0 );
                 var isUnseen   = ( ( mask.refuserstate & this.FLAG_SEEN ) === 0 );
                 var isDone     = ( ( mask.refuserstate & this.FLAG_DONE ) === this.FLAG_DONE );
-                result.numQuestions += isGraded     ? 1: 0;
-                result.goodPasses   += isGoodPass   ? 1: 0;
-                result.badPasses    += isBadPass    ? 1: 0;
-                result.fails        += isFail       ? 1: 0;
-                result.unattempted  += ( isGraded && isToDo && !isUnseen )? 1: 0;
-                result.unseen       += ( isGraded && isUnseen )? 1: 0;
-                result.numNotes     += ( isClosable && !isGraded )? 1: 0;
-                result.notesDone    += ( !isGraded && isDone )? 1: 0;
-                result.notesToDo    += ( isClosable && !isGraded && !isDone )? 1: 0;
+                result.numQuestions += isGraded     ? 1 : 0;
+                result.goodPasses   += isGoodPass   ? 1 : 0;
+                result.badPasses    += isBadPass    ? 1 : 0;
+                result.fails        += isFail       ? 1 : 0;
+                result.unattempted  += ( isGraded && isToDo && !isUnseen ) ? 1 : 0;
+                result.unseen       += ( isGraded && isUnseen ) ? 1: 0;
+                result.numNotes     += ( isClosable && !isGraded ) ? 1 : 0;
+                result.notesDone    += ( !isGraded && isDone ) ? 1 : 0;
+                result.notesToDo    += ( isClosable && !isGraded && !isDone ) ? 1 : 0;
             }
         }
         return result;
@@ -1204,7 +1277,7 @@ M.mod_masks={
             var maskSet = M.mod_masks_masks.pages[ p ];
             for ( var maskId in maskSet ){
                 var mask = maskSet[ maskId ];
-                result += ( ( mask.flags & ( this.FLAG_HIDDEN | this.FLAG_DELETED | maskTypeFlag ) ) === maskTypeFlag )? 1 : 0;
+                result += ( ( mask.flags & ( this.FLAG_HIDDEN | this.FLAG_DELETED | maskTypeFlag ) ) === maskTypeFlag ) ? 1 : 0;
             }
         }
         return result;
@@ -1219,10 +1292,29 @@ M.mod_masks={
                 var mask        = maskSet[ maskId ];
                 var isGradable  = ( ( mask.flags & ( this.FLAG_HIDDEN | this.FLAG_DELETED | maskTypeFlag ) ) === maskTypeFlag );
                 var isPassed    = ( ( mask.refuserstate & this.FLAG_DONE ) !== 0 );
-                result          += ( isGradable && !isPassed )? 1 : 0;
+                result          += ( isGradable && !isPassed ) ? 1 : 0;
             }
         }
         return result;
+    },
+    
+    // ------------------------------------------------------
+    // Other get functions
+    
+    docHasFalsePage: function(){
+        var pageIds = [] ;
+        for(var pageOrder in M.mod_masks_pages){
+            var pageId = M.mod_masks_pages[pageOrder].id;
+            pageIds[pageId] = pageId;
+        }
+        
+        for(var p in M.mod_masks_masks.pages){
+            if(!(p in pageIds)){
+                return true;
+            }
+        }
+        
+        return false;
     },
 };
 

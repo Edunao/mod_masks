@@ -82,6 +82,9 @@ $string['right-group']                  = '';
 $string['gradeNamePass']                = 'Perfect<br>Answers';
 $string['gradeNameToGo']                = 'Questions<br>Remaining';
 $string['header_congratulations_text']  = 'STRIKE!';
+$string['masks-shift-right']            = 'Ripple masks on';
+$string['masks-shift-left']             = 'Ripple masks back';
+$string['masks-retrieve-masks']         = 'Retrieve lost masks';
 
 // Texts for congratulation frame
 $string['frame_congratulation']         = 'Congratulation';
@@ -150,17 +153,18 @@ $string['upload-wait-text']             = ''
 $string['label_upload']                 = 'Upload';
 $string['label_upload_complete']        = 'Done';
 $string['failed-upload-title']          = 'Error';
-$string['failed-upload-text']           = 'Upload failed - please repload and try again or contact your system administrator';
+$string['failed-upload-text']           = 'Upload failed - please try again or contact your system administrator';
 
 // cmdline_pdf2svg isn't correct
 $string['failedcmdline-title']          = 'Incorrect pdf2svg command line';
 $string['failedcmdline-text']           = ''
-        . 'Command line for executing pdf2svg utility isn\'t correct.<br>'
+        . 'Command line for executing pdf2svg utility is incorrect.<br>'
         . 'Please contact your system administrator';
 
 // Alert texts
 $string['alert_uploadnofile']           = 'To get started please upload a PDF file';
 $string['alert_uploadsuccess']          = 'Congratulations. Your document has been uploaded.';
+$string['alert_reuploadsuccess']        = 'Your document has been uploaded<br>If pages have been inserted or removed then the Ripple Masks On and Ripple Masks Back menu options can be used to move existing masks to the pages where they belong.';
 $string['alert_uploadfailed']           = 'Upload failed - please try again or contact your system administrator';
 $string['alert_firstMaskAdded']         = 'Drag the mask to move and resize it';
 $string['alert_questionSaved']          = 'Changes have been saved';
@@ -175,6 +179,9 @@ $string['alert_studentGradeDone']       = '';
 $string['alert_studentGradeFail']       = 'Incorrect Answer';
 $string['alert_gradeNamePass']          = 'Correct Answers';
 $string['alert_gradeNameToGo']          = 'Questions Remaining';
+$string['alert_shiftRight']             = 'Masks from this page on have have been moved to the following page';
+$string['alert_shiftLeft']              = 'Masks from this page on have been moved to the previous page';
+$string['alert_falsePage']              = 'Masks beyond the end of the document can be recovered by rippling them back';
 
 // Textes sent down to the javascript for dynamic use in browser
 $string['navigateaway']                 = 'You have made changs that have not been saved\nTo save them click on \"'.$string['label_save'].'\"';

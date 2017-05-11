@@ -49,7 +49,7 @@ define('mod_masks\FIELDS_HF'        , 0 );
 
 abstract class mask_type{
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Protected Data
 
     // moodle execution environment (determined at the start of the page and stored here for use as required)
@@ -62,7 +62,7 @@ abstract class mask_type{
     protected $maskTypeFamily   = 'question';
 
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Public API
 
     public function applyMoodleEnvironment( $course, $cm, $masksInstance ){
@@ -80,7 +80,7 @@ abstract class mask_type{
     }
 
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Abstract Public API
 
     /* Method used to process a 'new mask' page
@@ -107,7 +107,7 @@ abstract class mask_type{
     abstract function onClickMask( $questionId, $questionData, $hiddenFields, $isLastQuestion );
 
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Protected helper functions
 
     protected function doNewMask( $id, $pageId, $maskType, $fields, $dbInterface, $flags ){
@@ -118,7 +118,7 @@ abstract class mask_type{
         if ( $haveData !== true ){
             // render the form
             $hiddenFields = array( 'id' => $id, 'pageid' => $pageId );
-            $this->renderEditForm( 'new_'.$maskType, $maskType, 'frame_new_mask.php', $fields, $_GET, array(), $hiddenFields );
+            $this->renderEditForm( $id, 'new_'.$maskType, $maskType, 'frame_new_mask.php', $fields, $_GET, array(), $hiddenFields );
         } else {
             // fetch the data that has been submitted and pack it into a json record for storage
             $newData        = $this->fetchSubmittedData( $fields );
@@ -126,8 +126,8 @@ abstract class mask_type{
 
             // write new record to database and retrieve updated full data snapshot
             $resultData = new \stdClass;
-            $resultData->newMask = $dbInterface->addMask( $id, $pageId, $maskType ,$jsonData, $flags );
-            $resultData->maskData = $dbInterface->fetchMaskData($id);
+            $resultData->newMask = $dbInterface->addMask( $id, $pageId, $maskType , $jsonData, $flags );
+            $resultData->maskData = $dbInterface->fetchMaskData( $id, true );
 
             // encode the result data and the script to apply it
             $jsData = 'var masksData =' . json_encode( $resultData );
@@ -137,7 +137,7 @@ abstract class mask_type{
             $jsAction .= 'parent.M.mod_masks.selectMask(masksData.newMask);';
             $jsAction .= 'parent.M.mod_masks.contextMenuShow();';
             $jsAction .= 'parent.M.mod_masks.closeFrame();';
-            if ($resultData->maskData->count==1){
+            if ($resultData->maskData->count == 1){
                 $jsAction .= 'parent.M.mod_masks.setAlertSuccess("firstMaskAdded");';
             }
             echo \html_writer::script( $jsAction );
@@ -152,7 +152,7 @@ abstract class mask_type{
         if ( $haveData !== true ){
             // render the form
             $hiddenFields = array( 'id' => $id, 'mid' => $maskId, 'qid' => $questionId );
-            $this->renderEditForm( 'edit_'.$maskType, $maskType, 'frame_edit_mask.php', $fields, $_GET, (array)$questionData, $hiddenFields );
+            $this->renderEditForm( $id, 'edit_'.$maskType, $maskType, 'frame_edit_mask.php', $fields, $_GET, (array)$questionData, $hiddenFields );
         } else {
             // fetch the data that has been submitted and pack it into a json record for storage
             $newData = $this->fetchSubmittedData( $fields );
@@ -177,15 +177,15 @@ abstract class mask_type{
         foreach( $fields as $field => $flags ){
             $fieldValue = htmlentities( $_GET[ $field ] );
             // The following 2 lines have been commented for now as the result caused display bugs on firefox relating to the size of the iframe tag
-            //$regex = array('/&lt;(\/?)(b|i|strong|strike|em|li|ul|ol|p|h1|h2|h3|h4|h5|br|hr)\s*(\/?)&gt;/');
-            //$fieldValue = preg_replace( $regex, '<\1\2\3>', $fieldValue );
+            // $regex = array('/&lt;(\/?)(b|i|strong|strike|em|li|ul|ol|p|h1|h2|h3|h4|h5|br|hr)\s*(\/?)&gt;/');
+            // $fieldValue = preg_replace( $regex, '<\1\2\3>', $fieldValue );
             $newData->$field = $fieldValue;
         }
 
         return $newData;
     }
 
-    protected function renderEditForm( $contextName, $maskType, $target, $fields, $refData0, $refData1, $hiddenFields ){
+    protected function renderEditForm( $id, $contextName, $maskType, $target, $fields, $refData0, $refData1, $hiddenFields ){
         // setup the form writer helper object
         require_once('./form_writer.class.php');
         $formWriter = new \mod_masks\form_writer( $refData0, $refData1 );
@@ -195,7 +195,8 @@ abstract class mask_type{
         \mod_masks\beginFrameOutput();
 
         // fetch config parameters and build a bitmask to use as a filter for eliminating fields that are not desired....
-        $config         = get_config('mod_masks');
+        require_once( __DIR__ . '/locallib.php' );
+        $config         = \mod_masks\getConfig( $id );
         $fieldFilter    = ~( $config->maskedit & ALL_FIELD_TYPES );
 
         // open page root tag
@@ -209,8 +210,8 @@ abstract class mask_type{
         echo \html_writer::end_div();
 
         // open a frame body tag to contain all of our question content
-        $formWriter->openForm($target,$hiddenFields);
-        $formWriter->addHidden('masktype',$maskType);
+        $formWriter->openForm($target, $hiddenFields);
+        $formWriter->addHidden('masktype', $maskType);
         echo \html_writer::start_div( 'frame-body' );
 
         // construct the help text
@@ -285,7 +286,7 @@ abstract class mask_type{
         $strHideHelp = get_string( 'label_hidehelp', 'mod_masks' );
         $buttonTxt   = \html_writer::span( $strShowHelp, 'btn-hint-show btn-hint' ) . \html_writer::span( $strHideHelp, 'btn-hint-hide btn-hint' );
         echo \html_writer::start_div( 'frame-sub-section button-sub-section' );
-        echo \html_writer::tag( 'button', $buttonTxt, array( 'type' => 'button', 'class' => 'hide-toggle', 'onclick' => $clickScript ,'id' => 'toggle-help', 'tabindex' => 99 ) );
+        echo \html_writer::tag( 'button', $buttonTxt, array( 'type' => 'button', 'class' => 'hide-toggle', 'onclick' => $clickScript , 'id' => 'toggle-help', 'tabindex' => 99 ) );
         echo \html_writer::end_div();
         $formWriter->closeForm();
 
@@ -359,7 +360,7 @@ abstract class mask_type{
         $formWriter = new \mod_masks\form_writer();
 
         // open the form and add hidden fields
-        $formWriter->openForm('frame_click_mask.php',$hiddenFields);
+        $formWriter->openForm('frame_click_mask.php', $hiddenFields);
 
         // add answer field
         echo \html_writer::start_div( 'answer-section' );
@@ -400,16 +401,16 @@ abstract class mask_type{
             // display a congratulations message and show a button to close the window and dismiss the mask
             if ( $isLastQuestion ){
                 $grade              = $dbInterface->gradeUser( $this->cm, $USER->id );
-                $responseType       = ( $grade == 100.0 )? 'perfect': 'final';
+                $responseType       = ( $grade == 100.0 ) ? 'perfect' : 'final';
                 $strResponseTitle   = get_string( $responseType . 'answer_title', 'mod_masks' );
                 $strResponseText    = get_string( $responseType . 'answer_text', 'mod_masks' );
-                $strText            = ( ! empty( $goodAnswerResponse ) )? ( $goodAnswerResponse . '<br><br>' . $strResponseText ): $strResponseText;
+                $strText            = ( ! empty( $goodAnswerResponse ) ) ? ( $goodAnswerResponse . '<br><br>' . $strResponseText ) : $strResponseText;
             } else {
                 $isPerfectAnswer    = $dbInterface->isFirstQuestionAttempt( $USER->id, $questionId );
-                $responseType       = ( $isPerfectAnswer === true )? 'good': 'pass';
+                $responseType       = ( $isPerfectAnswer === true ) ? 'good' : 'pass';
                 $strResponseTitle   = get_string( $responseType . 'answer_title', 'mod_masks' );
                 $strResponseText    = get_string( $responseType . 'answer_text', 'mod_masks' );
-                $strText            = ( ! empty( $goodAnswerResponse ) )? $goodAnswerResponse: $strResponseText;
+                $strText            = ( ! empty( $goodAnswerResponse ) ) ? $goodAnswerResponse : $strResponseText;
             }
             $this->renderInfoPage( $strResponseTitle, $strText, '', $responseType.'-answer correct-answer answer', $gradeUpdateScript.'parent.M.mod_masks.closeMask(); parent.M.mod_masks.closeFrame();' );
         } else {
@@ -420,10 +421,10 @@ abstract class mask_type{
             $gradeUpdateScript  = $this->getGradeUpdateScript( $updatedGrades );
 
             // display a wrong answer message and show a button to close the window without dismissing the mask
-            $responseType       = ( $isFirstAttempt === true )? 'wrong': 'bad';
+            $responseType       = ( $isFirstAttempt === true ) ? 'wrong' : 'bad';
             $strBadAnswerTitle  = get_string( $responseType . 'answer_title', 'mod_masks' );
             $strBadAnswerText   = get_string( $responseType . 'answer_text', 'mod_masks' );
-            $strText            = ( ! empty( $badAnswerResponse ) )? $badAnswerResponse: $strBadAnswerText;
+            $strText            = ( ! empty( $badAnswerResponse ) ) ? $badAnswerResponse : $strBadAnswerText;
             $this->renderInfoPage( $strBadAnswerTitle, $strText, $hintText, $responseType.'-answer incorrect-answer answer', $gradeUpdateScript.'parent.M.mod_masks.closeFrame();' );
         }
     }
@@ -434,7 +435,7 @@ abstract class mask_type{
     }
 
     protected function getGradeUpdateScript( $updatedGrades ){
-        $result = ( $updatedGrades == 0 )? '': "parent.M.mod_masks.setMaskState( $this->activeMask, $updatedGrades );";
+        $result = ( $updatedGrades == 0 ) ? '' : "parent.M.mod_masks.setMaskState( $this->activeMask, $updatedGrades );";
 
         if ( ( $updatedGrades & MASKS_STATE_PASS ) == MASKS_STATE_PASS ){
             $result .= 'parent.M.mod_masks.onMaskPass();';

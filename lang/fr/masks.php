@@ -36,7 +36,7 @@ $string['pluginadministration']         = 'Administration du module Masks';
 $string['pluginname']                   = 'Mask';
 
 // plugin capacities
-$string['masks:addinstance']            = 'Ajouter une activité Masks' ;
+$string['masks:addinstance']            = 'Ajouter une activité Masks';
 $string['masks:view']                   = 'Voir l\'activité Masks';
 
 // admin settings
@@ -82,6 +82,9 @@ $string['right-group']                  = '';
 $string['gradeNamePass']                = 'Réponses<br>Parfaites';
 $string['gradeNameToGo']                = 'Questions<br>Restantes';
 $string['header_congratulations_text']  = 'Parfait !';
+$string['masks-shift-right']            = 'Déplacer vers la droite';
+$string['masks-shift-left']             = 'Déplacer vers la gauche';
+$string['masks-retrieve-masks']         = 'Récupérer les masks';
 
 // Texts for congratulation frame
 $string['frame_congratulation']         = 'Félicitations';
@@ -116,9 +119,11 @@ $string['passanswer_text']              = 'C\'est la bonne réponse';
 $string['goodanswer_title']             = 'Parfait';
 $string['goodanswer_text']              = 'Bravo. C\'est la bonne réponse.';
 $string['finalanswer_title']            = 'Félicitations';
-$string['finalanswer_text']             = 'Vous avez répondu correctement à toutes les questions.<br>Toutefois, plusieurs essaies ont été nécessaires';
+$string['finalanswer_text']             = 'Vous avez répondu correctement à toutes les questions.<br>'
+                                        . 'Toutefois, plusieurs essaies ont été nécessaires';
 $string['perfectanswer_title']          = 'Score parfait !';
-$string['perfectanswer_text']           = 'Bravo !<br>Vous avez répondu correctement à toutes les questions du premier coup';
+$string['perfectanswer_text']           = 'Bravo !<br>'
+                                        . 'Vous avez répondu correctement à toutes les questions du premier coup';
 $string['wronganswer_title']            = 'Incorrect';
 $string['wronganswer_text']             = 'Premier essai incorrect : La note pour cette question sera zéro';
 $string['badanswer_title']              = 'Incorrect';
@@ -159,6 +164,7 @@ $string['failedcmdline-text']           = ''
 // Alert texts
 $string['alert_uploadnofile']           = 'Pour commencer, merci d\'importer un fichier PDF';
 $string['alert_uploadsuccess']          = 'Félicitations, votre document a bien été importé.';
+$string['alert_reuploadsuccess']        = 'Votre document a bien été importé.<br>Si des pages contenant des masks ont été insérées ou supprimées, les boutons Déplacer vers la droite et Déplacer vers la gauche dans le menu d\'options permettent de déplacer les Masks vers la page où ils devraient maintenant être. ';
 $string['alert_uploadfailed']           = 'Echec de l\'importation - merci de réessayer ou de contacter l\'administrateur de la plateforme';
 $string['alert_firstMaskAdded']         = 'Faites glisser le cache pour le déplacer ou le redimensioner';
 $string['alert_questionSaved']          = 'Les modifications ont été enregistrées';
@@ -173,6 +179,9 @@ $string['alert_studentGradeDone']       = '';
 $string['alert_studentGradeFail']       = 'Réponse Incorrecte';
 $string['alert_gradeNamePass']          = 'Réponses correctes';
 $string['alert_gradeNameToGo']          = 'Questions restantes';
+$string['alert_shiftRight']             = 'Les masks de la pages courante et des pages suivantes ont été déplacés vers ';
+$string['alert_shiftLeft']              = 'Les masks des pages suivantes ont été déplacés vers la gauche.';
+$string['alert_falsePage']              = 'Une fausse page a été créée.';  
 
 // Textes sent down to the javascript for dynamic use in browser
 $string['navigateaway']                 = 'Vous avez des modifications non enregistrées\nPour les enregistrer, cliquez sur \"'.$string['label_save'].'\"';

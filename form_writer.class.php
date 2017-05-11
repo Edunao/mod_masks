@@ -34,19 +34,19 @@ class form_writer
     private $lastHideHeading    = false;
     private $firstElement       = true;
 
-    public function __construct($refData0=array(),$refData1=array()){
+    public function __construct($refData0 = array(), $refData1 = array()){
         $this->refData0 = $refData0;
         $this->refData1 = $refData1;
     }
 
-    public function openForm($target,$hiddenFields){
+    public function openForm($target, $hiddenFields){
         echo \html_writer::start_tag( 'form', array( 'action' => new \moodle_url('/mod/masks/'.$target), 'id' => 'frame-form' ) );
         foreach( $hiddenFields as $key => $val ){
             $this->addHidden( $key, $val );
         }
     }
 
-    public function closeForm($includeButtons=true){
+    public function closeForm($includeButtons = true){
         if ( $includeButtons === true ){
             echo \html_writer::start_div( 'frame-footer' );
             $this->addCancelButton();
@@ -57,7 +57,7 @@ class form_writer
         echo \html_writer::end_tag( 'form' );
     }
 
-    public function addHidden($key,$val){
+    public function addHidden($key, $val){
         echo \html_writer::tag( 'input', '', array( 'type' => 'hidden', 'name' => $key, 'id' => 'formprop-'.$key, 'value' => $val ) );
     }
 
@@ -75,7 +75,7 @@ class form_writer
         echo $this->wrapWidget( $widget, $propName , $requiredField, $hideHeading );
     }
 
-    public function addTextArea($propName,$requiredField,$rows){
+    public function addTextArea($propName, $requiredField, $rows){
         $data   = $this->lookupRefData( $propName );
         $args   = array( 'name' => $propName, 'rows' => $rows, 'cols' => 80 );
         if ( $this->firstElement == true ){
@@ -105,13 +105,13 @@ class form_writer
         return '';
     }
 
-    private function wrapWidget($widget,$propName, $required = null, $hideHeading = null){
+    private function wrapWidget($widget, $propName, $required = null, $hideHeading = null){
         $label  = get_string( 'label_'.$propName, 'mod_masks' );
         if ( $required ){
             // consider adding code here to modify the appearance of labels for required fields
         }
         if ( $hideHeading && ! $this->lastHideHeading ){
-            echo \html_writer::div('','pre-noheading');
+            echo \html_writer::div('', 'pre-noheading');
         }
         if ( $hideHeading !== true ){
             echo \html_writer::start_div('form-field with-heading');
@@ -123,7 +123,7 @@ class form_writer
         echo $widget;
         echo \html_writer::end_div();
         if ( $this->lastHideHeading && !$hideHeading ){
-            echo \html_writer::div('','post-noheading');
+            echo \html_writer::div('', 'post-noheading');
         }
         $this->lastHideHeading = $hideHeading;
     }

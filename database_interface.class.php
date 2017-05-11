@@ -50,6 +50,7 @@ define( 'MASKS_STATE_PASS', 0x80 ); // correct answer given with no wrong answer
 
 
 class database_interface {
+    private $haveChangedDoc = false; // true after successfull re-upload
 
     /**
      * Fetch document data - that is the information regarding the pages that comprise the document
@@ -71,7 +72,7 @@ class database_interface {
             ' WHERE page.parentcm = :cmid'.
             ' ORDER BY page.orderkey'.
             '';
-        $result->pages = $DB->get_records_sql($query, array('cmid'=>$cmid));
+        $result->pages = $DB->get_records_sql($query, array( 'cmid' => $cmid ));
         $result->isInitialised = ! empty( $result->pages );
 
         // generate image urls from image names
@@ -88,27 +89,32 @@ class database_interface {
      * Fetch mask data - that is the information regarding the set of masks overlaid over document pages
      *
      * @param integer $cmid The course module instance id ($cm->id)
+     * @param bool $isTeacher if true, reset current user questions states
      * @return struct the mask set representation
      */
-    public function fetchMaskData( $cmid ) {
+    public function fetchMaskData( $cmid , $isTeacher = false ) {
         require_once(dirname(__FILE__).'/mask_types_manager.class.php');
         global $DB, $USER;
 
         // initalise the result container
         $result = new \stdClass;
 
-        // fetch the set of mask records from the database
+        // Reset teacher questions states
+        if($isTeacher){
+            $this->resetUserQuestionsStates($cmid);
+        }
+
         $query =
-            'SELECT mask.*, question.type , user.state AS userstate'.
+            'SELECT mask.*, question.type , us.state AS userstate'.
             ' FROM {masks_page} page'.
             ' JOIN {masks_mask} mask ON page.id = mask.page'.
-            ' LEFT JOIN {masks_user_state} user ON user.question = mask.question AND user.user = :user'.
+            ' LEFT JOIN {masks_user_state} us ON us.question = mask.question AND us.userid = :userid'.
             ' LEFT JOIN {masks_question} question ON question.id = mask.question ' .
             ' WHERE page.parentcm = :cmid'.
             ' AND (mask.flags & '.MASK_FLAG_DELETED.') = 0'.
             ' ORDER BY page.id, mask.id'.
             '';
-        $masks = $DB->get_records_sql( $query, array( 'cmid'=>$cmid, 'user'=>$USER->id ) );
+        $masks = $DB->get_records_sql( $query, array( 'cmid' => $cmid, 'userid' => $USER->id ) );
 
         // construct the result, group the masks by page
         $result->pages = array();
@@ -119,7 +125,7 @@ class database_interface {
                 $result->pages[$page] = array();
             }
             $mask->family    = mask_types_manager::getTypeFamily($mask->type);
-            $mask->userstate = ($mask->userstate==null)? 0: $mask->userstate;
+            $mask->userstate = ($mask->userstate == null) ? 0 : $mask->userstate;
             $result->pages[$page][] = $mask;
         }
 
@@ -139,7 +145,7 @@ class database_interface {
         $result = new \stdClass;
 
         // fetch the question record from the database
-        $record = $DB->get_record('masks_question', array('id'=>$questionId), 'id,type,data' );
+        $record = $DB->get_record('masks_question', array('id' => $questionId), 'id,type,data' );
 
         // construct the result
         $result = json_decode( $record->data );
@@ -160,7 +166,7 @@ class database_interface {
         $result = new \stdClass;
 
         // fetch the question record from the database
-        $record = $DB->get_record('masks_question', array('id'=>$questionId), 'type' );
+        $record = $DB->get_record('masks_question', array('id' => $questionId), 'type' );
 
         // construct the result
         $result = $record->type;
@@ -231,7 +237,8 @@ class database_interface {
         global $DB;
         // start by retrieving the identifiers of any existing masks_page records
         // that exist for this module instance
-        $oldPages = $DB->get_records( 'masks_page', array('parentcm'=>$cmid), 'orderkey', 'orderkey,id,flags' );
+        $oldPages = $DB->get_records( 'masks_page', array('parentcm' => $cmid), 'orderkey', 'orderkey,id,flags' );
+        $this->haveChangedDoc = $this->haveChangedDoc || !empty( $oldPages );
 
         // sort the new page set by key
         ksort( $docPageIds );
@@ -240,12 +247,13 @@ class database_interface {
         $idx = 0;
         $oldCount = count( $oldPages );
         foreach ( $docPageIds as $docPage ) {
-            if ( $idx < $oldCount ) {
+            if ( array_key_exists( $idx, $oldPages ) ) {
                 // we have a spare record to use so go for it
                 $row = new \stdClass;
                 $row->id        = $oldPages[ $idx ]->id;
                 $row->orderkey  = $idx;
                 $row->docpage   = $docPage;
+print_object( $row );
                 $DB->update_record( 'masks_page', $row, true );
             } else {
                 // we need to add a new record
@@ -268,7 +276,8 @@ class database_interface {
                 $row = new \stdClass;
                 $row->id        = $oldPages[ $idx ]->id;
                 $row->orderkey  = $idx;
-                $row->flags     = $oldPages[ $idx ]->flags | PAGE_FLAG_HIDDEN;
+                $row->flags     = $oldPages[ $idx ]->flags;
+                $row->docpage   = 0;
                 $DB->update_record( 'masks_page', $row, true );
             } else {
                 // have no masks so mark for deletion
@@ -280,6 +289,209 @@ class database_interface {
         if ( ! empty( $rowsToDelete ) ) {
             $DB->delete_records_list( 'masks_page', 'id', $rowsToDelete );
         }
+    }
+
+    /**
+     * Check if document has been updated
+     *
+     * @return boolean
+     */
+    public function haveReuploadedDoc(){
+        return $this->haveChangedDoc;
+    }
+
+    /**
+     * Check if page has masks
+     *
+     * @param integer $pageId
+     * @return boolean
+     */
+    public function pageHasMasks($pageId){
+        global $DB;
+        $query =
+            'SELECT mask.id'.
+            ' FROM {masks_page} page'.
+            ' JOIN {masks_mask} mask ON page.id = mask.page'.
+            ' WHERE mask.page = :pageid'.
+            ' AND (mask.flags & '.MASK_FLAG_DELETED.') = 0'.
+            '';
+
+        return count($DB->get_records_sql($query, array( 'pageid' => $pageId ))) > 0 ? true : false;
+    }
+
+    /**
+     * Get all pages of cm, including pages without docpage
+     *
+     * @param integer $cmid
+     * @param integer $startOrderKey
+     * @return array of pages
+     */
+    public function getPages($cmid, $startOrderKey = 0){
+        global $DB;
+        $query =
+            'SELECT page.orderkey, page.id, page.parentcm, page.docpage, page.flags'.
+            ' FROM {masks_page} page'.
+            ' WHERE page.parentcm = :cmid'.
+            ' AND page.orderkey >= :orderkey'.
+            ' ORDER BY page.orderkey'.
+            '';
+        return $DB->get_records_sql( $query, array( 'cmid' => $cmid , 'orderkey' => $startOrderKey) );
+    }
+
+    /**
+     *
+     * @param integer $cmid
+     * @param integer $orderKey
+     * @return page object
+     */
+    public function getPageByOrder($cmid, $orderKey){
+        global $DB;
+        $query =
+            'SELECT page.orderkey, page.id, page.parentcm, page.docpage, page.flags'.
+            ' FROM {masks_page} page'.
+            ' WHERE page.parentcm = :cmid'.
+            ' AND page.orderkey = :orderkey'.
+            '';
+        return $DB->get_record_sql( $query, array( 'cmid' => $cmid , 'orderkey' => $orderKey) );
+    }
+
+    /**
+     *
+     * @param interger $cmid
+     * @return boolean
+     */
+    public function docHasFalsePageWithMasks($cmid){
+        global $DB;
+
+        $query =
+                'SELECT * '
+                . ' FROM {masks_page} page '
+                . ' JOIN {masks_mask} m ON m.page = page.id'
+                . ' WHERE page.docpage = 0';
+
+        return $DB->get_records_sql( $query, array( 'cmid' => $cmid ) ) != false ? true : false;
+    }
+
+    /**
+     * Shift all masks of pages after current page to the left or the right
+     * If right shift create false page, return true
+     *
+     * @param integer $cmid
+     * @param integer $currentOrderKey
+     * @param boolean $toRight
+     * @return boolean
+     */
+    public function shiftPageMasks($cmid, $currentOrderKey, $toRight = true){
+        global $DB;
+
+        if($toRight) {
+            $nextPages = $this->getPages($cmid, $currentOrderKey);
+
+            // return if new fase page is created
+            $newFalsePage = false;
+
+            // add new first page
+            $newFirstPage = new \stdClass;
+            $newFirstPage->parentcm = $cmid;
+            $newFirstPage->orderkey = $currentOrderKey;
+            $newFirstPage->docpage = $nextPages[$currentOrderKey]->docpage;
+            $newFirstPage->flags = $nextPages[$currentOrderKey]->flags;
+            $DB->insert_record('masks_page', $newFirstPage);
+
+            foreach($nextPages as $order => $page) {
+
+                if(isset($nextPages[$order + 1])){
+                    $page->orderkey = $page->orderkey + 1;
+                    $page->docpage = $nextPages[$order + 1]->docpage;
+                    $DB->update_record( 'masks_page', $page );
+                } else {
+                    $hasMasks = $DB->record_exists('masks_mask',array('page' => $page->id));
+                    if($hasMasks){
+                        $page->orderkey = $page->orderkey + 1;
+                        $page->docpage = 0;
+                        $DB->update_record( 'masks_page', $page );
+                        $newFalsePage = true;
+                    }else{
+                        $DB->delete_records('masks_page',array('id' => $page->id));
+                    }
+                }
+            }
+            return $newFalsePage;
+        }else{
+            $nextPages = $this->getPages($cmid, $currentOrderKey);
+            // shift only if there is no mask in current page
+            $hasMasks = $this->pageHasMasks($nextPages[$currentOrderKey]->id);
+            $shiftPreviousPage = false;
+            if($hasMasks){
+                // check if previous page has masks
+                $previousPage = $this->getPageByOrder($cmid, ($currentOrderKey-1));
+                if($previousPage){
+                    $shiftPreviousPage = !$this->pageHasMasks($previousPage->id);
+                    if($shiftPreviousPage){
+                        $nextPages[$previousPage->orderkey] = $previousPage;
+                        ksort($nextPages);
+                    }
+                }
+            }
+
+            if(!$hasMasks || $shiftPreviousPage){
+                $prevPage = false;
+                foreach($nextPages as $order => $page){
+                    if ($prevPage) {
+                        $updatePage = new \stdClass();
+                        $updatePage->id = $page->id;
+                        $updatePage->parentcm = $page->parentcm;
+                        $updatePage->orderkey = $prevPage->orderkey;
+                        $updatePage->docpage = $prevPage->docpage;
+                        $updatePage->flags = $prevPage->flags;
+                        $DB->update_record( 'masks_page', $updatePage );
+                        $prevPage = $page;
+                    } else {
+                        // is first page;
+                        $DB->delete_records('masks_page',array('id' => $page->id));
+                        $prevPage = $page;
+                    }
+                }
+
+                // create last page if it wasn't false page
+                $lastPage = end($nextPages);
+                if($lastPage->docpage != 0){
+                    $newLastPage = new \stdClass();
+                    $newLastPage->parentcm = $cmid;
+                    $newLastPage->orderkey = $lastPage->orderkey;
+                    $newLastPage->docpage = $lastPage->docpage;
+                    $newLastPage->flags = $lastPage->flags;
+                    $DB->insert_record('masks_page', $newLastPage);
+                }
+            }
+
+            return $shiftPreviousPage;
+        }
+
+        return false;
+    }
+
+    /**
+     * Shift masks to left while page hasn't masks
+     * @param integer $cmid
+     * @param integer $currentOrderKey
+     * @return boolean
+     */
+    public function retrieveMasks($cmid, $currentOrderKey){
+
+        $currentPage = $this->getPageByOrder($cmid, ($currentOrderKey));
+
+        // check if doc has false page with masks
+        $hasFalsePageWithMasks = $this->docHasFalsePageWithMasks($cmid);
+
+        if($hasFalsePageWithMasks){
+            while(!($this->pageHasMasks($currentPage->id))){
+                $this->shiftPageMasks($cmid, $currentOrderKey, false);
+                $currentPage = $this->getPageByOrder($cmid, ($currentOrderKey));
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -335,7 +547,7 @@ class database_interface {
         }
         $jsonData = json_encode( $questionData );
 
-        // start by instantiating the new question record
+        // update the question record
         $dbRecord           = new \stdClass;
         $dbRecord->id       = $questionId;
         $dbRecord->data     = $jsonData;
@@ -365,7 +577,7 @@ class database_interface {
      */
     public function isFirstQuestionAttempt( $userId, $questionId ) {
         global $DB;
-        $failCount = $DB->get_field( 'masks_user_state', 'failcount', array( 'user'=>$userId, 'question'=>$questionId ) );
+        $failCount = $DB->get_field( 'masks_user_state', 'failcount', array( 'userid' => $userId, 'question' => $questionId ) );
         return ( $failCount == null ) || ( $failCount == 0 );
     }
 
@@ -400,7 +612,7 @@ class database_interface {
         $stateValue = $stateNameValues[ $stateName ];
 
         // fetch the existing state record (if there is one)
-        $record = $DB->get_record('masks_user_state', array('question'=>$questionId, 'user'=>$userId), 'id,state,failcount' );
+        $record = $DB->get_record('masks_user_state', array('question' => $questionId, 'userid' => $userId), 'id,state,failcount' );
         if ( $record ) {
             // Look for a state regression
             $oldStateValue  = $record->state;
@@ -433,7 +645,7 @@ class database_interface {
 
             // no previous record exists so insert a new one
             $record             = new \stdClass;
-            $record->user       = $userId;
+            $record->userid     = $userId;
             $record->question   = $questionId;
             $record->state      = $stateValue;
             $record->failcount  = ( $stateValue & MASKS_STATE_FAIL ) / MASKS_STATE_FAIL;
@@ -443,6 +655,25 @@ class database_interface {
         }
 
         return $record->state;
+    }
+
+    /**
+     * Reset all user questions states
+     * @param type $cm
+     * @param type $userId
+     */
+    public function resetUserQuestionsStates( $cmid ){
+        global $DB, $USER;
+
+         $select =
+                ' userid = :userid '.
+                ' AND question IN('.
+                ' SELECT id '.
+                ' FROM {masks_question}'.
+                ' WHERE parentcm = :cmid '.
+                ' )'.
+                '';
+        return $DB->delete_records_select( 'masks_user_state', $select , array( 'cmid' => $cmid, 'userid' => $USER->id ) );
     }
 
     /**
@@ -457,29 +688,29 @@ class database_interface {
         require_once($CFG->libdir.'/gradelib.php');
 
         // count the number of questions
-        $query=''
+        $query = ''
             .'SELECT count(*) AS result'
             .' FROM {masks_page} p'
             .' JOIN {masks_mask} m ON m.page = p.id'
             .' WHERE p.parentcm = :cmid'
             .' AND (m.flags & '.(MASK_FLAG_GRADED|MASK_FLAG_HIDDEN).')='.MASK_FLAG_GRADED
             ;
-        $numQuestions = $DB->get_field_sql( $query, array( 'cmid'=>$cm->id ) );
+        $numQuestions = $DB->get_field_sql( $query, array( 'cmid' => $cm->id ) );
 
         // count the number of correct answers
-        $query=''
+        $query = ''
             .'SELECT count(*) as result'
             .' FROM {masks_question} q'
             .' JOIN {masks_user_state} s ON q.id = s.question'
             .' WHERE q.parentcm = :cmid'
-            .' AND s.user = :userid'
+            .' AND s.userid = :userid'
             .' AND (s.state & '.MASKS_STATE_PASS.') > 0'
             ;
-        $passes = $DB->get_field_sql( $query, array( 'cmid'=>$cm->id, 'userid'=>$userId ) );
+        $passes = $DB->get_field_sql( $query, array( 'cmid' => $cm->id, 'userid' => $userId ) );
 
         // calculate and apply the grade
-        $gradeValue     = ( $passes == $numQuestions)? 100.0: ( $passes * 100.0 / $numQuestions );
-        $gradeRecord    = array( 'userid'=>$userId, 'rawgrade'=>$gradeValue );
+        $gradeValue     = ( $passes == $numQuestions) ? 100.0 : ( $passes * 100.0 / $numQuestions );
+        $gradeRecord    = array( 'userid' => $userId, 'rawgrade' => $gradeValue );
         $gradeResult    = \grade_update('mod/masks', $cm->course, 'mod', 'masks', $cm->instance, 0, $gradeRecord, null);
         if ( $gradeResult != GRADE_UPDATE_OK ) {
             throw new \moodle_exception( 'Failed to update gradebook' );

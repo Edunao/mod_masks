@@ -31,7 +31,7 @@ defined('MOODLE_INTERNAL') || die;
 require_once(dirname(__FILE__).'/mask_type.class.php');
 
 class mask_type_note extends mask_type{
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // data
 
     private $maskType       = 'note';
@@ -39,7 +39,7 @@ class mask_type_note extends mask_type{
     private $fields         = null;
 
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // basics
 
     public function __construct(){
@@ -57,7 +57,7 @@ class mask_type_note extends mask_type{
     }
 
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // mask_type API
 
     public function onNewMask( $id, $pageId ){
