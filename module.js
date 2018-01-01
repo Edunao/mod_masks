@@ -151,7 +151,7 @@ M.mod_masks={
         var action = target.attr('dblclick-action');
         while ( !action ){
             target = target.parent();
-            if(target.length == 0){
+            if ( target.length === 0 ){
                 target = $('body');
             }
             action = target.attr('dblclick-action');
@@ -167,12 +167,12 @@ M.mod_masks={
         var action = target.attr('click-action');
         while ( !action ){
             target = target.parent();
-            if(target.length == 0){
+            if ( target.length === 0 ){
                 target = $('body');
             }
             action = target.attr('click-action');
         }
-        
+
         // delegate processing to a shared routine
         M.mod_masks.processImpulseEvent(e,target,action);
     },
@@ -236,7 +236,7 @@ M.mod_masks={
         var currentPrevPage = M.mod_masks_pages[(M.mod_masks.currentPage-1)];
         var currentPageId = M.mod_masks_pages[M.mod_masks.currentPage].id;
         var currentPageHasMasks = ((currentPageId in M.mod_masks_masks.pages) && M.mod_masks_masks.pages[currentPageId].length > 0 );
-        
+
         if ( !currentPageHasMasks ||
                 ( !currentPrevPage ||
                     (currentPrevPage &&
@@ -249,7 +249,7 @@ M.mod_masks={
         } else {
             $('.masks-shift-left-entry.menu-entry').show();
         }
-        
+
         // hide shift right button if page hasn't masks
         var currentPageIsLast = (M.mod_masks_pages.slice(-1)[0].id == currentPageId);
         if (!currentPageHasMasks || currentPageIsLast){
@@ -257,7 +257,7 @@ M.mod_masks={
         }else{
             $('.masks-shift-right-entry.menu-entry').show();
         }
-        
+
         // if current page hasn't mask and is last page and has false page after, show retrieve masks button
         var hasFalsePage = this.docHasFalsePage();
         if (currentPageIsLast && !currentPageHasMasks && hasFalsePage) {
@@ -265,7 +265,7 @@ M.mod_masks={
         } else {
             $('.masks-retrieve-masks-entry.menu-entry').hide();
         }
-        
+
         menuNode.addClass( 'menu-show' );
         M.mod_masks.contextMenuHide();
     },
@@ -720,13 +720,13 @@ M.mod_masks={
         // return the selected mask object
         return mask;
     },
-    
+
     // shift masks of current and next pages
     shiftMasks : function(toRight){
         var currentOrderKey = M.mod_masks.currentPage;
         this.activateFrame( 'shift-masks', { currentorderkey: currentOrderKey , roright : toRight }, 'prompt' );
     },
-    
+
     retrieveMasks: function(){
         var currentOrderKey = M.mod_masks.currentPage;
         this.activateFrame( 'shift-masks', { currentorderkey: currentOrderKey , retrievemasks : true }, 'prompt' );
@@ -1139,38 +1139,39 @@ M.mod_masks={
         }
 
         // reset and re-apply page-hidden flags and false-page tag in the page nav drop-down menu
-        if(!navdata){
-            for (var pageNum in M.mod_masks_pages){
-                var page     = M.mod_masks_pages[ pageNum ];
-                var isHidden = page.flags & M.mod_masks.FLAG_HIDDEN;
+        var pageNum, page, isHidden, newNode;
+        if ( !navdata ){
+            for (pageNum in M.mod_masks_pages){
+                page     = M.mod_masks_pages[ pageNum ];
+                isHidden = page.flags & M.mod_masks.FLAG_HIDDEN;
                 refNode.attr('page',pageNum);
                 refChild.removeClass('page-hidden');
                 if ( isHidden ){
                     refChild.addClass('page-hidden');
                 }
                 refNum.html( 1 + parseInt( pageNum ) );
-                var newNode  = refNode.clone();
+                newNode  = refNode.clone();
                 menuRoot.append( newNode );
             }
-        }else{
-            for (var pageNum in navdata){
-                var page     = navdata[ pageNum ];
-                var isHidden = page.flags & M.mod_masks.FLAG_HIDDEN;
+        } else {
+            for (pageNum in navdata){
+                page     = navdata[ pageNum ];
+                isHidden = page.flags & M.mod_masks.FLAG_HIDDEN;
                 refNode.attr('page',pageNum);
                 refNode.removeClass('hidden-page');
                 if ( isHidden ){
                     refNode.addClass('hidden-page');
                 }
-                if(page.docpage == 0){
+                if ( page.docpage === 0 ){
                     refNode.addClass('false-page');
                     refNode.removeAttr('page');
                     refNode.removeAttr('click-action');
                 }
                 refNum.html( 1 + parseInt( pageNum ) );
-                var newNode  = refNode.clone();
+                newNode  = refNode.clone();
                 menuRoot.append( newNode );
             }
-        }  
+        }
 
         // refresh the display of the page itself
         M.mod_masks.gotoPage( M.mod_masks.currentPage );
@@ -1297,23 +1298,23 @@ M.mod_masks={
         }
         return result;
     },
-    
+
     // ------------------------------------------------------
     // Other get functions
-    
+
     docHasFalsePage: function(){
         var pageIds = [] ;
         for(var pageOrder in M.mod_masks_pages){
             var pageId = M.mod_masks_pages[pageOrder].id;
             pageIds[pageId] = pageId;
         }
-        
+
         for(var p in M.mod_masks_masks.pages){
             if(!(p in pageIds)){
                 return true;
             }
         }
-        
+
         return false;
     },
 };
